@@ -1,0 +1,525 @@
+/* 모달 영역 */
+.modal-area {
+    background: rgba(0,0,0,0.6);
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+.modal-area.active {
+    display: block;
+}
+.modal-area .modal {
+    width: 400px;
+    box-sizing: border-box;
+    padding: 40px;
+    display: none;
+}
+.modal-area .modal.active {
+    display: block;
+}
+.modal-area .modal .x-btn {
+    font-size: 24px;
+    top: 12px;
+    right: 12px;
+}
+.modal-area .a-modal {
+    background: beige;
+}
+.modal-area .b-modal {
+    background: pink;
+}
+.modal-area .c-modal {
+    background: skyblue;
+}
+.modal-btn-box {
+    gap: 20px;
+}
+.modal-btn-box .btn {
+    box-sizing: border-box;
+    padding: 8px 20px;
+    font-size: 16px;
+}
+.modal-btn-box .a-btn {
+    background: beige;
+}
+.modal-btn-box .b-btn {
+    background: pink;
+}
+.modal-btn-box .c-btn {
+    background: skyblue;
+}
+
+/* ------------------------------------------------------------------------------- */
+
+/* 공통 */
+body {
+    box-sizing: border-box;
+    padding: 80px 0 0 0;
+}
+
+.top-btn-box {
+    width: 3.125vw;
+    right: 2.0833vw;
+    bottom: 2.0833vw;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+}
+.top-btn-box.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.select-type-1 {
+    width: auto;
+    height: 20px;
+}
+.select-type-1 select {
+    width: auto;
+    height: 100%;
+    box-sizing: border-box;
+    border: none;
+    padding: 0 26px 0 0;
+    font-size: 16px;
+    color: #777;
+    cursor: pointer;
+    background: inherit;
+}
+.select-type-1 .arrow {
+    width: 20px;
+    right: 0;
+    pointer-events: none;
+}
+
+.select-type-2 {
+    width: 100%;
+    height: 52px;
+}
+.select-type-2 select {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px solid #E0E0E0;
+    padding: 0 48px 0 16px;
+    background: #fff;
+    font-size: 16px;
+    color: #333;
+    border-radius: 4px;
+}
+.select-type-2 .arrow {
+    width: 24px;
+    right: 16px;
+    pointer-events: none;
+}
+
+.input-type-1 {
+    width: 100%;
+    height: 52px;
+}
+.input-type-1 input {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px solid #E0E0E0;
+    padding: 0 16px;
+    background: #fff;
+    font-size: 16px;
+    color: #333;
+    border-radius: 4px;
+}
+.input-type-1 input::placeholder {
+    color: #999;
+}
+
+.date-type-1 {
+    width: 100%;
+    height: 52px;
+}
+.date-type-1 input {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px solid #E0E0E0;
+    padding: 0 16px;
+    background: #fff;
+    font-size: 16px;
+    color: #333;
+    border-radius: 4px;
+}
+.date-type-1 input::-webkit-inner-spin-button,
+.date-type-1 input::-webkit-calendar-picker-indicator {
+    display: block;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: url(../img/ico_date_999999.svg) no-repeat center center/cover;
+    cursor: pointer;
+}
+.date-type-1 input::placeholder {
+    color: #999;
+}
+
+.btn-type-1 {
+    height: 52px;
+    box-sizing: border-box;
+    font-size: 18px;
+    border-radius: 4px;
+    color: #fff;
+    background: #030095;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Pretendard-Bold";
+}
+.btn-type-1-2 {
+    height: 52px;
+    box-sizing: border-box;
+    font-size: 18px;
+    border-radius: 4px;
+    color: #030095;
+    background: inherit;
+    border: 1px solid #030095;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Pretendard-Bold";
+}
+.btn-type-2 {
+    min-width: 96px;
+    height: 52px;
+    box-sizing: border-box;
+    font-size: 16px;
+    border-radius: 4px;
+    color: #fff;
+    background: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Pretendard-Bold";
+}
+.btn-type-3 {
+    min-width: 92px;
+    height: 42px;
+    box-sizing: border-box;
+    font-size: 14px;
+    border-radius: 4px;
+    color: #fff;
+    background: #777;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.check-text-type-1 input {
+    display: none;
+}
+.check-text-type-1 input + label {
+    display: inline-block;
+    cursor: pointer;
+    padding-left: 20px;
+    position: relative;
+}
+.check-text-type-1 input + label::before {
+    content: "";
+    display: block;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    background: url(../img/ico_check_1.svg) no-repeat center center/cover;
+}
+.check-text-type-1 input:checked + label::before {
+    background: url(../img/ico_check_1_active.svg) no-repeat center center/cover;
+}
+.check-text-type-1 input + label .text {
+    font-size: 14px;
+    color: #555;
+}
+
+.check-text-type-2 input {
+    display: none;
+}
+.check-text-type-2 input + label {
+    display: inline-block;
+    cursor: pointer;
+    padding-left: 28px;
+    position: relative;
+}
+.check-text-type-2 input + label::before {
+    content: "";
+    display: block;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    background: url(../img/ico_check_1.svg) no-repeat center center/cover;
+}
+.check-text-type-2 input:checked + label::before {
+    background: url(../img/ico_check_1_active.svg) no-repeat center center/cover;
+}
+.check-text-type-2 input + label .text {
+    font-size: 18px;
+    color: #999;
+}
+
+.file-type-1 {
+    box-sizing: border-box;
+    padding: 0 0 8px 8px;
+}
+.file-type-1 .user-img-box {
+    width: 100px;
+}
+.file-type-1 .file-btn input {
+    display: none;
+}
+.file-type-1 .file-btn label {
+    cursor: pointer;
+}
+
+/* ------------------------------------------------------------------------------- */
+
+/* 헤더 영역 */
+.header-area {
+    height: 80px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #DBDBDB;
+}
+.header-area .con {
+    max-width: inherit;
+}
+.header-area .left-box .menu-box li a {
+    transition: all 0.3s;
+}
+.header-area .left-box .menu-box li a.active {
+    color: #030095;
+    font-family: "Pretendard-Bold";
+}
+.header-area .left-box .menu-box li a:hover {
+    color: #030095;
+    font-family: "Pretendard-Bold";
+}
+.header-area .right-box .sub-menu-box li a {
+    transition: all 0.3s;
+}
+.header-area .right-box .sub-menu-box li a:hover {
+    color: #333;
+    text-decoration: underline;
+}
+
+/* ------------------------------------------------------------------------------- */
+
+/* 공통 영역 */
+.cnt-area {
+    box-sizing: border-box;
+    padding: 9.375vw 0;
+}
+.cnt-area h1.title-text {
+    font-size: 2.7083vw;
+}
+.cnt-area p.title-sub-text {
+    font-size: 1.3541vw;
+    margin-top: 1.25vw;
+}
+
+.login-cnt-area {
+    min-height: calc(100vh - 254px);
+    box-sizing: border-box;
+    padding: 6.25vw 0;
+}
+.login-cnt-area .con {
+    max-width: 560px;
+}
+.login-cnt-area h1.title-text {
+    font-size: 2.7083vw;
+    margin-bottom: 4.1666vw;
+}
+
+/* ------------------------------------------------------------------------------- */
+
+/* 매칭 리스트 영역 */
+.matching-list-area.inner {
+    margin-top: 3.8020vw;
+}
+.matching-list-area .swiper-box .swiper {
+    width: calc(100% - 100px);
+    margin: 0   auto;
+}
+.matching-list-area .swiper-box .swiper .swiper-slide {
+    width: auto;
+    background: inherit;
+}
+.matching-list-area .swiper-box .swiper .swiper-slide > a {
+    box-sizing: border-box;
+    padding: 0 8px 10px 8px;
+    border-bottom: 4px solid transparent;
+    font-size: 18px;
+    transition: all 0.3s;
+}
+.matching-list-area .swiper-box .swiper .swiper-slide > a:hover {
+    border-bottom: 4px solid #030095;
+    font-family: "Pretendard-Bold";
+    color: #030095;
+}
+.matching-list-area .swiper-box .swiper .swiper-slide > a.active {
+    border-bottom: 4px solid #030095;
+    font-family: "Pretendard-Bold";
+    color: #030095;
+}
+.matching-list-area .swiper-box .swiper-button-prev,
+.matching-list-area .swiper-box .swiper-button-next {
+    transform: translateY(-50%) !important;
+    width: 32px !important;
+    height: 32px !important;
+    margin-top: 0 !important;
+    z-index: 2 !important;
+}
+.matching-list-area .swiper-box .swiper-button-prev {
+    left: -0 !important;
+    right: auto !important;
+}
+.matching-list-area .swiper-box .swiper-button-next {
+    left: auto !important;
+    right: 0 !important;
+}
+.matching-list-area .swiper-box .swiper-button-prev::before {
+    background: url(../img/arrow_prev_point_030095.svg) no-repeat center center/cover;
+}
+.matching-list-area .swiper-box .swiper-button-next::before {
+    background: url(../img/arrow_next_point_030095.svg) no-repeat center center/cover;
+}
+.matching-list-area .matching-list-box > li  > a {
+    box-sizing: border-box;
+    padding: 16px 20px;
+}
+.matching-list-area .matching-list-box > li:not(:last-child)  > a {
+    border-bottom: 1px solid #D9D9D9;
+}
+.matching-list-area .matching-list-box > li  > a .left-box .text-box .difficulty-text {
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+.matching-list-area .matching-list-box > li  > a .left-box .text-box .difficulty-text.type-1 {
+    border: 1px solid #FF7A00;
+    color: #FF7A00;
+}
+.matching-list-area .matching-list-box > li  > a .left-box .text-box .difficulty-text.type-2 {
+    border: 1px solid #32DD07;
+    color: #32DD07;
+}
+.matching-list-area .matching-list-box > li  > a .left-box .text-box .difficulty-text.type-3 {
+    border: 1px solid #FF0000;
+    color: #FF0000;
+}
+.matching-list-area .matching-list-box > li  > a .situation-box {
+    width: 118px;
+    height: 56px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+.matching-list-area .matching-list-box > li  > a .situation-box.type-1 {
+    background: #CC0000;
+}
+.matching-list-area .matching-list-box > li  > a .situation-box.type-2 {
+    background: #030095;
+}
+
+/* 경기 완료시 */
+.matching-list-area .matching-list-box > li  > a.finish {
+    cursor: inherit;
+}
+.matching-list-area .matching-list-box > li  > a.finish {
+    color: #999999 !important;
+}
+.matching-list-area .matching-list-box > li  > a.finish .left-box .text-box .difficulty-text {
+    border: 1px solid #999999 !important;
+    color: #999999 !important;
+}
+.matching-list-area .matching-list-box > li  > a.finish .situation-box {
+    background: #CCCCCC;
+}
+
+/* ------------------------------------------------------------------------------- */
+
+/* 질문 리스트 박스 */
+.question-list-box.inner {
+    margin-top: 3.75vw;
+}
+.question-list-box > li {
+    box-sizing: border-box;
+    border-bottom: 1px solid #eee;
+}
+.question-list-box > li.active {
+    border-bottom: none;
+}
+.question-list-box > li:first-child {
+    border-top: 1px solid #eee;
+}
+.question-list-box > li .area-1 {
+    box-sizing: border-box;
+    padding: 2.0833vw 1.25vw;
+    background: #fff;
+    cursor: pointer;
+}
+.question-list-box > li .area-1 .left-box {
+    width: calc(100% - 2.0833vw);
+    font-size: 1.25vw;
+    color: #231916;
+}
+.question-list-box > li .area-1 .left-box h3 {
+    line-height: 120%;
+}
+.question-list-box > li.active .area-1 .left-box h3 {
+    font-family: "Pretendard-Bold";
+    color: #0F46BC;
+}
+.question-list-box > li .area-1 .arrow-ico {
+    width: 1.4583vw;
+}
+.question-list-box > li.active .area-1 .arrow-ico > img {
+    content: url(../img/arrow_top_0F46BC.svg);
+}
+.question-list-box > li .area-2 {
+    box-sizing: border-box;
+    padding: 2.0833vw;
+    background: #F6FAFF;
+    border-radius: 12px;
+    display: none;
+}
+.question-list-box > li .area-2 p {
+    font-size: 1.25vw;
+    line-height: 160%;
+    color: #231916;
+}
+
+/* ------------------------------------------------------------------------------- */
+
+/* 푸터 영역 */
+.footer-area .logo-box {
+    width: 96px;
+}
+
+/* ------------------------------------------------------------------------------- */
+
+@media (max-width:1280px) {
+    
+}
+
+@media (max-width:1023px) {
+    
+}
+
+@media (max-width:767px) {
+    
+} 

@@ -1,5 +1,6 @@
 package com.playwith.play;
 
+import com.playwith.play.user.UserCreateForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -7,7 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MainController {
 
     @GetMapping("/")
-    public String root() {
-        return "redirect:/article/list";
+    public String main() {
+        return "index";
     }
+
 }
