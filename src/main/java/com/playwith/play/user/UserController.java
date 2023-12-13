@@ -40,7 +40,7 @@ public class UserController {
     @PreAuthorize("isAnonymous()")
     @GetMapping("/password_search")
     public String password_result() {
-        return "password_search";;;;
+        return "password_search";
     }
 
     @PreAuthorize("isAnonymous()")
