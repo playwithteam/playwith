@@ -25,18 +25,17 @@ public class SiteUser {
     @Column(unique = true)
     private String username;
 
+    private String name;
     private String password;
-
     private LocalDateTime birthDate;
 
     @Column(unique = true)
     private String email;
-
     private String area;
     private String level;
-
     private String nickname;
     private String profileImgUrl;
+    private String rating;
 
 
     @ManyToOne
@@ -45,33 +44,8 @@ public class SiteUser {
     private List<ReportArticle> reportArticle;
 
 
-
-
-    public boolean isAdmin() {
-        return "admin".equals(username);
-    }
-    public List<? extends GrantedAuthority> getGrantedAuthorities() {
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        // 모든 멤버는 member 권한을 가진다.
-        grantedAuthorities.add(new SimpleGrantedAuthority("member"));
-        // username이 admin인 회원은 추가로 admin 권한도 가진다.
-        if (isAdmin()) {
-            grantedAuthorities.add(new SimpleGrantedAuthority("admin"));
-        }
-
-        return grantedAuthorities;
-    }
-
     public boolean isSocialMember() {
         return username.startsWith("KAKAO_");
-    }
+    }  //사용자명이 카카오로 시작하는지 확인
 
-    public boolean isModifyAvailable() {
-        return !isSocialMember();
-    }
-
-    public String getEmailForPrint() {
-        if (isSocialMember()) return "-";
-        return email;
-    }
 }

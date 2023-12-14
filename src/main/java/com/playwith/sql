@@ -1,0 +1,5 @@
+DROP DATABASE IF EXISTS play_dev;
+CREATE DATABASE play_dev;
+USE play_dev;
+
+SELECT * FROM site_user;

@@ -1,8 +1,10 @@
 package com.playwith.play;
 
+import com.playwith.play.RsData;
+import com.playwith.play.Ut;
 import com.playwith.play.user.SiteUser;
-import com.playwith.play.user.UserRepository;
 import com.playwith.play.user.UserService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -12,6 +14,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
+import java.util.Optional;
+
 @Component
 @RequestScope
 public class Rq {
@@ -20,7 +24,7 @@ public class Rq {
     private final HttpServletResponse resp;
     private final HttpSession session;
     private final User user;
-    private SiteUser siteUser = null; // 레이지 로딩, 처음부터 넣지 않고, 요청이 들어올 때 넣는다.
+    private SiteUser siteUser = null;
 
     public Rq(UserService userService, HttpServletRequest req, HttpServletResponse resp, HttpSession session) {
         this.userService = userService;
@@ -38,25 +42,152 @@ public class Rq {
         }
     }
 
-    // 로그인 되어 있는지 체크
+    private String getLoginedMemberUsername() {
+        if (isLogout()) return null;
+
+        return user.getUsername();
+    }
+
     public boolean isLogin() {
         return user != null;
     }
 
-    // 로그아웃 되어 있는지 체크
     public boolean isLogout() {
         return !isLogin();
     }
 
-    // 로그인 된 회원의 객체
-    public SiteUser getSiteUser() {
-        if (isLogout()) return null;
+    public SiteUser getMember() {
+        if (isLogout()) {
+            return null;
+        }
 
-        // 데이터가 없는지 체크
         if (siteUser == null) {
-            siteUser = userService.findByUsername(user.getUsername()).orElseThrow();
+            siteUser = userService.findByUsername(getLoginedMemberUsername()).get();
         }
 
         return siteUser;
+    }
+
+
+    // 세션 관련 함수
+    public void setSession(String name, Object value) {
+        session.setAttribute(name, value);
+    }
+
+    private Object getSession(String name, Object defaultValue) {
+        Object value = session.getAttribute(name);
+
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return value;
+    }
+
+    private long getSessionAsLong(String name, long defaultValue) {
+        Object value = getSession(name, null);
+
+        if (value == null) return defaultValue;
+
+        return (long) value;
+    }
+
+    public void removeSession(String name) {
+        session.removeAttribute(name);
+    }
+
+    // 쿠키 관련
+    public void setCookie(String name, String value) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setPath("/");
+        resp.addCookie(cookie);
+    }
+
+    private String getCookie(String name, String defaultValue) {
+        Cookie[] cookies = req.getCookies();
+
+        if (cookies == null) {
+            return defaultValue;
+        }
+
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals(name)) {
+                return cookie.getValue();
+            }
+        }
+
+        return defaultValue;
+    }
+
+    private long getCookieAsLong(String name, int defaultValue) {
+        String value = getCookie(name, null);
+
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return Long.parseLong(value);
+    }
+
+    public void removeCookie(String name) {
+        Cookie cookie = new Cookie(name, "");
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        resp.addCookie(cookie);
+    }
+
+
+    public String getAllCookieValuesAsString() {
+        StringBuilder sb = new StringBuilder();
+
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                sb.append(cookie.getName()).append(": ").append(cookie.getValue()).append("\n");
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public String getAllSessionValuesAsString() {
+        StringBuilder sb = new StringBuilder();
+
+        java.util.Enumeration<String> attributeNames = session.getAttributeNames();
+        while (attributeNames.hasMoreElements()) {
+            String attributeName = attributeNames.nextElement();
+            sb.append(attributeName).append(": ").append(session.getAttribute(attributeName)).append("\n");
+        }
+
+        return sb.toString();
+    }
+
+    public String historyBack(RsData rs) {
+        return historyBack(rs.getMsg());
+    }
+
+    public String historyBack(String msg) {
+        String referer = req.getHeader("referer");
+        String key = "historyBackFailMsg___" + referer;
+        req.setAttribute("localStorageKeyAboutHistoryBackFailMsg", key);
+        req.setAttribute("historyBackFailMsg", Ut.url.withTtl(msg));
+        // 200 이 아니라 400 으로 응답코드가 지정되도록
+        resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+
+        return "common/js";
+    }
+
+    public String redirect(String url, RsData rs) {
+        return redirect(url, rs.getMsg());
+    }
+
+    public String redirect(String url, String msg) {
+        return "redirect:" + Ut.url.modifyQueryParam(url, "msg", Ut.url.encodeWithTtl(msg));
+    }
+
+    public String redirectOrBack(String url, RsData rs) {
+        if (rs.isFail()) return historyBack(rs);
+
+        return redirect(url, rs);
     }
 }

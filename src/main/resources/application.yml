@@ -8,9 +8,12 @@ spring:
     username: root
     password:
     driver-class-name: org.mariadb.jdbc.Driver
+    thymeleaf:
+      cache: false
+      prefix: file:src/main/resources/templates/
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
   output:
     ansi:

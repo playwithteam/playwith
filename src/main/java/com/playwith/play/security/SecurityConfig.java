@@ -17,20 +17,17 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .formLogin(
-                        formLogin -> formLogin
-                                .loginPage("/user/login")
-                )
+                .formLogin((formLogin) -> formLogin
+                        .loginPage("/user/login")
+                        .defaultSuccessUrl("/"))
                 .oauth2Login(
                         oauth2Login -> oauth2Login
                                 .loginPage("/user/login")
-                )
-                .logout(
-                        logout -> logout
-                                .logoutUrl("/user/logout")
-                                .logoutSuccessUrl("/")
-                                .invalidateHttpSession(true)
-                );
+                                .defaultSuccessUrl("/"))
+                .logout((logout) -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true))
         ;
         return http.build();
     }
