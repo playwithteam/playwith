@@ -10,4 +10,5 @@ public class PlayApplication {
 		SpringApplication.run(PlayApplication.class, args);
 	}
 
+
 }
