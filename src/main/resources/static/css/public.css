@@ -291,6 +291,9 @@ body {
 .header-area .con {
     max-width: inherit;
 }
+.header-area .left-box .logo-box {
+    width: 96px;
+}
 .header-area .left-box .menu-box li a {
     transition: all 0.3s;
 }
