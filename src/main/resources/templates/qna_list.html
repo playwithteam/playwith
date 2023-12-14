@@ -9,37 +9,86 @@
                     <table>
                         <thead>
                             <tr>
+                                <th>선택</th>
                                 <th>번호</th>
                                 <th>제목</th>
+                                <th>내용</th>
                                 <th>생성일</th>
                                 <th>수정일</th>
                                 <th>관리</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>내용</td>
-                                <td class="wsw tal">
-                                    <a th:href="@{/qna/detail/{id}}" class="lh140 tm c333">내용</a>
+                            <tr th:each="qna, loop : ${qnaList}">
+                                <td>
+                                    <div class="check-type-1 inblock">
+                                        <input type="checkbox" th:id="'chk_' + ${qna.id}">
+                                        <label th:for="'chk_' + ${qna.id}"></label>
+                                    </div>
                                 </td>
-                                <td>내용</td>
-                                <td>내용</td>
+                                <td th:text="${loop.count}"></td>
+                                <td class="tal lh140" th:text="${qna.title}"></td>
+                                <td class="wsw tal lh140" th:utext="${qna.content}"></td>
+                                <td th:text="${#temporals.format(qna.createDate, 'yy-MM-dd HH:mm')}"></td>
+                                <td>
+                                    <span th:if="${qna.modifyDate != null}" th:text="${#temporals.format(qna.modifyDate, 'yy-MM-dd HH:mm')}"></span>
+                                </td>
                                 <td>
                                     <div class="btn-box inflex g8">
-                                        <a href="" class="btn-type-4">수정</a>
-                                        <button type="button" class="btn-type-4">삭제</button>
+                                        <a th:href="@{|/qna/modify/${qna.id}|}" class="btn-type-4">수정</a>
+                                        <a onclick="return confirm('정말 삭제하시겠습니까?')" th:href="@{|/qna/delete/${qna.id}|}" class="btn-type-4">삭제</a>
                                     </div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+                <div class="flex jce mt20 g8">
+                    <button onclick="deleteSelectedItems()" class="btn-type-5">선택 삭제</button>
+                    <form th:action="@{/qna/deleteAll}" method="get" onsubmit="return confirm('정말로 전체 삭제하시겠습니까?')">
+                        <button type="submit" class="btn-type-5">전체 삭제</button>
+                    </form>
+                </div>
                 <div class="btn-box-type-1 flex jcc">
-                    <a th:href="@{/qna/form}" class="btn-type-1">질문 작성</a>
+                    <a th:href="@{/qna/create}" class="btn-type-1">질문 작성</a>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function deleteSelectedItems() {
+    if (confirm('선택한 아이템을 삭제하시겠습니까?')) {
+        var selectedItems = document.querySelectorAll('.checkbox:checked');
+        var ids = Array.from(selectedItems).map(function (checkbox) {
+            return checkbox.id.replace('chk_', '');
+        });
+
+        // 서버로 데이터를 전송
+        fetch('/qna/deleteSelectedItems', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ itemIds: ids }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Success:', data);
+            // 성공적으로 처리된 경우의 동작을 추가할 수 있습니다.
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // 에러 발생 시 처리할 동작을 추가할 수 있습니다.
+        });
+    }
+}
+    </script>
 
 </div>
 </html>
