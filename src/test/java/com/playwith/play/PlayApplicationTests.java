@@ -1,6 +1,6 @@
 package com.playwith.play;
 
-import com.playwith.play.user.UserService;
+import com.playwith.play.domain.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

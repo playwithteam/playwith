@@ -1,0 +1,43 @@
+<header th:fragment="headerFragment" class="header-area w100per bfff fixed zi5 xy-tl">
+    <div class="con wh100per flex aic jcsb">
+        <div class="left-box flex aic g120">
+            <a th:href="@{/}" class="logo-box img-box">
+                <img th:src="@{/img/logo.svg}" alt="">
+            </a>
+            <ul class="menu-box flex aic g60">
+                <li>
+                    <a href="#area_0" class="scroll-btn c777 f20">홈</a>
+                </li>
+                <li>
+                    <a href="#area_1" class="scroll-btn c777 f20">용병 매칭</a>
+                </li>
+                <li>
+                    <a href="#area_2" class="scroll-btn c777 f20">팀 매칭</a>
+                </li>
+                <li>
+                    <a href="" class="scroll-btn c777 f20">신고하기</a>
+                </li>
+                <li>
+                    <a href="#area_3" class="scroll-btn c777 f20">자주 묻는 질문</a>
+                </li>
+            </ul>
+        </div>
+        <div class="right-box flex aic g40">
+            <div sec:authorize="isAuthenticated()" class="user-name-box f16 tm c777"><span class="c333 tb inblock">홍길동</span>님</div>
+            <ul class="sub-menu-box flex aic g12">
+                <li sec:authorize="isAnonymous()">
+                    <a th:href="@{/user/login}" class="c999 f16">로그인</a>
+                </li>
+                <li sec:authorize="isAnonymous()">
+                    <a th:href="@{/user/signup}" class="c999 f16">회원가입</a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <a href="" class="c999 f16">내 정보</a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <a href="" class="c999 f16">로그아웃</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
