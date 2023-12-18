@@ -15,24 +15,24 @@ public class EmailController {
 
 
     // 임시 비밀번호 발급
-    @PostMapping("/password")
-    public ResponseEntity sendPasswordMail(@RequestBody EmailPostDto emailPostDto) {
-        EmailMessage emailMessage = EmailMessage.builder()
-                .to(emailPostDto.getEmail())
-                .subject("[SAVIEW] 임시 비밀번호 발급")
-                .build();
-
-        emailService.sendMail(emailMessage, "password");
-
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping("/password")
+//    public ResponseEntity sendPasswordMail(@RequestBody EmailPostDto emailPostDto) {
+//        EmailMessage emailMessage = EmailMessage.builder()
+//                .to(emailPostDto.getEmail())
+//                .subject("")
+//                .build();
+//
+//        emailService.sendMail(emailMessage, "password");
+//
+//        return ResponseEntity.ok().build();
+//    }
 
     // 회원가입 이메일 인증 - 요청 시 body로 인증번호 반환하도록 작성하였음
     @PostMapping("/email")
     public ResponseEntity<EmailResponseDto> sendJoinMail(@RequestBody EmailPostDto emailPostDto) {
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(emailPostDto.getEmail())
-                .subject("[SAVIEW] 이메일 인증을 위한 인증 코드 발송")
+                .subject("[PLAY WITH] 이메일 인증을 위한 인증 코드")
                 .build();
 
         String code = emailService.sendMail(emailMessage, "email");

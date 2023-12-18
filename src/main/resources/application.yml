@@ -1,17 +1,16 @@
 server:
   port: 8080
-
 spring:
   profiles:
     include: secret
   datasource:
-    url: jdbc:mariadb://127.0.0.1:3306/play_dev
+    url: jdbc:mariadb://127.0.0.1:3306/play_dev?
     username: root
     password:
     driver-class-name: org.mariadb.jdbc.Driver
-  thymeleaf:
-    cache: false
-    prefix: file:src/main/resources/templates/
+    thymeleaf:
+      cache: false
+      prefix: file:src/main/resources/templates/
   jpa:
     hibernate:
       ddl-auto: update
@@ -49,12 +48,10 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
-
 logging:
   level:
     org.hibernate.orm.jdbc.bind: TRACE
     org.hibernate.orm.jdbc.extract: TRACE
-
 custom:
   site:
     baseUrl: http://localhost:8080

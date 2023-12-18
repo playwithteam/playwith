@@ -4,9 +4,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- CSRF 토큰 설정 -->
-    <meta name="_csrf" th:content="${_csrf.token}">
-    <meta name="_csrf_header" th:content="${_csrf.headerName}">
-
+        <meta name="_csrf" th:content="${_csrf.token}">
+        <meta name="_csrf_header" th:content="${_csrf.headerName}">
 
 
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -23,15 +22,17 @@
                     var verificationCode = $("input[name='verificationCode']").val();
                     var name = $("input[name='name']").val();
                     var birthdate = $("input[name='birthdate']").val();
-                    var region = $("#region").val();
+                    var area = $("#area").val();
                     var level = $("#level").val();
                     var privacyAgreement = $("#privacy").prop("checked");
 
                     // TODO: 입력 데이터 유효성 검사 및 필요한 처리 수행
-
+                    var isValid = validateInput(username, password1, password2, email, verificationCode, name, birthdate, area, level, privacyAgreement);
                     // CSRF 토큰 가져오기
+                    if (isValid) {
                     var csrfToken = $("meta[name='_csrf']").attr("content");
                     var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+                    var profileImgUrl = $("#user_img").val();
 
                     // 서버에 회원가입 요청 보내기
                     $.ajax({
@@ -45,9 +46,10 @@
                             verificationCode: verificationCode,
                             name: name,
                             birthdate: birthdate,
-                            region: region,
+                            area: area,
                             level: level,
-                            privacyAgreement: privacyAgreement
+                            privacyAgreement: privacyAgreement,
+                            profileImgUrl: profileImgUrl
                         },
                          beforeSend: function(xhr) {
                             // CSRF 토큰을 헤더에 포함
@@ -62,6 +64,7 @@
                             alert("회원가입에 실패하였습니다. 다시 시도해주세요.");
                         }
                     });
+                    }
                 });
 
                 // 이메일 전송 버튼 클릭 시 처리
@@ -71,13 +74,12 @@
                     var email = $("input[name='email']").val();
 
                     // TODO: 이메일 주소 유효성 검사 등 필요한 처리 수행
-
+                     var isEmailValid = validateEmail(email);
                      // CSRF 토큰 가져오기
-
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
+                    if (isEmailValid) {
+                    var token = $("meta[name='_csrf']").attr("content");
+                    var header = $("meta[name='_csrf_header']").attr("content");
                     // 서버에 이메일 전송 요청 보내기
-
                     const sendData = { email: email };
 
                     $.ajax({
@@ -92,15 +94,61 @@
                         },
                         success: function (verificationCode) {
                             // 성공 시 사용자에게 메시지 표시 또는 다른 처리 수행
-                            alert("이메일이 성공적으로 발송되었습니다. 인증 코드: " + verificationCode);
+                            showSuccessMessage(verificationCode);
                         },
                         error: function (error) {
-
                             // 실패 시 사용자에게 메시지 표시 또는 다른 처리 수행
-                            alert("이메일 발송에 실패하였습니다. 다시 시도해주세요.");
+                            showFailureMessage();
                         }
                     });
+                    }
                 });
+                function validateEmail(email) {
+                     // 간단한 이메일 유효성 검사 로직을 사용
+                     var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    return emailRegex.test(email);
+                }
+                function validateInput(username,password1, password2, email, verificationCode, name, birthdate, area, level, privacyAgreement) {
+                // TODO: 각 입력값에 대한 유효성 검사 로직 작성
+                // 예시: 필수 입력, 길이 제한, 정규 표현식 등을 사용하여 검사
+                if (!username) {
+                    updateErrorMessage("required", $("input[name='username']"));
+                    return false;
+                }
+                // ... (다른 입력값에 대한 검사 추가)
+                return true;
+            }
+             // 에러 메시지 업데이트 함수
+            function updateErrorMessage(errorType, inputBox) {
+                // 에러 메시지를 표시할 요소
+                var errorBox = inputBox.siblings(".error-text-box");
+
+                // 모든 에러 메시지를 초기화
+                errorBox.find(".error-text, .confirm-text").hide();
+
+                // 특정 에러 타입에 따라 메시지 업데이트
+                switch (errorType) {
+                    case "required":
+                        errorBox.find(".error-text.f14.cCC0000").show().text("필수 입력 항목입니다.");
+                        break;
+                    case "invalidEmail":
+                        errorBox.find(".error-text.f14.cCC0000").show().text("유효한 이메일 주소를 입력하세요.");
+                        break;
+                    // 추가적인 에러 타입에 따른 처리 가능
+                }
+            }
+
+            // 성공 메시지 표시 함수
+            function showSuccessMessage(verificationCode) {
+                $(".error-text-box").empty(); // 기존 메시지 초기화
+                $(".confirm-text").text("이메일이 성공적으로 발송되었습니다. 인증 코드: " + verificationCode);
+                }
+
+            // 실패 메시지 표시 함수
+            function showFailureMessage() {
+                $(".error-text-box").empty(); // 기존 메시지 초기화
+                $(".error-text").text("이메일 발송에 실패하였습니다. 다시 시도해주세요.");
+                }
             });
         </script>
 
@@ -126,9 +174,11 @@
                             </div>
                         </li>
                         <li>
-                            <h3 class="c333 f18 tb mb16">아이디<span class="tb cCC0000 inblock">*</span></h3>
-                            <div class="input-type-1">
-                                <input type="text" placeholder="아이디">
+                            <div class="input-btn-box flex g8">
+                                <div class="input-type-1">
+                                    <input type="text" placeholder="아이디">
+                                </div>
+                                <button type="button" class="btn-type-2">중복 확인</button>
                             </div>
                             <div class="error-text-box wsn flex g8 mt8">
                                 <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
@@ -203,7 +253,7 @@
                                 <li class="w50per">
                                     <h3 class="c333 f18 tb mb16">지역<span class="tb cCC0000 inblock">*</span></h3>
                                     <div class="select-type-2 rel">
-                                        <select id="region" name="region">
+                                        <select id="area" name="area">
                                             <option value="지역">지역</option>
                                             <option value="강원도">강원도</option>
                                             <option value="경기도">경기도</option>

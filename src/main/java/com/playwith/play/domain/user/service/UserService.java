@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Service
@@ -18,29 +19,29 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public SiteUser join(String username, String name, String password,
-                         String email, String area, String level
-            , String nickname, String profileImgUrl, String rating) {
-        SiteUser siteUser = new SiteUser();
-        siteUser.setUsername(username);
-        siteUser.setName(name);
-        siteUser.setPassword(passwordEncoder.encode(password));
-        siteUser.setEmail(email);
-        siteUser.setArea(area);
-        siteUser.setLevel(level);
-        siteUser.setNickname(nickname);
-        siteUser.setProfileImgUrl(profileImgUrl);
-        siteUser.setRating(rating);
-        siteUser.setBirthDate(LocalDateTime.now());
+                         String email, String area, String level, String profileImgUrl, LocalDate birthdate) {
+        SiteUser siteUser = SiteUser.builder()
+                .profileImgUrl(profileImgUrl)
+                .username(username)
+                .name(name)
+                .password(passwordEncoder.encode(password))
+                .email(email)
+                .area(area)
+                .level(level)
+                .birthDate(birthdate)
+                .build();
 
         return this.userRepository.save(siteUser);
     }
 
     public SiteUser SocialJoin(String username, String password, String nickname, String profileImgUrl) {
-        SiteUser siteUser = new SiteUser();
-        siteUser.setUsername(username);
-        siteUser.setPassword(passwordEncoder.encode(password));
-        siteUser.setNickname(nickname);
-        siteUser.setProfileImgUrl(profileImgUrl);
+        SiteUser siteUser = SiteUser.builder()
+                .username(username)
+                .password(passwordEncoder.encode(password))
+                .nickname(nickname)
+                .profileImgUrl(profileImgUrl)
+                .build();
+
         return siteUser;
     }
 

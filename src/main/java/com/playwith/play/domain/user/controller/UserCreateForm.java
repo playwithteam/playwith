@@ -1,15 +1,16 @@
 package com.playwith.play.domain.user.controller;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
 public class UserCreateForm {
+    private String profileImgUrl;
     @Size(min = 3, max = 25)
     @NotEmpty(message = "사용자ID는 필수항목입니다.")
     private String username;
@@ -22,10 +23,20 @@ public class UserCreateForm {
     private String password2;
 
     @NotEmpty(message = "이메일은 필수항목입니다.")
-    @Pattern(regexp = "^(?:\\w+\\.?)*\\w+@(?:\\w+\\.)+\\w+$", message = "이메일 형식이 올바르지 않습니다.")
     @Email
     private String email;
+    @NotEmpty(message = "이메일 확인은 필수항목입니다.")
+    private String verificationCode;
 
     @NotEmpty(message = "이름은 필수항목입니다.")
     private String name;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "생년월일은 필수항목입니다.")
+    private LocalDate birthDate;
+    @NotEmpty(message = "지역은 필수항목입니다.")
+    private String area;
+    @NotEmpty(message = "레벨은 필수항목입니다.")
+    private String level;
+    @NotEmpty(message = "필수 체크 항목입니다.")
+    private String privacyAgreement;
 }
