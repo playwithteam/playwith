@@ -7,12 +7,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequestMapping("/user")
 @Controller
@@ -35,21 +36,36 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
+    @ResponseBody
+    public Map<String, Object> signup(@RequestBody @Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
+        Map<String, Object> response = new HashMap<>();
+
         if (bindingResult.hasErrors()) {
-            return "signup";
+            response.put("success", false);
+            response.put("errors", getErrorMessages(bindingResult));
+            return response;
         }
 
         if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
-            bindingResult.rejectValue("password2", "passwordInCorrect",
-                    "2개의 패스워드가 일치하지 않습니다.");
-            return "signup";
+            bindingResult.rejectValue("password2", "passwordInCorrect", "2개의 패스워드가 일치하지 않습니다.");
+            response.put("success", false);
+            response.put("errors", getErrorMessages(bindingResult));
+            return response;
         }
 
         userService.join(userCreateForm.getProfileImgUrl(), userCreateForm.getUsername(), userCreateForm.getName(),
-                 userCreateForm.getPassword1(), userCreateForm.getEmail(),userCreateForm.getArea(), userCreateForm.getLevel(), userCreateForm.getBirthDate());
+                userCreateForm.getPassword1(), userCreateForm.getEmail(), userCreateForm.getArea(), userCreateForm.getLevel(), userCreateForm.getBirthDate());
 
-        return "redirect:/";
+        response.put("success", true);
+        return response;
+    }
+
+    private Map<String, String> getErrorMessages(BindingResult bindingResult) {
+        Map<String, String> errorMap = new HashMap<>();
+        for (FieldError error : bindingResult.getFieldErrors()) {
+            errorMap.put(error.getField(), error.getDefaultMessage());
+        }
+        return errorMap;
     }
 
     @PreAuthorize("isAnonymous()")
