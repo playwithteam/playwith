@@ -37,7 +37,7 @@ public class UserController {
 
     @PostMapping("/signup")
     @ResponseBody
-    public Map<String, Object> signup(@RequestBody @Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
+    public Map<String, Object> signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
         Map<String, Object> response = new HashMap<>();
 
         if (bindingResult.hasErrors()) {

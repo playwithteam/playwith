@@ -6,7 +6,9 @@ import com.playwith.play.domain.team.entity.Team;
 import com.playwith.play.domain.wishlist.entity.WishList;
 import com.playwith.play.global.jpa.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,6 +22,8 @@ import java.util.List;
 @Getter
 @Entity
 @SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SiteUser extends BaseEntity {
 
     @Column(unique = true)
