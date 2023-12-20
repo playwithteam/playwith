@@ -1,19 +1,16 @@
 package com.playwith.play.domain.user.controller;
 
-import com.playwith.play.global.rq.Rq;
 import com.playwith.play.domain.user.service.UserService;
+import com.playwith.play.global.rq.Rq;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping("/user")
 @Controller
@@ -36,36 +33,31 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    @ResponseBody
-    public Map<String, Object> signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
-        Map<String, Object> response = new HashMap<>();
-
+    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            response.put("success", false);
-            response.put("errors", getErrorMessages(bindingResult));
-            return response;
+            return "signup";
         }
 
         if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
-            bindingResult.rejectValue("password2", "passwordInCorrect", "2개의 패스워드가 일치하지 않습니다.");
-            response.put("success", false);
-            response.put("errors", getErrorMessages(bindingResult));
-            return response;
+            bindingResult.rejectValue("password2", "passwordInCorrect",
+                    "2개의 패스워드가 일치하지 않습니다.");
+            return "signup";
         }
 
-        userService.join(userCreateForm.getProfileImgUrl(), userCreateForm.getUsername(), userCreateForm.getName(),
-                userCreateForm.getPassword1(), userCreateForm.getEmail(), userCreateForm.getArea(), userCreateForm.getLevel(), userCreateForm.getBirthDate());
-
-        response.put("success", true);
-        return response;
-    }
-
-    private Map<String, String> getErrorMessages(BindingResult bindingResult) {
-        Map<String, String> errorMap = new HashMap<>();
-        for (FieldError error : bindingResult.getFieldErrors()) {
-            errorMap.put(error.getField(), error.getDefaultMessage());
+        try {
+            userService.join(userCreateForm.getProfileImgUrl(), userCreateForm.getUsername(), userCreateForm.getName(),
+                    userCreateForm.getPassword1(), userCreateForm.getEmail(), userCreateForm.getArea(), userCreateForm.getLevel(), userCreateForm.getBirthDate());
+        }catch(DataIntegrityViolationException e) {
+            e.printStackTrace();
+            bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
+            return "signup";
+        }catch(Exception e) {
+            e.printStackTrace();
+            bindingResult.reject("signupFailed", e.getMessage());
+            return "signup";
         }
-        return errorMap;
+
+        return "redirect:/";
     }
 
     @PreAuthorize("isAnonymous()")

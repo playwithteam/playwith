@@ -1,15 +1,16 @@
 package com.playwith.play.domain.user.controller;
 
-import jakarta.validation.constraints.*;
-import lombok.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Setter
 public class UserCreateForm {
     private String profileImgUrl;
     @Size(min = 3, max = 25)

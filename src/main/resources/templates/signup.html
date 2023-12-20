@@ -7,7 +7,8 @@
         <meta name="_csrf" th:content="${_csrf.token}">
         <meta name="_csrf_header" th:content="${_csrf.headerName}">
         <div class="signup-area login-cnt-area w100per rel zi2">
-            <input type="hidden" name="_csrf" value="${_csrf.token}" />
+            <form action="/user/signup" method="post" modelAttribute="userCreateForm">
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
             <div class="con w100per">
                 <h1 class="title-text lh120 tb tac wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">회원가입</h1>
                 <div class="signup-box flex fdc wow fadeInUp" data-wow-delay="0.6s" data-wow-duration="0.6s">
@@ -162,6 +163,7 @@
                     <button type="submit" class="btn-type-1 mt40">회원가입</button>
                 </div>
             </div>
+            </form>
         </div>
 </div>
 </html>
@@ -169,69 +171,69 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
     $(document).ready(function () {
-        // 페이지 로드 시 에러 메시지 숨기기
-        $(".error-text-box").hide();
+<!--        // 페이지 로드 시 에러 메시지 숨기기-->
+<!--        $(".error-text-box").hide();-->
 
-        // 회원가입 버튼 클릭 시 처리
-        $(".btn-type-1.mt40").click(function () {
-            console.log("회원가입 버튼이 클릭되었습니다.");
-            // 사용자가 입력한 데이터 가져오기
-            var username = $("input[name='username']").val();
-            var password1 = $("input[name='password1']").val();
-            var password2 = $("input[name='password2']").val();
-            var email = $("input[name='email']").val();
-            var verificationCode = $("input[name='verificationCode']").val();
-            var name = $("input[name='name']").val();
-            var birthDate = $("input[name='birthDate']").val();
-            var area = $("#area").val();
-            var level = $("#level").val();
-            var token = $("meta[name='_csrf']").attr("content");
-            var header = $("meta[name='_csrf_header']").attr("content");
-            var profileImgUrl = $("#user_img").val();
+<!--        // 회원가입 버튼 클릭 시 처리-->
+<!--        $(".btn-type-1.mt40").click(function () {-->
+<!--            console.log("회원가입 버튼이 클릭되었습니다.");-->
+<!--            // 사용자가 입력한 데이터 가져오기-->
+<!--            var username = $("input[name='username']").val();-->
+<!--            var password1 = $("input[name='password1']").val();-->
+<!--            var password2 = $("input[name='password2']").val();-->
+<!--            var email = $("input[name='email']").val();-->
+<!--            var verificationCode = $("input[name='verificationCode']").val();-->
+<!--            var name = $("input[name='name']").val();-->
+<!--            var birthDate = $("input[name='birthDate']").val();-->
+<!--            var area = $("#area").val();-->
+<!--            var level = $("#level").val();-->
+<!--            var token = $("meta[name='_csrf']").attr("content");-->
+<!--            var header = $("meta[name='_csrf_header']").attr("content");-->
+<!--            var profileImgUrl = $("#user_img").val();-->
 
-            // TODO: 입력 데이터 유효성 검사 및 필요한 처리 수행
-            var isValid = validateInput(username, password1, password2, email, verificationCode, name, birthDate, area, level);
+<!--            // TODO: 입력 데이터 유효성 검사 및 필요한 처리 수행-->
+<!--            var isValid = validateInput(username, password1, password2, email, verificationCode, name, birthDate, area, level);-->
 
-            if (isValid) {
-                // 서버에 회원가입 요청 보내기
-                $.ajax({
-                    type: "POST",
-                    url: "/user/signup",
-                    data: {
-                        username: username,
-                        password1: password1,
-                        password2: password2,
-                        email: email,
-                        verificationCode: verificationCode,
-                        name: name,
-                        birthDate: birthDate,
-                        area: area,
-                        level: level,
-                        profileImgUrl: profileImgUrl
-                    },
-                    beforeSend: function (xhr) {
-                        // CSRF 토큰을 헤더에 포함
-                        xhr.setRequestHeader(header, token);
-                    },
-                    success: function (response) {
-                        // 성공 시 사용자에게 메시지 표시 또는 다른 처리 수행
-                        if (response.success) {
-                            alert("회원가입이 완료되었습니다.");
-                        } else {
-                            // 에러 메시지 표시
-                            displayErrorMessages(response.errors);
-                        }
-                    },
-                    error: function (error) {
-                        // 실패 시 사용자에게 메시지 표시 또는 다른 처리 수행
-                        alert("회원가입에 실패하였습니다. 다시 시도해주세요.");
-                    }
-                });
-            } else {
-    // 유효성 검사 실패 시 추가적인 처리 (예: 에러 메시지 표시)
-    console.log("유효성 검사 실패");
-}
-        });
+<!--            if (isValid) {-->
+<!--                // 서버에 회원가입 요청 보내기-->
+<!--                $.ajax({-->
+<!--                    type: "POST",-->
+<!--                    url: "/user/signup",-->
+<!--                    data: {-->
+<!--                        username: username,-->
+<!--                        password1: password1,-->
+<!--                        password2: password2,-->
+<!--                        email: email,-->
+<!--                        verificationCode: verificationCode,-->
+<!--                        name: name,-->
+<!--                        birthDate: birthDate,-->
+<!--                        area: area,-->
+<!--                        level: level,-->
+<!--                        profileImgUrl: profileImgUrl-->
+<!--                    },-->
+<!--                    beforeSend: function (xhr) {-->
+<!--                        // CSRF 토큰을 헤더에 포함-->
+<!--                        xhr.setRequestHeader(header, token);-->
+<!--                    },-->
+<!--                    success: function (response) {-->
+<!--                        // 성공 시 사용자에게 메시지 표시 또는 다른 처리 수행-->
+<!--                        if (response.success) {-->
+<!--                            alert("회원가입이 완료되었습니다.");-->
+<!--                        } else {-->
+<!--                            // 에러 메시지 표시-->
+<!--                            displayErrorMessages(response.errors);-->
+<!--                        }-->
+<!--                    },-->
+<!--                    error: function (error) {-->
+<!--                        // 실패 시 사용자에게 메시지 표시 또는 다른 처리 수행-->
+<!--                        alert("회원가입에 실패하였습니다. 다시 시도해주세요.");-->
+<!--                    }-->
+<!--                });-->
+<!--            } else {-->
+<!--    // 유효성 검사 실패 시 추가적인 처리 (예: 에러 메시지 표시)-->
+<!--    console.log("유효성 검사 실패");-->
+<!--}-->
+<!--        });-->
 
         // 이메일 전송 버튼 클릭 시 처리
         $("#sendEmailBtn").click(function () {
@@ -276,16 +278,16 @@
              var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return emailRegex.test(email);
         }
-        function validateInput(username, password1, password2, email, verificationCode, name, birthDate, area, level) {
-            // TODO: 각 입력값에 대한 유효성 검사 로직 작성
-            if (!username || !password1 || !password2 || !email || !verificationCode || !name || !birthDate || area === "지역" || level === "레벨") {
-                updateErrorMessage("required", $("input[name='username']"));
-                return false;
-            }
+<!--        function validateInput(username, password1, password2, email, verificationCode, name, birthDate, area, level) {-->
+<!--            // TODO: 각 입력값에 대한 유효성 검사 로직 작성-->
+<!--            if (!username || !password1 || !password2 || !email || !verificationCode || !name || !birthDate || area === "지역" || level === "레벨") {-->
+<!--                updateErrorMessage("required", $("input[name='username']"));-->
+<!--                return false;-->
+<!--            }-->
 
-            $(".error-text-box").hide();
-            return true;
-        }
+<!--            $(".error-text-box").hide();-->
+<!--            return true;-->
+<!--        }-->
          function displayErrorMessages(errors) {
           console.log("에러 메시지:", errors);
             // 각 입력 필드에 대한 에러 메시지 표시
