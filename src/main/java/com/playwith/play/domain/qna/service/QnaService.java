@@ -6,6 +6,7 @@ import com.playwith.play.global.util.DataNotFoundException;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,7 +29,7 @@ public class QnaService {
         return this.qnaRepository.findAll();
     }
 
-    public Qna getQna(Integer id) {
+    public Qna getQna(Long id) {
         Optional<Qna> qna = this.qnaRepository.findById(id);
         if (qna.isPresent()) {
             return qna.get();
@@ -49,14 +50,20 @@ public class QnaService {
         this.qnaRepository.delete(qna);
     }
 
+    public void deleteById(Long itemId) {
+        qnaRepository.deleteById(itemId);
+    }
+
     public void deleteAll(List<Qna> qnaList) {
         this.qnaRepository.deleteAll(qnaList);
     }
 
-    public void deleteItemsById(List<Integer> itemIds) {
-        for (Integer itemId : itemIds) {
-            Optional<Qna> qnaOptional = qnaRepository.findById(itemId);
-            qnaOptional.ifPresent(qnaRepository::delete);
+    public void deleteSelectedQna(String[] selectedIds) {
+        for (String idVal : selectedIds) {
+            Long id = Long.parseLong(idVal);
+            this.qnaRepository.deleteById(id);
         }
     }
+
+
 }

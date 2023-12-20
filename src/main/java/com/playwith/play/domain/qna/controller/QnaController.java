@@ -2,6 +2,7 @@ package com.playwith.play.domain.qna.controller;
 
 import com.playwith.play.domain.qna.entity.Qna;
 import com.playwith.play.domain.qna.service.QnaService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -13,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/qna")
@@ -42,7 +44,7 @@ public class QnaController {
     }
 
     @GetMapping("/modify/{id}")
-    public String modify(QnaForm qnaForm, @PathVariable("id") Integer id) {
+    public String modify(QnaForm qnaForm, @PathVariable("id") Long id) {
         Qna qna = this.qnaService.getQna(id);
         qnaForm.setTitle(qna.getTitle());
         qnaForm.setContent(qna.getContent());
@@ -50,7 +52,7 @@ public class QnaController {
     }
 
     @PostMapping("/modify/{id}")
-    public String modify(@Valid QnaForm qnaForm, BindingResult bindingResult, @PathVariable("id") Integer id) {
+    public String modify(@Valid QnaForm qnaForm, BindingResult bindingResult, @PathVariable("id") Long id) {
         if (bindingResult.hasErrors()) {
             return "qna_form";
         }
@@ -60,7 +62,7 @@ public class QnaController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Integer id) {
+    public String delete(@PathVariable("id") Long id) {
         Qna qna = this.qnaService.getQna(id);
         this.qnaService.delete(qna);
         return "redirect:/qna/list";
@@ -73,15 +75,11 @@ public class QnaController {
         return "redirect:/qna/list";
     }
 
-    @PostMapping("/deleteSelectedItems")
-    public ResponseEntity<String> deleteSelectedItems(@RequestParam("itemIds") List<Integer> itemIds) {
-        try {
-            qnaService.deleteItemsById(itemIds);
-            return ResponseEntity.ok("Successfully deleted selected items");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting items");
-        }
+    @PostMapping("/deleteSelectedQna")
+    @ResponseBody
+    public String deleteSelectedQna(@RequestBody Map<String, String[]> requestBody) {
+        String[] temp = requestBody.get("selectedIds");
+        qnaService.deleteSelectedQna(temp);
+        return "redirect:/qna/list";
     }
-
-
 }
