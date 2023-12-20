@@ -17,8 +17,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public SiteUser join(String username, String name, String password,
-                         String email, String area, String level, String profileImgUrl, LocalDate birthdate) {
+    public SiteUser join(String profileImgUrl, String username, String name, String password,
+                         String email, String area, String level, LocalDate birthdate) {
         SiteUser siteUser = SiteUser.builder()
                 .profileImgUrl(profileImgUrl)
                 .username(username)

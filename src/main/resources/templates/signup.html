@@ -7,7 +7,8 @@
         <meta name="_csrf" th:content="${_csrf.token}">
         <meta name="_csrf_header" th:content="${_csrf.headerName}">
         <div class="signup-area login-cnt-area w100per rel zi2">
-            <form action="/user/signup" method="post" modelAttribute="userCreateForm">
+            <!--/*@thymesVar id="userCreateForm" type="com.playwith.play.domain.user.controller.UserCreateForm"*/-->
+            <form action="/user/signup" method="post" th:object="${userCreateForm}">
             <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
             <div class="con w100per">
                 <h1 class="title-text lh120 tb tac wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">회원가입</h1>
@@ -31,12 +32,12 @@
                         <li>
                             <div class="input-btn-box flex g8">
                                 <div class="input-type-1">
-                                    <input type="text" name="username" placeholder="아이디">
+                                    <input type="text" th:field="*{username}"  placeholder="아이디">
                                 </div>
                                 <button type="button" id="checkDuplicateBtn" class="btn-type-2">중복 확인</button>
                             </div>
                             <div class="error-text-box wsn flex g8 mt8">
-                                <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                                <span th:if="${#fields.hasErrors('username')}" class="error-text f14 cCC0000" th:errors="*{username}"></span>
                                 <span class="error-text f14 cCC0000">중복된 아이디 입니다.</span>
                                 <span class="confirm-text f14 c009521">사용가능한 아이디 입니다.</span>
                             </div>
@@ -44,18 +45,18 @@
                         <li>
                             <h3 class="c333 f18 tb mb16">비밀번호<span class="tb cCC0000 inblock">*</span></h3>
                             <div class="input-type-1">
-                                <input type="password" name="password1" placeholder="비밀번호(최소 8자 이상, 영문, 숫자, 특수문자 3가지 조합)">
+                                <input type="password" th:field="*{password1}" placeholder="비밀번호(최소 8자 이상, 영문, 숫자, 특수문자 3가지 조합)">
                             </div>
                             <div class="error-text-box wsn flex g8 mt8">
-                                <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                                <span th:if="${#fields.hasErrors('password1')}" class="error-text f14 cCC0000" th:errors="*{password1}"></span>
                                 <span class="error-text f14 cCC0000">사용할 수 없는 비밀번호 입니다.</span>
                                 <span class="confirm-text f14 c009521">사용가능한 비밀번호 입니다.</span>
                             </div>
                             <div class="input-type-1 mt8">
-                                <input type="password" name="password2" placeholder="비밀번호 확인">
+                                <input type="password" th:field="*{password2}" placeholder="비밀번호 확인">
                             </div>
                             <div class="error-text-box wsn flex g8 mt8">
-                                <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                                <span th:if="${#fields.hasErrors('password2')}" class="error-text f14 cCC0000" th:errors="*{password2}"></span>
                                 <span class="error-text f14 cCC0000">비밀번호가 일치하지 않습니다.</span>
                                 <span class="confirm-text f14 c009521">비밀번호가 일치합니다.</span>
                             </div>
@@ -64,13 +65,12 @@
                             <h3 class="c333 f18 tb mb16">이메일<span class="tb cCC0000 inblock">*</span></h3>
                             <div class="input-btn-box flex g8">
                                 <div class="input-type-1">
-                                    <input type="text" name="email" placeholder="이메일">
+                                    <input type="text" th:field="*{email}" placeholder="이메일">
                                 </div>
                                 <button type="button" id="sendEmailBtn" class="btn-type-2">전송</button>
                             </div>
                             <div id="emailMessage" class="error-text-box wsn flex g8 mt8">
-                                <span class="error-text f14 cCC0000">메일이 발송되었습니다.</span>
-                                <span class="confirm-text f14 c009521">인증번호가 일치합니다.</span>
+                                <span th:if="${#fields.hasErrors('email')}" class="error-text f14 cCC0000" th:errors="*{email}"></span>
                             </div>
                             <div class="input-btn-box flex g8 mt8">
                                 <div class="input-type-1">
@@ -79,7 +79,6 @@
                                 <button type="button" id="verifyBtn" class="btn-type-2">확인</button>
                             </div>
                             <div class="error-text-box wsn flex g8 mt8">
-                                <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
                                 <span class="error-text f14 cCC0000">인증번호가 일치하지 않습니다.</span>
                                 <span class="confirm-text f14 c009521">인증번호가 일치합니다.</span>
                             </div>
@@ -87,19 +86,19 @@
                         <li>
                             <h3 class="c333 f18 tb mb16">이름<span class="tb cCC0000 inblock">*</span></h3>
                             <div class="input-type-1">
-                                <input type="text" name="name" placeholder="이름">
+                                <input type="text" th:field="*{name}" placeholder="이름">
                             </div>
                             <div class="error-text-box wsn flex g8 mt8">
-                                <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                                <span th:if="${#fields.hasErrors('name')}" class="error-text f14 cCC0000" th:errors="*{name}"></span>
                             </div>
                         </li>
                         <li>
                             <h3 class="c333 f18 tb mb16">생년월일<span class="tb cCC0000 inblock">*</span></h3>
                             <div class="date-type-1">
-                                <input type="date" name="birthDate">
+                                <input type="date" th:field="*{birthDate}">
                             </div>
                             <div class="error-text-box wsn flex g8 mt8">
-                                <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                                <span th:if="${#fields.hasErrors('birthDate')}" class="error-text f14 cCC0000" th:errors="*{birthDate}"></span>
                             </div>
                         </li>
                         <li>
@@ -107,7 +106,7 @@
                                 <li class="w50per">
                                     <h3 class="c333 f18 tb mb16">지역<span class="tb cCC0000 inblock">*</span></h3>
                                     <div class="select-type-2 rel">
-                                        <select id="area" name="area">
+                                        <select id="area" th:field="*{area}">
                                             <option value="지역">지역</option>
                                             <option value="강원도">강원도</option>
                                             <option value="경기도">경기도</option>
@@ -128,13 +127,13 @@
                                     </span>
                                     </div>
                                     <div class="error-text-box wsn flex g8 mt8">
-                                        <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                                        <span th:if="${#fields.hasErrors('area')}" class="error-text f14 cCC0000" th:errors="*{area}"></span>
                                     </div>
                                 </li>
                                 <li class="w50per">
                                     <h3 class="c333 f18 tb mb16">레벨<span class="tb cCC0000 inblock">*</span></h3>
                                     <div class="select-type-2 rel">
-                                        <select id="level" name="level">
+                                        <select id="level" th:field="*{level}">
                                             <option value="레벨">레벨</option>
                                             <option value="하">하</option>
                                             <option value="중">중</option>
@@ -145,7 +144,7 @@
                                     </span>
                                     </div>
                                     <div class="error-text-box wsn flex g8 mt8">
-                                        <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                                        <span th:if="${#fields.hasErrors('level')}" class="error-text f14 cCC0000" th:errors="*{level}"></span>
                                     </div>
                                 </li>
                             </ul>
@@ -171,70 +170,6 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
     $(document).ready(function () {
-<!--        // 페이지 로드 시 에러 메시지 숨기기-->
-<!--        $(".error-text-box").hide();-->
-
-<!--        // 회원가입 버튼 클릭 시 처리-->
-<!--        $(".btn-type-1.mt40").click(function () {-->
-<!--            console.log("회원가입 버튼이 클릭되었습니다.");-->
-<!--            // 사용자가 입력한 데이터 가져오기-->
-<!--            var username = $("input[name='username']").val();-->
-<!--            var password1 = $("input[name='password1']").val();-->
-<!--            var password2 = $("input[name='password2']").val();-->
-<!--            var email = $("input[name='email']").val();-->
-<!--            var verificationCode = $("input[name='verificationCode']").val();-->
-<!--            var name = $("input[name='name']").val();-->
-<!--            var birthDate = $("input[name='birthDate']").val();-->
-<!--            var area = $("#area").val();-->
-<!--            var level = $("#level").val();-->
-<!--            var token = $("meta[name='_csrf']").attr("content");-->
-<!--            var header = $("meta[name='_csrf_header']").attr("content");-->
-<!--            var profileImgUrl = $("#user_img").val();-->
-
-<!--            // TODO: 입력 데이터 유효성 검사 및 필요한 처리 수행-->
-<!--            var isValid = validateInput(username, password1, password2, email, verificationCode, name, birthDate, area, level);-->
-
-<!--            if (isValid) {-->
-<!--                // 서버에 회원가입 요청 보내기-->
-<!--                $.ajax({-->
-<!--                    type: "POST",-->
-<!--                    url: "/user/signup",-->
-<!--                    data: {-->
-<!--                        username: username,-->
-<!--                        password1: password1,-->
-<!--                        password2: password2,-->
-<!--                        email: email,-->
-<!--                        verificationCode: verificationCode,-->
-<!--                        name: name,-->
-<!--                        birthDate: birthDate,-->
-<!--                        area: area,-->
-<!--                        level: level,-->
-<!--                        profileImgUrl: profileImgUrl-->
-<!--                    },-->
-<!--                    beforeSend: function (xhr) {-->
-<!--                        // CSRF 토큰을 헤더에 포함-->
-<!--                        xhr.setRequestHeader(header, token);-->
-<!--                    },-->
-<!--                    success: function (response) {-->
-<!--                        // 성공 시 사용자에게 메시지 표시 또는 다른 처리 수행-->
-<!--                        if (response.success) {-->
-<!--                            alert("회원가입이 완료되었습니다.");-->
-<!--                        } else {-->
-<!--                            // 에러 메시지 표시-->
-<!--                            displayErrorMessages(response.errors);-->
-<!--                        }-->
-<!--                    },-->
-<!--                    error: function (error) {-->
-<!--                        // 실패 시 사용자에게 메시지 표시 또는 다른 처리 수행-->
-<!--                        alert("회원가입에 실패하였습니다. 다시 시도해주세요.");-->
-<!--                    }-->
-<!--                });-->
-<!--            } else {-->
-<!--    // 유효성 검사 실패 시 추가적인 처리 (예: 에러 메시지 표시)-->
-<!--    console.log("유효성 검사 실패");-->
-<!--}-->
-<!--        });-->
-
         // 이메일 전송 버튼 클릭 시 처리
         $("#sendEmailBtn").click(function () {
         console.log("이메일 전송 버튼이 클릭되었습니다.");
@@ -278,16 +213,6 @@
              var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return emailRegex.test(email);
         }
-<!--        function validateInput(username, password1, password2, email, verificationCode, name, birthDate, area, level) {-->
-<!--            // TODO: 각 입력값에 대한 유효성 검사 로직 작성-->
-<!--            if (!username || !password1 || !password2 || !email || !verificationCode || !name || !birthDate || area === "지역" || level === "레벨") {-->
-<!--                updateErrorMessage("required", $("input[name='username']"));-->
-<!--                return false;-->
-<!--            }-->
-
-<!--            $(".error-text-box").hide();-->
-<!--            return true;-->
-<!--        }-->
          function displayErrorMessages(errors) {
           console.log("에러 메시지:", errors);
             // 각 입력 필드에 대한 에러 메시지 표시

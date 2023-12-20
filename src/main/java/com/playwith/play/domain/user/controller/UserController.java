@@ -28,7 +28,7 @@ public class UserController {
 
     @PreAuthorize("isAnonymous()")
     @GetMapping("/signup")
-    public String signup() {
+    public String signup(UserCreateForm userCreateForm) {
         return "signup";
     }
 
@@ -47,11 +47,11 @@ public class UserController {
         try {
             userService.join(userCreateForm.getProfileImgUrl(), userCreateForm.getUsername(), userCreateForm.getName(),
                     userCreateForm.getPassword1(), userCreateForm.getEmail(), userCreateForm.getArea(), userCreateForm.getLevel(), userCreateForm.getBirthDate());
-        }catch(DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
             return "signup";
-        }catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", e.getMessage());
             return "signup";
