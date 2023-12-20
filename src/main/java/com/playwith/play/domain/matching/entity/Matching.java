@@ -16,8 +16,8 @@ public class Matching {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private int matchingType;
+    @Column(columnDefinition = "TEXT")
+    private String matchingType;
 
     private LocalDate createDate;
 

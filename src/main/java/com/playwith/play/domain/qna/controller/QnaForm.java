@@ -7,9 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class QnaForm {
-    @NotEmpty(message = "필수 입력항목입니다.")
+    @NotEmpty(message = "필수 입력 항목 입니다.")
     private String title;
 
-    @NotEmpty(message = "필수 입력항목입니다.")
+    @NotEmpty(message = "필수 입력 항목 입니다.")
     private String content;
 }

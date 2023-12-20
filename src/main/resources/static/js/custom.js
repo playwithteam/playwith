@@ -82,7 +82,7 @@ $(document).ready(function(){
         var selectedIds = [];
 
         // 각 선택된 체크박스의 값을 배열에 추가
-        $('.check-type-1 > input[type="checkbox"]:checked').each(function () {
+        $('td .check-type-1 > input[type="checkbox"]:checked').each(function () {
             selectedIds.push($(this).val());
         });
 
@@ -111,5 +111,29 @@ $(document).ready(function(){
             alert('삭제할 항목을 선택하세요.');
         }
     });
+
+    //체크박스 전제 선택
+    $("#cbx_chkAll").click(function() {
+        if($("#cbx_chkAll").is(":checked")) $("input[name=chk]").prop("checked", true);
+        else $("input[name=chk]").prop("checked", false);
+    });
+
+    $("input[name=chk]").click(function() {
+        var total = $("input[name=chk]").length;
+        var checked = $("input[name=chk]:checked").length;
+
+        if(total != checked) $("#cbx_chkAll").prop("checked", false);
+        else $("#cbx_chkAll").prop("checked", true);
+    });
+
+    $("#customTimeInput").on("change", function() {
+        // 분을 00분으로 고정하고 시간과 분을 합치기
+        var fixedMinutes = "00";
+        var selectedTime = $(this).val() || "00:00";
+        var modifiedTime = selectedTime.split(":")[0] + ":" + fixedMinutes;
+
+        // 수정된 값을 다시 input 요소에 설정
+        $(this).val(modifiedTime);
+      });
 
 });

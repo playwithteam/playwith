@@ -9,7 +9,12 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>선택</th>
+                                <th>
+                                    <div class="check-type-1 inblock">
+                                        <input type="checkbox" id="cbx_chkAll">
+                                        <label for="cbx_chkAll"></label>
+                                    </div>
+                                </th>
                                 <th>번호</th>
                                 <th>제목</th>
                                 <th>내용</th>
@@ -22,7 +27,7 @@
                             <tr th:each="qna, loop : ${qnaList}">
                                 <td>
                                     <div class="check-type-1 inblock">
-                                        <input type="checkbox" th:id="${qna.id}" th:value="${qna.id}">
+                                        <input type="checkbox" th:id="${qna.id}" th:value="${qna.id}" name="chk">
                                         <label th:for="${qna.id}"></label>
                                     </div>
                                 </td>

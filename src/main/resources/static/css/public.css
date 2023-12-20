@@ -351,6 +351,37 @@ body {
     color: #999;
 }
 
+.check-text-type-3 input {
+    display: none;
+}
+.check-text-type-3 input + label {
+    display: inline-block;
+    cursor: pointer;
+    padding-left: 24px;
+    position: relative;
+}
+.check-text-type-3 input + label::before {
+    content: "";
+    display: block;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    background: url(../img/ico_check_2.svg) no-repeat center center/cover;
+}
+.check-text-type-3 input:checked + label::before {
+    background: url(../img/ico_check_2_active.svg) no-repeat center center/cover;
+}
+.check-text-type-3 input + label .text {
+    font-size: 16px;
+    color: #999;
+}
+.check-text-type-3 input:checked + label .text {
+    color: #333;
+}
+
 .file-type-1 {
     box-sizing: border-box;
     padding: 0 0 8px 8px;
