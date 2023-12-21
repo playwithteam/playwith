@@ -7,7 +7,6 @@
         <meta name="_csrf" th:content="${_csrf.token}">
         <meta name="_csrf_header" th:content="${_csrf.headerName}">
         <div class="signup-area login-cnt-area w100per rel zi2">
-            <!--/*@thymesVar id="userCreateForm" type="com.playwith.play.domain.user.controller.UserCreateForm"*/-->
             <form action="/user/signup" method="post" th:object="${userCreateForm}">
             <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
             <div class="con w100per">
@@ -71,6 +70,7 @@
                             </div>
                             <div id="emailMessage" class="error-text-box wsn flex g8 mt8">
                                 <span th:if="${#fields.hasErrors('email')}" class="error-text f14 cCC0000" th:errors="*{email}"></span>
+                                <span class="error-text f14 cCC0000"></span>
                             </div>
                             <div class="input-btn-box flex g8 mt8">
                                 <div class="input-type-1">
@@ -107,7 +107,7 @@
                                     <h3 class="c333 f18 tb mb16">지역<span class="tb cCC0000 inblock">*</span></h3>
                                     <div class="select-type-2 rel">
                                         <select id="area" th:field="*{area}">
-                                            <option value="지역">지역</option>
+                                            <option value="">지역</option>
                                             <option value="강원도">강원도</option>
                                             <option value="경기도">경기도</option>
                                             <option value="충청도">충청도</option>
@@ -134,7 +134,7 @@
                                     <h3 class="c333 f18 tb mb16">레벨<span class="tb cCC0000 inblock">*</span></h3>
                                     <div class="select-type-2 rel">
                                         <select id="level" th:field="*{level}">
-                                            <option value="레벨">레벨</option>
+                                            <option value="">레벨</option>
                                             <option value="하">하</option>
                                             <option value="중">중</option>
                                             <option value="상">상</option>
@@ -156,7 +156,7 @@
                             <span class="text">개인정보 수집 및 이용 동의</span>
                         </label>
                     </div>
-                    <div class="error-text-box wsn flex g8 mt8">
+                    <div class="error-text-box wsn flex g8 mt8" id="agreement">
                         <span class="error-text f14 cCC0000">필수 체크 항목 입니다.</span>
                     </div>
                     <button type="submit" class="btn-type-1 mt40">회원가입</button>
@@ -170,6 +170,17 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
     $(document).ready(function () {
+
+        //개인정보 수집 및 이용 동의 체크박스
+        $("#privacy").change(function () {
+            // 만약 체크박스가 체크되어 있다면 오류 메시지를 숨깁니다
+            if ($(this).prop("checked")) {
+                $("#agreement").hide();
+            } else {
+                // 만약 체크박스가 체크되어 있지 않다면 오류 메시지를 보여줍니다
+                $("#agreement").show();
+            }
+        });
         // 이메일 전송 버튼 클릭 시 처리
         $("#sendEmailBtn").click(function () {
         console.log("이메일 전송 버튼이 클릭되었습니다.");
@@ -179,6 +190,10 @@
             // TODO: 이메일 주소 유효성 검사 등 필요한 처리 수행
              var isEmailValid = validateEmail(email);
              // CSRF 토큰 가져오기
+             if (!isEmailValid) {
+               // 에러 메시지 업데이트
+               updateErrorMessage("invalidEmail", $("input[name='email']"));
+             }
             if (isEmailValid) {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
@@ -213,46 +228,40 @@
              var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return emailRegex.test(email);
         }
+        // 에러 메시지 업데이트 함수
+        function updateErrorMessage(errorType, inputBox) {
+            // 에러 메시지를 표시할 요소
+            var errorBox = inputBox.closest(".input-btn-box").find("#emailMessage");
+
+            // 유효한 이메일에 대한 에러 처리
+            if (errorType === "invalidEmail") {
+                errorBox.find(".error-text.f14.cCC0000").show().text("유효한 이메일 주소를 입력하세요.");
+
+                // 기존에 표시된 성공 메시지 지우기
+                errorBox.find(".confirm-text.f14.c009521").empty();
+            }
+        }
          function displayErrorMessages(errors) {
           console.log("에러 메시지:", errors);
             // 각 입력 필드에 대한 에러 메시지 표시
             for (var field in errors) {
                 updateErrorMessage(errors[field], $("input[name='" + field + "']"));
             }
-        }
-     // 에러 메시지 업데이트 함수
-    function updateErrorMessage(errorType, inputBox) {
-        console.log("updateErrorMessage - errorType:", errorType);
-        console.log("updateErrorMessage - inputBox:", inputBox);
-        // 에러 메시지를 표시할 요소
-        var errorBox = inputBox.siblings(".error-text-box");
-
-        // 특정 에러 타입에 따라 메시지 업데이트
-        switch (errorType) {
-            case "required":
-                errorBox.find(".error-text.f14.cCC0000").show().text("필수 입력 항목입니다.");
-                break;
-            case "invalidEmail":
-                errorBox.find(".error-text.f14.cCC0000").show().text("유효한 이메일 주소를 입력하세요.");
-                break;
-            // 추가적인 에러 타입에 따른 처리 가능
-        }
-    }
-
-     function updateEmailMessage(message) {
+         }
+         function updateEmailMessage(message) {
             $("#emailMessage").empty().append("<span class='confirm-text f14 c009521'>" + message + "</span>");
-        }
+         }
 
-        function showSuccessMessage(verificationCode) {
+         function showSuccessMessage(verificationCode) {
             // 이 함수 내부에서 어떤 동작이 이루어지는지 확인
             console.log("Verification Code:", verificationCode);
             // 기타 로직 추가 가능
-        }
+         }
 
-        function showFailureMessage() {
+         function showFailureMessage() {
             // 이 함수 내부에서 어떤 동작이 이루어지는지 확인
             console.log("Email sending failed.");
             // 기타 로직 추가 가능
-        }
+         }
     });
 </script>
