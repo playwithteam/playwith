@@ -43,23 +43,23 @@ public class QnaController {
         return "redirect:/qna/list";
     }
 
-//    @GetMapping("/modify/{id}")
-//    public String modify(QnaForm qnaForm, @PathVariable("id") Long id) {
-//        Qna qna = this.qnaService.getQna(id);
-//        qnaForm.setTitle(qna.getTitle());
-//        qnaForm.setContent(qna.getContent());
-//        return "qna_form";
-//    }
-//
-//    @PostMapping("/modify/{id}")
-//    public String modify(@Valid QnaForm qnaForm, BindingResult bindingResult, @PathVariable("id") Long id) {
-//        if (bindingResult.hasErrors()) {
-//            return "qna_form";
-//        }
-//        Qna qna = this.qnaService.getQna(id);
-//        this.qnaService.modify(qna, qnaForm.getTitle(), qnaForm.getContent());
-//        return "redirect:/qna/list";
-//    }
+    @GetMapping("/modify/{id}")
+    public String modify(QnaForm qnaForm, @PathVariable("id") Long id) {
+        Qna qna = this.qnaService.getQna(id);
+        qnaForm.setTitle(qna.getTitle());
+        qnaForm.setContent(qna.getContent());
+        return "qna_form";
+    }
+
+    @PostMapping("/modify/{id}")
+    public String modify(@Valid QnaForm qnaForm, BindingResult bindingResult, @PathVariable("id") Long id) {
+        if (bindingResult.hasErrors()) {
+            return "qna_form";
+        }
+        Qna qna = this.qnaService.getQna(id);
+        this.qnaService.modify(qna, qnaForm.getTitle(), qnaForm.getContent());
+        return "redirect:/qna/list";
+    }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id) {
