@@ -1,12 +1,15 @@
 package com.playwith.play.domain.user.controller;
 
 import com.playwith.play.domain.user.entity.SiteUser;
-import com.playwith.play.global.rq.Rq;
 import com.playwith.play.domain.user.service.UserService;
+import com.playwith.play.global.rq.Rq;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -21,7 +24,6 @@ public class UserController {
     private SiteUser findUser;
 
     //로그인
-
     @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false) String error,
@@ -34,11 +36,39 @@ public class UserController {
 
     @PreAuthorize("isAnonymous()")
     @GetMapping("/signup")
-    public String signup() {
+    public String signup(UserCreateForm userCreateForm) {
         return "signup";
     }
 
+    @PostMapping("/signup")
+    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "signup";
+        }
+
+        if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
+            bindingResult.rejectValue("password2", "passwordInCorrect",
+                    "2개의 패스워드가 일치하지 않습니다.");
+            return "signup";
+        }
+
     // 아이디 찾기
+        try {
+            userService.join(userCreateForm.getProfileImgUrl(), userCreateForm.getUsername(), userCreateForm.getName(),
+                    userCreateForm.getPassword1(), userCreateForm.getEmail(), userCreateForm.getArea(), userCreateForm.getLevel(), userCreateForm.getBirthDate());
+        } catch (DataIntegrityViolationException e) {
+            e.printStackTrace();
+            bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
+            return "signup";
+        } catch (Exception e) {
+            e.printStackTrace();
+            bindingResult.reject("signupFailed", e.getMessage());
+            return "signup";
+        }
+
+        return "redirect:/user/login";
+    }
+
     @PreAuthorize("isAnonymous()")
     @GetMapping("/id_search")
     public String id_search() {
@@ -65,6 +95,7 @@ public class UserController {
                 )
                 .orElse(rq.historyBack("`%s` (은)는 존재하지 않은 회원입니다."));
     }
+
 
     @PreAuthorize("isAnonymous()")
     @GetMapping("/id_search_result")
@@ -97,4 +128,5 @@ public class UserController {
         this.userService.modifyPassword(userCreateForm, findUser);
         return "";
     }
+
 }
