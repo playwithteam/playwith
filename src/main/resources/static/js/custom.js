@@ -44,7 +44,7 @@ $(document).ready(function(){
     $(window).scroll(function () {
 
         let scroll = $(window).scrollTop();
-            
+
         if (scroll > 0) {
             $(".top-btn-box").addClass("active");
         }
@@ -75,5 +75,65 @@ $(document).ready(function(){
         }
 
     });
+
+    // "선택 삭제" 버튼에 대한 클릭 이벤트
+    $('#selectDelBtn').click(function () {
+        // 선택된 체크박스 값들을 저장할 배열
+        var selectedIds = [];
+
+        // 각 선택된 체크박스의 값을 배열에 추가
+        $('td .check-type-1 > input[type="checkbox"]:checked').each(function () {
+            selectedIds.push($(this).val());
+        });
+
+        // 선택된 항목이 있는지 확인
+        if (selectedIds.length > 0) {
+            if (confirm('선택한 항목을 정말 삭제하시겠습니까?')) {
+
+                var jsonData = JSON.stringify({ "selectedIds": selectedIds });
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/qna/deleteSelectedQna',
+                    contentType: 'application/json',
+                    data: jsonData,
+                    success: function (response) {
+                        console.log(response);
+                        location.reload();
+                    },
+                    error: function (error) {
+                        console.error(error);
+                    }
+                });
+            }
+            else return false;
+        } else {
+            alert('삭제할 항목을 선택하세요.');
+        }
+    });
+
+    //체크박스 전제 선택
+    $("#cbx_chkAll").click(function() {
+        if($("#cbx_chkAll").is(":checked")) $("input[name=chk]").prop("checked", true);
+        else $("input[name=chk]").prop("checked", false);
+    });
+
+    $("input[name=chk]").click(function() {
+        var total = $("input[name=chk]").length;
+        var checked = $("input[name=chk]:checked").length;
+
+        if(total != checked) $("#cbx_chkAll").prop("checked", false);
+        else $("#cbx_chkAll").prop("checked", true);
+    });
+
+    $("#customTimeInput").on("change", function() {
+        // 분을 00분으로 고정하고 시간과 분을 합치기
+        var fixedMinutes = "00";
+        var selectedTime = $(this).val() || "00:00";
+        var modifiedTime = selectedTime.split(":")[0] + ":" + fixedMinutes;
+
+        // 수정된 값을 다시 input 요소에 설정
+        $(this).val(modifiedTime);
+      });
 
 });

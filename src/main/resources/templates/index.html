@@ -208,6 +208,12 @@
                     </li>
                 </ul>
             </div>
+            <div class="matching-none-area wow fadeInUp" data-wow-delay="0.9s" data-wow-duration="0.6s">
+                <p class="tac tb c333">현재 진행중인 매치가 없습니다.</p>
+            </div>
+            <div class="btn-box-type-1 flex jcc wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">
+                <a th:href="@{/matching/create}" class="btn-type-1">용병 매칭 등록</a>
+            </div>
         </div>
     </div>
     <!-- //용병 매칭 영역 -->
@@ -371,6 +377,12 @@
                     </li>
                 </ul>
             </div>
+            <div class="matching-none-area wow fadeInUp" data-wow-delay="0.9s" data-wow-duration="0.6s">
+                <p class="tac tb c333">현재 진행중인 매치가 없습니다.</p>
+            </div>
+            <div class="btn-box-type-1 flex jcc wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">
+                <a th:href="@{/matching/create}" class="btn-type-1">팀 매칭 등록</a>
+            </div>
         </div>
     </div>
     <!-- //팀 매칭 영역 -->
@@ -382,85 +394,30 @@
             <p class="title-sub-text mt24 lh140 c777 wow fadeInUp" data-wow-delay="0.6s" data-wow-duration="0.6s">
                 자주 묻는 질문 목록입니다.<br>
                 찾으시는 질문이 없으시다면<br>
-                새로운 질문을 해보세요!
+                고객센터로 문의주세요!
             </p>
-            <ul class="question-list-box inner wow fadeInUp" data-wow-delay="0.9s" data-wow-duration="0.6s">
-                <li>
+            <ul class="question-list-box inner wow fadeInUp" data-wow-delay="0.9s" data-wow-duration="0.6s" th:if="${qnaList.size() != 0}">
+                <li th:each="qna : ${qnaList}">
                     <div class="area-1 flex aic jcsb">
                         <div class="left-box flex aic">
-                            <h3 class="tb">Q. 질문질문질문질문질문질문질문</h3>
+                            <h3 class="tb" th:text="'Q. ' + ${qna.title}"></h3>
                         </div>
                         <span class="arrow-ico img-box">
                             <img th:src="@{/img/arrow_bottom_231916.svg}" alt="">
                         </span>
                     </div>
                     <div class="area-2">
-                        <p>
-                            답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div class="area-1 flex aic jcsb">
-                        <div class="left-box flex aic">
-                            <h3 class="tb">Q. 질문질문질문질문질문질문질문</h3>
-                        </div>
-                        <span class="arrow-ico img-box">
-                            <img th:src="@{/img/arrow_bottom_231916.svg}" alt="">
-                        </span>
-                    </div>
-                    <div class="area-2">
-                        <p>
-                            답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div class="area-1 flex aic jcsb">
-                        <div class="left-box flex aic">
-                            <h3 class="tb">Q. 질문질문질문질문질문질문질문</h3>
-                        </div>
-                        <span class="arrow-ico img-box">
-                            <img th:src="@{/img/arrow_bottom_231916.svg}" alt="">
-                        </span>
-                    </div>
-                    <div class="area-2">
-                        <p>
-                            답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div class="area-1 flex aic jcsb">
-                        <div class="left-box flex aic">
-                            <h3 class="tb">Q. 질문질문질문질문질문질문질문</h3>
-                        </div>
-                        <span class="arrow-ico img-box">
-                            <img th:src="@{/img/arrow_bottom_231916.svg}" alt="">
-                        </span>
-                    </div>
-                    <div class="area-2">
-                        <p>
-                            답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div class="area-1 flex aic jcsb">
-                        <div class="left-box flex aic">
-                            <h3 class="tb">Q. 질문질문질문질문질문질문질문</h3>
-                        </div>
-                        <span class="arrow-ico img-box">
-                            <img th:src="@{/img/arrow_bottom_231916.svg}" alt="">
-                        </span>
-                    </div>
-                    <div class="area-2">
-                        <p>
-                            답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변
+                        <p th:utext="${qna.content}">
                         </p>
                     </div>
                 </li>
             </ul>
+            <div class="matching-none-area wow fadeInUp" data-wow-delay="0.9s" data-wow-duration="0.6s" th:if="${qnaList.size() == 0}">
+                <p class="tac tb c333">등록된 자주 묻는 질문이 없습니다.</p>
+            </div>
+            <div class="btn-box-type-1 flex jcc wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">
+                <a th:href="@{/qna/list}" class="btn-type-1">질문 관리</a>
+            </div>
         </div>
     </div>
     <!-- //질문 영역 -->
