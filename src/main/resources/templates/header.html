@@ -1,7 +1,7 @@
 <header th:fragment="headerFragment" class="header-area w100per bfff fixed zi5 xy-tl">
     <div class="con wh100per flex aic jcsb">
         <div class="left-box flex aic g120">
-            <a th:href="@{/}" class="logo-box img-box w100per">
+            <a th:href="@{/}" class="logo-box img-box">
                 <img th:src="@{/img/logo.svg}" alt="">
             </a>
             <ul class="menu-box flex aic g60">
@@ -36,7 +36,7 @@
                     <a href="" class="c999 f16">내 정보</a>
                 </li>
                 <li sec:authorize="isAuthenticated()">
-                    <a th:href="@{/user/logout}" class="c999 f16">로그아웃</a>
+                    <a href="" class="c999 f16">로그아웃</a>
                 </li>
             </ul>
         </div>
