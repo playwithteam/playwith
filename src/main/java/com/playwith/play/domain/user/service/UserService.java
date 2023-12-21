@@ -1,5 +1,7 @@
 package com.playwith.play.domain.user.service;
 
+
+import com.playwith.play.domain.user.controller.UserCreateForm;
 import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -33,36 +35,45 @@ public class UserService {
         return this.userRepository.save(siteUser);
     }
 
-    public SiteUser SocialJoin(String username, String password, String nickname, String profileImgUrl) {
-        SiteUser siteUser = SiteUser.builder()
-                .username(username)
-                .password(passwordEncoder.encode(password))
-                .nickname(nickname)
-                .profileImgUrl(profileImgUrl)
-                .build();
-
-        return siteUser;
-    }
-
+    //소셜 로그인
     @Transactional
-    public SiteUser KakaoSocialLogin(String username, String nickname, String profileImgUrl) {
+    public SiteUser whenSocialLogin(String profileImgUrl, String username, String name, String password,
+                                    String email, String area, String level, LocalDate birthdate) {
         Optional<SiteUser> opUser = findByUsername(username);
         if (opUser.isPresent()) return opUser.get();
 
-        // 소셜 로그인를 통한 가입시 비번은 없음
-        return SocialJoin(username, "", nickname, profileImgUrl); // 최초 로그인 시 딱 한번 실행
+        // 소셜 로그인를 통한 가입
+        return join(profileImgUrl, username, null,"",null,null,null,null); // 최초 로그인 시 딱 한번 실행
     }
 
-    //유저네임 찾기
+    //유저 아이디 찾기
     public Optional<SiteUser> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return this.userRepository.findByUsername(username);
     }
 
-    public Optional<SiteUser> findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
-    public Optional<SiteUser> findByName(String name) {
-        return userRepository.findByName(name);
+
+    public Optional<SiteUser> getEmailAndName(String email, String name) {
+        return this.userRepository.findByEmailAndName(email, name);
     }
 
+    public Optional<SiteUser> getUserUsernameAndMailAndName(String username, String email, String name) {
+        return this.userRepository.findByUsernameAndEmailAndName(username, email, name);
+    }
+
+    public SiteUser modifyPassword(UserCreateForm userCreateForm, SiteUser findUser) {
+        SiteUser siteUserPassword = SiteUser
+                .builder()
+                .username(findUser.getUsername())
+                .name(findUser.getName())
+                .id(findUser.getId())
+                .password(passwordEncoder.encode(userCreateForm.getPassword1()))
+                .birthDate(findUser.getBirthDate())
+                .email(findUser.getEmail())
+                .nickname(findUser.getNickname())
+                .profileImgUrl(findUser.getProfileImgUrl())
+                .level(findUser.getLevel())
+                .area(findUser.getArea())
+                .build();
+        return this.userRepository.save(siteUserPassword);
+    }
 }
