@@ -19,10 +19,12 @@ public class QnaService {
     private final QnaRepository qnaRepository;
 
     public void create(String title, String content) {
-        Qna qna = new Qna();
-        qna.setTitle(title);
-        qna.setContent(content);
-        qna.setCreateDate(LocalDateTime.now());
+        Qna qna = Qna
+                .builder()
+                .title(title)
+                .content(content)
+                .createdDate(LocalDateTime.now())
+                .build();
         this.qnaRepository.save(qna);
     }
 
@@ -40,12 +42,12 @@ public class QnaService {
         }
     }
 
-    public void modify(Qna qna, String title, String content) {
-        qna.setTitle(title);
-        qna.setContent(content);
-        qna.setModifyDate(LocalDateTime.now());
-        this.qnaRepository.save(qna);
-    }
+//    public void modify(Qna qna, String title, String content) {
+//        qna.setTitle(title);
+//        qna.setContent(content);
+//        qna.setModifyDate(LocalDateTime.now());
+//        this.qnaRepository.save(qna);
+//    }
 
     public void delete(Qna qna) {
         this.qnaRepository.delete(qna);
