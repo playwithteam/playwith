@@ -19,6 +19,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    //일반 유저
     public SiteUser join(String profileImgUrl, String username, String name, String password,
                          String email, String area, String level, LocalDate birthdate) {
         SiteUser siteUser = SiteUser.builder()
@@ -35,15 +36,14 @@ public class UserService {
         return this.userRepository.save(siteUser);
     }
 
-    //소셜 로그인
     @Transactional
-    public SiteUser whenSocialLogin(String profileImgUrl, String username, String name, String password,
-                                    String email, String area, String level, LocalDate birthdate) {
-        Optional<SiteUser> opUser = findByUsername(username);
-        if (opUser.isPresent()) return opUser.get();
+    public SiteUser whenSocialLogin(String providerTypeCode, String username, String nickname) {
+        Optional<SiteUser> opMember = findByUsername(username);
 
-        // 소셜 로그인를 통한 가입
-        return join(profileImgUrl, username, null,"",null,null,null,null); // 최초 로그인 시 딱 한번 실행
+        if (opMember.isPresent()) return opMember.get();
+
+        // 소셜 로그인를 통한 가입시 비번은 없다.
+        return join("",username,"","","", "", nickname, null); // 최초 로그인 시 딱 한번 실행
     }
 
     //유저 아이디 찾기
