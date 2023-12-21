@@ -1,5 +1,6 @@
 package com.playwith.play.global.data;
 
+import com.playwith.play.domain.qna.service.QnaService;
 import com.playwith.play.domain.user.service.UserService;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -29,4 +30,11 @@ public class NotProd {
             );
         };
     }
+
+//    @Bean
+//    public ApplicationRunner init(QnaService qnaService) {
+//        return args -> {
+//            qnaService.create("질문입니당", "내용입니다.<br>내용입니다.");
+//        };
+//    }
 }

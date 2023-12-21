@@ -1,14 +1,16 @@
 package com.playwith.play.domain.user.entity;
 
 import com.playwith.play.global.jpa.BaseEntity;
-import groovyjarjarpicocli.CommandLine;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -38,6 +40,8 @@ public class SiteUser extends BaseEntity {
     private String profileImgUrl;
     private String level;
     private String area;
+    //관리자와 매니저 등급
+    private Integer rating;
 
     public List<? extends GrantedAuthority> getGrantedAuthorities() {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();

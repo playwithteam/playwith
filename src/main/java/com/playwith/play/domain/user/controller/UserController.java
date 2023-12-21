@@ -95,6 +95,6 @@ public class UserController {
     @PostMapping("/password_search_result")
     public String modifyPassword(@ModelAttribute("userCreateForm") UserCreateForm userCreateForm) {
         this.userService.modifyPassword(userCreateForm, findUser);
-        return "login";
+        return "";
     }
 }

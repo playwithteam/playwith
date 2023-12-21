@@ -46,7 +46,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 class CustomOAuth2User extends User implements OAuth2User {
 
-    public CustomOAuth2User(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public  CustomOAuth2User(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
     }
 
