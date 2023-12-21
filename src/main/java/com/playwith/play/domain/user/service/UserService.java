@@ -1,6 +1,7 @@
 package com.playwith.play.domain.user.service;
 
 
+import com.playwith.play.domain.email.repository.EmailRepository;
 import com.playwith.play.domain.user.controller.UserCreateForm;
 import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.domain.user.repository.UserRepository;
@@ -18,7 +19,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
+    private final EmailRepository emailRepository;
     public SiteUser join(String profileImgUrl, String username, String name, String password,
                          String email, String area, String level, LocalDate birthdate) {
         SiteUser siteUser = SiteUser.builder()
@@ -76,4 +77,5 @@ public class UserService {
                 .build();
         return this.userRepository.save(siteUserPassword);
     }
+
 }

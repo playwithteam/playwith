@@ -1,5 +1,9 @@
-package com.playwith.play.domain.user;
+package com.playwith.play.domain.email.controller;
 
+import com.playwith.play.domain.email.dto.EmailMessage;
+import com.playwith.play.domain.email.dto.EmailPostDto;
+import com.playwith.play.domain.email.dto.EmailResponseDto;
+import com.playwith.play.domain.email.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,5 +45,17 @@ public class EmailController {
         emailResponseDto.setCode(code);
 
         return ResponseEntity.ok(emailResponseDto);
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity<String> verifyCode(@RequestBody EmailPostDto emailPostDto) {
+        String userEmail = emailPostDto.getEmail();
+        String userEnteredCode = emailPostDto.getCode();
+
+        if (emailService.verifyCode(userEmail, userEnteredCode)) {
+            return ResponseEntity.ok("인증 성공");
+        } else {
+            return ResponseEntity.badRequest().body("인증 실패");
+        }
     }
 }

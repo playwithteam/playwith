@@ -1,4 +1,4 @@
-package com.playwith.play.domain.user;
+package com.playwith.play.domain.email.dto;
 
 import lombok.Builder;
 import lombok.Getter;
