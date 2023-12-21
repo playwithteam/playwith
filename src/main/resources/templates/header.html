@@ -23,7 +23,8 @@
             </ul>
         </div>
         <div class="right-box flex aic g40">
-            <div sec:authorize="isAuthenticated()" class="user-name-box f16 tm c777"><span class="c333 tb inblock">홍길동</span>님</div>
+            <div sec:authorize="isAuthenticated()" class="user-name-box f16 tm c777">
+                <span class="c333 tb inblock" th:text="${#authentication.name}"></span>님</div>
             <ul class="sub-menu-box flex aic g12">
                 <li sec:authorize="isAnonymous()">
                     <a th:href="@{/user/login}" class="c999 f16">로그인</a>
@@ -35,7 +36,7 @@
                     <a href="" class="c999 f16">내 정보</a>
                 </li>
                 <li sec:authorize="isAuthenticated()">
-                    <a href="" class="c999 f16">로그아웃</a>
+                    <a th:href="@{/user/logout}" class="c999 f16">로그아웃</a>
                 </li>
             </ul>
         </div>
