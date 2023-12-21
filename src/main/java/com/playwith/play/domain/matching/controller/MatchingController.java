@@ -5,10 +5,13 @@ import com.playwith.play.domain.qna.controller.QnaForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.time.format.DateTimeFormatter;
 
 @Controller
 @RequestMapping("/matching")
@@ -26,7 +29,7 @@ public class MatchingController {
         if (bindingResult.hasErrors()) {
             return "matching_form";
         }
-        this.matchingService.create(matchingForm.getMatchingType(),matchingForm.getCreateDate(), matchingForm.getCreateTime(), matchingForm.getLevel(), matchingForm.getArea(), matchingForm.getBetel());
+        this.matchingService.create(matchingForm.getMatchingType(), matchingForm.getGameDate(), matchingForm.getGameTime(), matchingForm.getLevel(), matchingForm.getArea(), matchingForm.getBetel());
         return "redirect:/";
     }
 }

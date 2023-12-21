@@ -1,4 +1,4 @@
-<html layout:decorate="~{layout}">
+<html layout:decorate="~{/common/layout}">
 <div layout:fragment="content">
 
     <div class="matching-form-area login-cnt-area w100per rel zi2">
@@ -12,20 +12,16 @@
                             <h3 class="c333 f18 tb mb16">매칭 유형<span class="tb cCC0000 inblock">*</span></h3>
                             <div class="flex aic g32">
                                 <div class="check-text-type-3 flex aic">
-                                    <input type="radio" name="matching_type" id="matching_type_1" value="type_1" />
+                                    <input type="radio" th:field="*{matchingType}" id="matching_type_1" value="TYPE_1" />
                                     <label for="matching_type_1">
                                         <span class="text">용병 매칭</span>
                                     </label>
                                 </div>
                                 <div class="check-text-type-3 flex aic">
-                                    <input type="radio" name="matching_type" id="matching_type_2" value="type_2" />
+                                    <input type="radio" th:field="*{matchingType}" id="matching_type_2" value="TYPE_2" />
                                     <label for="matching_type_2">
                                         <span class="text">팀 매칭</span>
                                     </label>
-<!--                                    <input type="radio" th:field="*{matching_type}" id="matching_type_2" value="type_2">-->
-<!--                                    <label for="matching_type_2">-->
-<!--                                        <span class="text">팀 매칭</span>-->
-<!--                                    </label>-->
                                 </div>
                             </div>
                             <div class="error-text-box wsn flex g8 mt8" role="alert" th:if="${#fields.hasErrors('matchingType')}">
@@ -35,10 +31,10 @@
                         <li>
                             <h3 class="c333 f18 tb mb16">날짜<span class="tb cCC0000 inblock">*</span></h3>
                             <div class="date-type-1">
-                                <input type="date" th:field="*{createDate}">
+                                <input type="date" id="gameDate" th:field="*{gameDate}">
                             </div>
-                            <div class="error-text-box wsn flex g8 mt8" role="alert" th:if="${#fields.hasErrors('createDate')}">
-                                <div class="error-text f14 cCC0000" th:each="err : ${#fields.errors('createDate')}" th:text="${err}" />
+                            <div class="error-text-box wsn flex g8 mt8" role="alert" th:if="${#fields.hasErrors('gameDate')}">
+                                <div class="error-text f14 cCC0000" th:each="err : ${#fields.errors('gameDate')}" th:text="${err}" />
                             </div>
                         </li>
                         <li>
@@ -46,10 +42,10 @@
                                 <li class="w50per">
                                     <h3 class="c333 f18 tb mb16">시간<span class="tb cCC0000 inblock">*</span></h3>
                                     <div class="date-type-1">
-                                        <input th:field="*{createTime}" type="time" id="customTimeInput">
+                                        <input th:field="*{gameTime}" type="time" id="customTimeInput">
                                     </div>
-                                    <div class="error-text-box wsn flex g8 mt8" role="alert" th:if="${#fields.hasErrors('createTime')}">
-                                        <div class="error-text f14 cCC0000" th:each="err : ${#fields.errors('createTime')}" th:text="${err}" />
+                                    <div class="error-text-box wsn flex g8 mt8" role="alert" th:if="${#fields.hasErrors('gameTime')}">
+                                        <div class="error-text f14 cCC0000" th:each="err : ${#fields.errors('gameTime')}" th:text="${err}" />
                                     </div>
                                 </li>
                                 <li class="w50per">
@@ -105,9 +101,9 @@
                                     <div class="select-type-2 rel">
                                         <select th:field="*{betel}">
                                             <option value="">구장</option>
-                                            <option value="">ㅇㅇㅇ구장</option>
-                                            <option value="">ㅇㅇㅇ구장</option>
-                                            <option value="">ㅇㅇㅇ구장</option>
+                                            <option value="ㅇㅇㅇ구장">ㅇㅇㅇ구장</option>
+                                            <option value="ㅇㅇㅇ구장">ㅇㅇㅇ구장</option>
+                                            <option value="ㅇㅇㅇ구장">ㅇㅇㅇ구장</option>
                                         </select>
                                         <span class="arrow img-box abs y-middle">
                                             <img th:src="@{/img/arrow_bottom_999999.svg}" alt="">
