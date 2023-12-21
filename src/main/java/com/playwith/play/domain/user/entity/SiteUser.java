@@ -33,6 +33,7 @@ import java.util.List;
 @Getter
 @SuperBuilder
 @ToString
+@Entity
 public class SiteUser extends BaseEntity {
 
     @Column(unique = true)
