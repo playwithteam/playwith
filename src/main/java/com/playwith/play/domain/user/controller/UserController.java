@@ -3,12 +3,10 @@ package com.playwith.play.domain.user.controller;
 import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.global.rq.Rq;
 import com.playwith.play.domain.user.service.UserService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -23,6 +21,7 @@ public class UserController {
     private SiteUser findUser;
 
     //로그인
+
     @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false) String error,
@@ -56,7 +55,7 @@ public class UserController {
         if (findUser.getEmail().equals(email)) {
             model.addAttribute("findUsername", findUser.getUsername());
         }
-        //url 결과
+        //url 결과 보여 주기
         return userService.getEmailAndName(email, name)
                 .map(siteUser ->
                         rq.redirect(
@@ -87,8 +86,6 @@ public class UserController {
                                   @RequestParam("name") String name, Model model) {
         Optional<SiteUser> os = this.userService.getUserUsernameAndMailAndName(username, email, name);
         findUser = os.get();
-
-
         model.addAttribute("userCreateForm", new UserCreateForm());
 
         return "password_search_modify";
@@ -98,7 +95,6 @@ public class UserController {
     @PostMapping("/password_search_result")
     public String modifyPassword(@ModelAttribute("userCreateForm") UserCreateForm userCreateForm) {
         this.userService.modifyPassword(userCreateForm, findUser);
-
         return "login";
     }
 }

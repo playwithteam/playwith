@@ -15,13 +15,15 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 //HTTP 헤더를 나타냄
                 .headers((headers) -> headers
                         .addHeaderWriter(new XFrameOptionsHeaderWriter(
-                                XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))  //페이지가 동일한 출처에서만 프레임에 표시(보안상의 이유)
+                                XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
+
                 .formLogin((formLogin) -> formLogin
                         .loginPage("/user/login")
                         .successHandler(new CustomSimpleUrlAuthenticationSuccessHandler())
@@ -39,6 +41,8 @@ public class SecurityConfig {
         ;
         return http.build();
     }
+
+
 
     @Bean
     PasswordEncoder passwordEncoder() {
