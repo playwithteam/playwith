@@ -1,9 +1,10 @@
 package com.playwith.play.domain.qna.entity;
 
+import com.playwith.play.global.jpa.BaseEntity;
 import jakarta.persistence.*;
 import jdk.jfr.Enabled;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 

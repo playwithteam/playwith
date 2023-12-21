@@ -51,6 +51,7 @@ public class Rq {
     }
 
     public boolean isLogout() {
+
         return !isLogin();
     }
 
@@ -60,7 +61,7 @@ public class Rq {
         }
 
         if (siteUser == null) {
-            siteUser = userService.findByUsername(getLoginedMemberUsername()).get();
+            siteUser = userService.findByUsername(user.getUsername()).orElseThrow();
         }
 
         return siteUser;
@@ -165,8 +166,11 @@ public class Rq {
     }
 
     public String historyBack(String msg) {
+        // http요청에서 referer 가져오기
         String referer = req.getHeader("referer");
+        //referer기반 키 생성
         String key = "historyBackFailMsg___" + referer;
+        //요청 객체 속성 설정
         req.setAttribute("localStorageKeyAboutHistoryBackFailMsg", key);
         req.setAttribute("historyBackFailMsg", Ut.url.withTtl(msg));
         // 200 이 아니라 400 으로 응답코드가 지정되도록
@@ -185,7 +189,6 @@ public class Rq {
 
     public String redirectOrBack(String url, RsData rs) {
         if (rs.isFail()) return historyBack(rs);
-
         return redirect(url, rs);
     }
 }

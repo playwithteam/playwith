@@ -2,6 +2,7 @@ package com.playwith.play.domain.qna.service;
 
 import com.playwith.play.domain.qna.entity.Qna;
 import com.playwith.play.domain.qna.repository.QnaRepository;
+import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.global.util.DataNotFoundException;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
