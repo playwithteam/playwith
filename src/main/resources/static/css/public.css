@@ -522,9 +522,6 @@ body {
 .matching-list-area.inner {
     margin-top: 3.8020vw;
 }
-.matching-list-area .tab-menu-box-1 {
-    margin-top: 5.2083vw;
-}
 .matching-list-area .swiper-box .swiper {
     width: calc(100% - 100px);
     margin: 0   auto;

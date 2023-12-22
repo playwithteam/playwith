@@ -161,4 +161,19 @@ $(document).ready(function(){
           });
       });
 
+      // gameDate input 요소에 change 이벤트 리스너 등록
+      $("#gameDate").on("change", function () {
+          // 현재 날짜 가져오기
+          var currentDate = new Date();
+
+          // 선택된 날짜 가져오기
+          var selectedDate = new Date($(this).val());
+
+          // 선택된 날짜가 오늘 날짜보다 이전인 경우 경고 메시지 표시
+          if (selectedDate <= currentDate) {
+                $(this).val("");
+              alert("최소 1일 전 매칭만 등록 가능합니다.");
+          }
+      });
+
 });
