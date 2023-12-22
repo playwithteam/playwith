@@ -52,7 +52,7 @@ public class UserController {
             return "signup";
         }
 
-    // 아이디 찾기
+        // 아이디 중복
         try {
             userService.join(userCreateForm.getProfileImgUrl(), userCreateForm.getUsername(), userCreateForm.getName(),
                     userCreateForm.getPassword1(), userCreateForm.getEmail(), userCreateForm.getArea(), userCreateForm.getLevel(), userCreateForm.getBirthDate());
@@ -71,14 +71,16 @@ public class UserController {
 
     @PreAuthorize("isAnonymous()")
     @GetMapping("/id_search")
-    public String id_search() {
+    public String id_search(UserCreateForm userCreateForm) {
         return "id_search";
     }
 
     @PreAuthorize("isAnonymous()")
     @PostMapping("/id_search")
-    public String id_search(Model model, @RequestParam("email") String email, @RequestParam("name") String name) {
-        Optional<SiteUser> os = this.userService.getEmailAndName(email, name);
+    public String id_search(@Valid UserCreateForm userCreateForm, BindingResult bindingResult,
+                            Model model, @RequestParam("email") String email, @RequestParam("name") String name) {
+        Optional<SiteUser> os = this.userService.getEmailAndName(userCreateForm.getEmail(), userCreateForm.getName());
+
         SiteUser findUser = os.get();
 
         //메일 일치 시, 아이디 알려주기
@@ -107,18 +109,22 @@ public class UserController {
     // 비번 찾기
     @PreAuthorize("isAnonymous()")
     @GetMapping("/password_search")
-    public String password_search() {
+    public String password_search(UserCreateForm userCreateForm) {
         return "password_search";
     }
 
     @PreAuthorize("isAnonymous()")
     @PostMapping("/password_search_modify")
-    public String password_search(@RequestParam("username") String username, @RequestParam("email") String email,
+    public String password_search(@Valid UserCreateForm userCreateForm, BindingResult bindingResult,
+                                  @RequestParam("username") String username, @RequestParam("email") String email,
                                   @RequestParam("name") String name, Model model) {
-        Optional<SiteUser> os = this.userService.getUserUsernameAndMailAndName(username, email, name);
-        findUser = os.get();
-        model.addAttribute("userCreateForm", new UserCreateForm());
-
+        findUser = this.userService.getUserUsernameAndMailAndName(userCreateForm.getUsername(), userCreateForm.getEmail(),
+                userCreateForm.getName());
+        if(findUser.getEmail().equals(email)&&findUser.getUsername().equals(username)) {
+            model.addAttribute("userCreateForm", new UserCreateForm());
+        }else {
+            throw new RuntimeException("일치하는 값이 존재하지 않습니다.");
+        }
         return "password_search_modify";
     }
 
@@ -126,7 +132,6 @@ public class UserController {
     @PostMapping("/password_search_result")
     public String modifyPassword(@ModelAttribute("userCreateForm") UserCreateForm userCreateForm) {
         this.userService.modifyPassword(userCreateForm, findUser);
-        return "";
+        return "login";
     }
-
 }

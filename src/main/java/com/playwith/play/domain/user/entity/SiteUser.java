@@ -47,13 +47,14 @@ public class SiteUser extends BaseEntity {
     private String nickname;
     private String profileImgUrl;
 
-
     @OneToMany
     private List<ReportArticle> reportArticleList;
     @OneToMany
     private List<SoldierArticle> soldierArticleList;
     @OneToMany
     private List<WishList> wishLists;
+
+
     public boolean isSocialMember() {
         return username.startsWith("KAKAO_");
     }  //사용자명이 카카오로 시작하는지 확인
