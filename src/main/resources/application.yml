@@ -1,28 +1,27 @@
-server:
-  port: 8080
 spring:
   profiles:
+    active: dev
     include: secret
-  datasource:
-    url: jdbc:mariadb://127.0.0.1:3306/play_dev?
-    username: root
-    password:
-    driver-class-name: org.mariadb.jdbc.Driver
-    thymeleaf:
-      cache: false
-      prefix: file:src/main/resources/templates/
-  jpa:
-    hibernate:
-      ddl-auto: create
-    show-sql: true
-  output:
-    ansi:
-      enabled: always
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            scope:
+            client-name: Kakao
+            authorization-grant-type: authorization_code
+            redirect-uri: 'http://localhost:8080/{action}/oauth2/code/{registrationId}'
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
   mail:
     host: smtp.gmail.com
     port: 587
     username: rhkddhks18@gmail.com
-    password: qzhatcneeijarjft
+    password: tldrnbyosaeyujmq
     properties:
       mail:
         smtp:
@@ -30,28 +29,22 @@ spring:
           timeout: 5000
           starttls:
             enable: true
-  security:
-    oauth2:
-      client:
-        registration:
-          kakao:
-            scope: profile_nickname, profile_image
-            client-id: a7dbb3e5eda558e2c6b0b0a107bb4842
-            client-secret: G3lLBF8NLjdR9BOleYMVxB8cUXimwvj4
-            client-name: Kakao
-            authorization-grant-type: authorization_code
-            redirect-uri: '${custom.site.baseUrl}/{action}/oauth2/code/{registrationId}'
-            client-authentication-method: client_secret_post
-        provider:
-          kakao:
-            authorization-uri: https://kauth.kakao.com/oauth/authorize
-            token-uri: https://kauth.kakao.com/oauth/token
-            user-info-uri: https://kapi.kakao.com/v2/user/me
-            user-name-attribute: id
-logging:
-  level:
-    org.hibernate.orm.jdbc.bind: TRACE
-    org.hibernate.orm.jdbc.extract: TRACE
-custom:
-  site:
-    baseUrl: http://localhost:8080
+            logging:
+              level:
+                org.springframework.mail: DEBUG
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    jpa:
+      properties:
+        hibernate:
+          default_batch_fetch_size: 100 # Lazy ??? ? ? ??? DB?? ???? ???? ?
+          show_sql: true # SQL ??? ?? ?? ???
+          format_sql: true # SQL ??? ?????
+          use_sql_comments: true # SQL ??? ???
+    logging:
+      level:
+        # SQL? ??? ?? ????, SQL? ??? ??
+        org.hibernate.SQL: DEBUG
+        org.hibernate.orm.jdbc.bind: TRACE
+        org.hibernate.orm.jdbc.extract: TRACE
+        org.springframework.transaction.interceptor: TRACE
