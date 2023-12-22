@@ -1,0 +1,75 @@
+/* 메인 비주얼 영역 */
+.main-visual-area {
+    height: calc(100vh - 80px);
+    overflow: hidden;
+}
+.main-visual-area .swiper-box .swiper .swiper-slide > img {
+    transition: all 4s;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: block;
+    position: absolute;
+}
+.main-visual-area .swiper-box .swiper .swiper-slide-active  > img {
+    transform: scale(1.2);
+}
+.main-visual-area .swiper-box .swiper .swiper-slide {
+    text-align: left;
+}
+.main-visual-area .swiper-box .swiper .swiper-slide .con {
+    padding-top: 12.5vw;
+}
+.main-visual-area .swiper-box .swiper .swiper-slide .con .text-box h1 {
+    font-size: 4.375vw;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 1.5s;
+    transition-delay: 0.3s;
+}
+.main-visual-area .swiper-box .swiper .swiper-slide-active .con .text-box h1 {
+    opacity: 1;
+    transform: translateY(0);
+}
+.main-visual-area .swiper-box .swiper .swiper-pagination {
+    bottom: 2.0833vw !important;
+}
+.main-visual-area .swiper-box .swiper .swiper-pagination .swiper-pagination-bullet {
+    width: 12px !important;
+    height: 12px !important; 
+    background: rgba(265,265,265,0.6) !important;
+    opacity: 1 !important;
+    margin: 0 6px !important;
+    border-radius: 50% !important;
+}
+.main-visual-area .swiper-box .swiper .swiper-pagination .swiper-pagination-bullet-active {
+    width: 36px !important;
+    background: rgba(265,265,265,1) !important;
+    border-radius: 999px !important;
+}
+
+/* ------------------------------------------------------------------------------- */
+
+/* 로그인 영역 */
+.login-area .add-menu-box .line {
+    width: 1px;
+    height: 12px;
+    background: #E0E0E0;
+}
+.login-area .sns-login-box > h3::before,
+.login-area .sns-login-box > h3::after {
+    content: "";
+    display: block;
+    width: 156px;
+    height: 1px;
+    background: #ccc;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.login-area .sns-login-box > h3::before {
+    left: 0;
+}
+.login-area .sns-login-box > h3::after {
+    right: 0;
+}
