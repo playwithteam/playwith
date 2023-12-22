@@ -136,4 +136,29 @@ $(document).ready(function(){
         $(this).val(modifiedTime);
       });
 
+      $("#areaSelect").change(function () {
+          var selectedArea = $(this).val();
+
+          // Ajax 호출을 통해 서버에서 해당 지역의 구장 리스트를 가져옴
+          $.ajax({
+              type: "GET",
+              url: "/stadium/stadiumList", // 여기에 실제 백엔드 API 엔드포인트를 넣어주세요
+              data: { area: selectedArea },
+              success: function (stadiums) {
+                  // 가져온 데이터를 바탕으로 두 번째 select 박스 업데이트
+                  var stadiumSelect = $("#stadiumSelect");
+                  stadiumSelect.empty(); // 기존 옵션 제거
+
+                  stadiumSelect.append('<option value="">구장</option>'); // 기본 옵션 추가
+
+                  $.each(stadiums, function (index, stadium) {
+                      stadiumSelect.append('<option value="' + stadium.name + '">' + stadium.name + '</option>');
+                  });
+              },
+              error: function (error) {
+                  console.log("Error fetching stadiums: " + error);
+              }
+          });
+      });
+
 });

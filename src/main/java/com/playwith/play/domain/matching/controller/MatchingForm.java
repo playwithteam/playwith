@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -17,9 +18,11 @@ public class MatchingForm {
     @NotNull(message = "필수 입력 항목 입니다.")
     private MatchingType matchingType;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "필수 입력 항목 입니다.")
     private LocalDate gameDate;
 
+    @DateTimeFormat(pattern = "HH:mm")
     @NotNull(message = "필수 입력 항목 입니다.")
     private LocalTime gameTime;
 
