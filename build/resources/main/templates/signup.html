@@ -1,0 +1,165 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content">
+
+    <div class="signup-area login-cnt-area w100per rel zi2">
+        <div class="con w100per">
+            <h1 class="title-text lh120 tb tac wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">회원가입</h1>
+            <div class="signup-box flex fdc wow fadeInUp" data-wow-delay="0.6s" data-wow-duration="0.6s">
+                <ul class="flex fdc g36">
+                    <li>
+                        <h3 class="c333 f18 tb mb16">프로필 사진</h3>
+                        <div class="file-type-1 rel flex aie g20">
+                            <div class="user-img-box">
+                                <img th:src="@{/img/user_img.svg}" alt="">
+                            </div>
+                            <div class="file-btn w16 abs xy-bl">
+                                <label for="user_img" class="block img-box">
+                                    <img th:src="@{/img/ico_edit_999999.svg}" alt="">
+                                </label>
+                                <input type="file" id="user_img">
+                            </div>
+                            <button type="button" class="btn-type-3">기본 이미지</button>
+                        </div>
+                    </li>
+                    <li>
+                        <h3 class="c333 f18 tb mb16">아이디<span class="tb cCC0000 inblock">*</span></h3>
+                        <div class="input-btn-box flex g8">
+                            <div class="input-type-1">
+                                <input type="text" placeholder="아이디">
+                            </div>
+                            <button type="button" class="btn-type-2">중복 확인</button>
+                        </div>
+                        <div class="error-text-box wsn flex g8 mt8">
+                            <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                            <span class="error-text f14 cCC0000">중복된 아이디 입니다.</span>
+                            <span class="confirm-text f14 c009521">사용가능한 아이디 입니다.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <h3 class="c333 f18 tb mb16">비밀번호<span class="tb cCC0000 inblock">*</span></h3>
+                        <div class="input-type-1">
+                            <input type="password" placeholder="비밀번호(최소 8자 이상, 영문, 숫자, 특수문자 3가지 조합)">
+                        </div>
+                        <div class="error-text-box wsn flex g8 mt8">
+                            <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                            <span class="error-text f14 cCC0000">사용할 수 없는 비밀번호 입니다.</span>
+                            <span class="confirm-text f14 c009521">사용가능한 비밀번호 입니다.</span>
+                        </div>
+                        <div class="input-type-1 mt8">
+                            <input type="password" placeholder="비밀번호 확인">
+                        </div>
+                        <div class="error-text-box wsn flex g8 mt8">
+                            <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                            <span class="error-text f14 cCC0000">비밀번호가 일치하지 않습니다.</span>
+                            <span class="confirm-text f14 c009521">비밀번호가 일치합니다.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <h3 class="c333 f18 tb mb16">이메일<span class="tb cCC0000 inblock">*</span></h3>
+                        <div class="input-btn-box flex g8">
+                            <div class="input-type-1">
+                                <input type="text" placeholder="이메일">
+                            </div>
+                            <button type="button" class="btn-type-2">전송</button>
+                        </div>
+                        <div class="error-text-box wsn flex g8 mt8">
+                            <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                            <span class="error-text f14 cCC0000">올바른 이메일 형식이 아닙니다.</span>
+                            <span class="error-text f14 cCC0000">이미 인증된 이메일 입니다.</span>
+                            <span class="confirm-text f14 c009521">인증번호가 발송되었습니다.</span>
+                        </div>
+                        <div class="input-btn-box flex g8 mt8">
+                            <div class="input-type-1">
+                                <input type="text" placeholder="인증번호">
+                            </div>
+                            <button type="button" class="btn-type-2">확인</button>
+                        </div>
+                        <div class="error-text-box wsn flex g8 mt8">
+                            <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                            <span class="error-text f14 cCC0000">인증번호가 일치하지 않습니다.</span>
+                            <span class="confirm-text f14 c009521">인증번호가 일치합니다.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <h3 class="c333 f18 tb mb16">이름<span class="tb cCC0000 inblock">*</span></h3>
+                        <div class="input-type-1">
+                            <input type="text" placeholder="이름">
+                        </div>
+                        <div class="error-text-box wsn flex g8 mt8">
+                            <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <h3 class="c333 f18 tb mb16">생년월일<span class="tb cCC0000 inblock">*</span></h3>
+                        <div class="date-type-1">
+                            <input type="date">
+                        </div>
+                        <div class="error-text-box wsn flex g8 mt8">
+                            <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <ul class="flex g8">
+                            <li class="w50per">
+                                <h3 class="c333 f18 tb mb16">지역<span class="tb cCC0000 inblock">*</span></h3>
+                                <div class="select-type-2 rel">
+                                    <select id="region" name="region">
+                                        <option value="지역">지역</option>
+                                        <option value="강원도">강원도</option>
+                                        <option value="경기도">경기도</option>
+                                        <option value="충청도">충청도</option>
+                                        <option value="전라도">전라도</option>
+                                        <option value="경상도">경상도</option>
+                                        <option value="제주">제주</option>
+                                        <option value="서울">서울</option>
+                                        <option value="인천">인천</option>
+                                        <option value="대전">대전</option>
+                                        <option value="부산">부산</option>
+                                        <option value="대구">대구</option>
+                                        <option value="울산">울산</option>
+                                        <option value="광주">광주</option>
+                                    </select>
+                                    <span class="arrow img-box abs y-middle">
+                                        <img th:src="@{/img/arrow_bottom_999999.svg}" alt="">
+                                    </span>
+                                </div>
+                                <div class="error-text-box wsn flex g8 mt8">
+                                    <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                                </div>
+                            </li>
+                            <li class="w50per">
+                                <h3 class="c333 f18 tb mb16">레벨<span class="tb cCC0000 inblock">*</span></h3>
+                                <div class="select-type-2 rel">
+                                    <select id="level" name="level">
+                                        <option value="레벨">레벨</option>
+                                        <option value="하">하</option>
+                                        <option value="중">중</option>
+                                        <option value="상">상</option>
+                                    </select>
+                                    <span class="arrow img-box abs y-middle">
+                                        <img th:src="@{/img/arrow_bottom_999999.svg}" alt="">
+                                    </span>
+                                </div>
+                                <div class="error-text-box wsn flex g8 mt8">
+                                    <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="check-text-type-2 mt100 flex aic">
+                    <input type="checkbox" id="privacy">
+                    <label for="privacy">
+                        <span class="text">개인정보 수집 및 이용 동의</span>
+                    </label>
+                </div>
+                <div class="error-text-box wsn flex g8 mt8">
+                    <span class="error-text f14 cCC0000">필수 체크 항목 입니다.</span>
+                </div>
+                <button type="button" class="btn-type-1 mt40">회원가입</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+</html>
