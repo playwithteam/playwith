@@ -5,6 +5,7 @@ import com.playwith.play.domain.email.entity.EmailVerification;
 import com.playwith.play.domain.email.repository.EmailRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -48,20 +49,21 @@ public class EmailService {
         }
     }
     public boolean verifyCode(String email, String userEnteredCode) {
-        String storedCode = getVerificationCodeByEmail(email);
-
-        // 저장된 코드와 사용자가 입력한 코드 비교
-        return storedCode != null && storedCode.equals(userEnteredCode);
+        Optional<EmailVerification> optionalEmailVerification =
+                emailRepository.findByEmailAndVerificationCode(email, userEnteredCode);
+        return optionalEmailVerification.isPresent() &&
+                optionalEmailVerification.get().getVerificationCode().equals(userEnteredCode);
     }
 
     // 인증번호 저장
+    @Transactional
     private void saveVerificationCode(String email, String verificationCode) {
         EmailVerification emailVerification = new EmailVerification();
         emailVerification.setEmail(email);
         emailVerification.setVerificationCode(verificationCode);
         emailRepository.save(emailVerification);
     }
-    // 인증번호 및 임시 비밀번호 생성 메서드
+    // 인증번호 생성 메서드
     public String createCode() {
         Random random = new Random();
         StringBuffer key = new StringBuffer();
@@ -83,11 +85,5 @@ public class EmailService {
         Context context = new Context();
         context.setVariable("code", code);
         return templateEngine.process(type, context);
-    }
-
-    // 사용자의 이메일 주소에 대한 저장된 인증번호 가져오기
-    public String getVerificationCodeByEmail(String email) {
-        Optional<EmailVerification> optionalEmailVerification = emailRepository.findByEmail(email);
-        return optionalEmailVerification.map(EmailVerification::getVerificationCode).orElse(null);
     }
 }

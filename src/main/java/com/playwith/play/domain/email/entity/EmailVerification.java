@@ -19,8 +19,6 @@ public class EmailVerification {
     @Column(nullable = false)
     private String verificationCode;
 
-    public EmailVerification() {
-    }
+    public EmailVerification() {}
 
-    // Getter, Setter, Constructors 등 필요한 메서드 추가
 }
