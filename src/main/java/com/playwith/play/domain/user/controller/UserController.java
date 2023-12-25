@@ -5,12 +5,14 @@ import com.playwith.play.domain.user.service.UserService;
 import com.playwith.play.global.rq.Rq;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -47,27 +49,22 @@ public class UserController {
             return "signup";
         }
 
-        if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
-            bindingResult.rejectValue("password2", "passwordInCorrect",
-                    "2개의 패스워드가 일치하지 않습니다.");
-            return "signup";
-        }
-
-    // 아이디 찾기
-        try {
-            userService.join(userCreateForm.getProfileImgUrl(), userCreateForm.getUsername(), userCreateForm.getName(),
-                    userCreateForm.getPassword1(), userCreateForm.getEmail(), userCreateForm.getArea(), userCreateForm.getLevel(), userCreateForm.getBirthDate());
-        } catch (DataIntegrityViolationException e) {
-            e.printStackTrace();
-            bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
-            return "signup";
-        } catch (Exception e) {
-            e.printStackTrace();
-            bindingResult.reject("signupFailed", e.getMessage());
-            return "signup";
-        }
+        MultipartFile profileImage = userCreateForm.getProfileImage();
+        userService.join(profileImage, userCreateForm.getUsername(), userCreateForm.getName(),
+                userCreateForm.getPassword1(), userCreateForm.getEmail(),
+                userCreateForm.getArea(), userCreateForm.getLevel(), userCreateForm.getBirthDate());
 
         return "redirect:/user/login";
+    }
+
+    @GetMapping("/checkUsername")
+    @ResponseBody
+    public ResponseEntity<String> checkUsername(@RequestParam("username") String username) {
+        if (userService.isUsernameUnique(username)) {
+            return ResponseEntity.ok("사용 가능한 아이디입니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 사용 중인 아이디입니다.");
+        }
     }
 
     @PreAuthorize("isAnonymous()")

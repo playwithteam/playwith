@@ -40,7 +40,7 @@ public class EmailService {
             javaMailSender.send(mimeMessage);
 
             log.info("Success");
-
+            saveVerificationCode(emailMessage.getTo(), authNum);
             return authNum;
 
         } catch (MessagingException e) {
@@ -57,7 +57,7 @@ public class EmailService {
 
     // 인증번호 저장
     @Transactional
-    private void saveVerificationCode(String email, String verificationCode) {
+    public void saveVerificationCode(String email, String verificationCode) {
         EmailVerification emailVerification = new EmailVerification();
         emailVerification.setEmail(email);
         emailVerification.setVerificationCode(verificationCode);

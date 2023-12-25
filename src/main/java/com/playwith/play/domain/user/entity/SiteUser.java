@@ -2,28 +2,22 @@ package com.playwith.play.domain.user.entity;
 
 import com.playwith.play.domain.reportarticle.entity.ReportArticle;
 import com.playwith.play.domain.soldierarticle.entity.SoldierArticle;
-import com.playwith.play.domain.team.entity.Team;
 import com.playwith.play.domain.wishlist.entity.WishList;
 import com.playwith.play.global.jpa.BaseEntity;
-import com.playwith.play.global.jpa.BaseEntity;
-import groovyjarjarpicocli.CommandLine;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-import org.springframework.format.annotation.DateTimeFormat;
-import lombok.*;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,5 +70,6 @@ public class SiteUser extends BaseEntity {
     public boolean isAdmin() {
         return "admin".equals(username);
     }
+
 
 }
