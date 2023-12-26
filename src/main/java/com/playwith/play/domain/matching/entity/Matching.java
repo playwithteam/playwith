@@ -1,5 +1,6 @@
 package com.playwith.play.domain.matching.entity;
 
+import com.playwith.play.domain.stadium.entity.Stadium;
 import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.global.jpa.BaseEntity;
 import jakarta.persistence.*;
@@ -26,6 +27,8 @@ public class Matching extends BaseEntity {
     private String area;
     private String betel;
     private String managerName;
-//    @OneToMany(mappedBy = "matching", cascade = CascadeType.REMOVE)
-//    private List<Matching> matchingList;
+    @OneToOne
+    private Stadium stadium;
+    @OneToMany(mappedBy = "matching", cascade = CascadeType.REMOVE)
+    private List<SiteUser> userList;
 }

@@ -26,4 +26,8 @@ public class StadiumService {
     public List<Stadium> getStadiumsByArea(String area) {
         return  this.stadiumRepository.getStadiumsByArea(area);
     }
+
+    public Stadium getStadiumsByName(String betel) {
+        return  this.stadiumRepository.getStadiumsByName(betel);
+    }
 }

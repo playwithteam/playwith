@@ -109,7 +109,7 @@
                     <li id="tab1-1">
                         <ul class="matching-list-box">
                             <li th:each="matching : ${matchingList}" th:if="${matching.matchingType.toString() == 'TYPE_1'}">
-                                <a href="" class="flex aic jcsb">
+                                <a th:href="@{|/matching/detail/${matching.id}|}" class="flex aic jcsb">
                                     <div class="left-box flex aic g40">
                                         <div class="flex aic g20">
                                             <button class="favor-box img-box w24" id="favor_btn">
@@ -121,11 +121,13 @@
                                             <span th:if="${matching.level} == '하'" class="difficulty-text f16 type-1" th:text="${matching.level}"></span>
                                             <span th:if="${matching.level} == '중'" class="difficulty-text f16 type-2" th:text="${matching.level}"></span>
                                             <span th:if="${matching.level} == '상'" class="difficulty-text f16 type-3" th:text="${matching.level}"></span>
-                                            <span class="location-text f18" th:text="${matching.area} + ' ' + ${matching.betel}"></span>
+                                            <span class="location-text f18" th:text="${matching.stadium.area} + ' ' + ${matching.stadium.name}"></span>
                                         </div>
                                     </div>
                                     <span class="situation-box tac f16 tb lh140 type-1">용병 모집 중<br>0 / 14</span>
                                     <span class="situation-box tac f16 tb lh140 type-2">용병 모집 완료<br>14 / 14</span>
+<!--                                    <span th:if="${#lists.size(matching.userList) > 0}" class="situation-box tac f16 tb lh140 type-1">용병 모집 중<br>0 / 14</span>-->
+<!--                                    <span th:if="${#lists.size(matching.userList) = 0}" class="situation-box tac f16 tb lh140 type-2">용병 모집 완료<br>14 / 14</span>-->
                                 </a>
                             </li>
                         </ul>

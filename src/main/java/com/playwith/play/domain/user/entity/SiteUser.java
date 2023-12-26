@@ -56,8 +56,8 @@ public class SiteUser extends BaseEntity {
     @OneToMany
     private List<WishList> wishLists;
 
-//    @ManyToOne
-//    private Matching matching;
+    @ManyToOne
+    private Matching matching;
 
 
     public boolean isSocialMember() {
