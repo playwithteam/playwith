@@ -40,6 +40,8 @@ public class SecurityConfig {
                         .invalidateHttpSession(true))
                 .csrf((csrf) -> csrf
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/qna/*")))
+                .csrf((csrf) -> csrf
+                        .ignoringRequestMatchers(new AntPathRequestMatcher("/stadium/*")))
         ;
         return http.build();
     }
