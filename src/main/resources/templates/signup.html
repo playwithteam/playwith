@@ -347,14 +347,15 @@
         // 에러 메시지 업데이트 함수
         function updateErrorMessage(errorType, inputBox) {
             // 에러 메시지를 표시할 요소
-            var errorBox = inputBox.closest(".input-btn-box").find("#emailMessage");
+            var errorBox = $("#emailMessage");
 
             // 유효한 이메일에 대한 에러 처리
             if (errorType === "invalidEmail") {
-                errorBox.find(".error-text.f14.cCC0000").show().text("유효한 이메일 주소를 입력하세요.");
+                var errorTextElement = errorBox.find(".error-text.f14.cCC0000");
+                errorTextElement.show().text("유효한 이메일 주소를 입력하세요.");
 
-                // 기존에 표시된 성공 메시지 지우기
-                errorBox.find(".confirm-text.f14.c009521").empty();
+                var confirmTextElement = errorBox.find(".confirm-text.f14.c009521");
+                confirmTextElement.empty();
             }
         }
          function displayErrorMessages(errors) {
