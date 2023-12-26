@@ -1,7 +1,7 @@
 package com.playwith.play.domain.user.service;
 
 
-import com.playwith.play.domain.user.controller.UserCreateForm;
+import com.playwith.play.domain.user.controller.NewPasswordForm;
 import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -100,36 +100,49 @@ public class UserService {
 
     //소셜 로그인
     @Transactional
-    public SiteUser whenSocialLogin(MultipartFile profileImgUrl, String username, String name, String password,
-                                    String email, String area, String level, LocalDate birthdate) {
-        Optional<SiteUser> opUser = findByUsername(username);
-        if (opUser.isPresent()) return opUser.get();
+    public SiteUser whenSocialLogin(String providerTypeCode, String username, String nickname) {
+        Optional<SiteUser> os = this.userRepository.findByUsername(username);
+        if (os.isPresent()) return os.get();
 
-        // 소셜 로그인를 통한 가입
-        return join(profileImgUrl, username, null,"",null,null,null,null); // 최초 로그인 시 딱 한번 실행
+        return join(null, username, "", "", "", "", nickname, null); // 최초 로그인 시 딱 한번 실행
     }
 
-    //유저 아이디 찾기
+    //유저아이디 찾기
     public Optional<SiteUser> findByUsername(String username) {
-        return this.userRepository.findByUsername(username);
+        return userRepository.findByUsername(username);
     }
 
 
-    public Optional<SiteUser> getEmailAndName(String email, String name) {
-        return this.userRepository.findByEmailAndName(email, name);
+    //이메일, 이름 찾기
+    public Optional<SiteUser> getUserByEmailAndName(String email, String name) {
+
+        Optional<SiteUser> os = userRepository.findByEmailAndName(email, name);
+
+        // 입력된 이메일,이름이 일치하는 경우에만 사용자 정보를 반환
+        return os.filter(u -> u
+                .getEmail().equals(email) && u.getName().equals(name));
     }
 
+
+    //유저 아이디,메일,이름 찾기
     public Optional<SiteUser> getUserUsernameAndMailAndName(String username, String email, String name) {
-        return this.userRepository.findByUsernameAndEmailAndName(username, email, name);
+        Optional<SiteUser> os = this.userRepository.findByUsernameAndEmailAndName(username, email, name);
+
+        // 입력된 아이디,이메일,이름이 일치하는 경우에만 사용자 정보를 반환
+        return os.filter(u -> u
+                .getUsername().equals(username) && u.getEmail().equals(email) && u.getName().equals(name));
     }
 
-    public SiteUser modifyPassword(UserCreateForm userCreateForm, SiteUser findUser) {
+    //비번 수정
+    public SiteUser modifyPassword(NewPasswordForm newPasswordForm, SiteUser findUser) {
+        String newPassword = newPasswordForm.getPassword1();
+
         SiteUser siteUserPassword = SiteUser
                 .builder()
                 .username(findUser.getUsername())
                 .name(findUser.getName())
                 .id(findUser.getId())
-                .password(passwordEncoder.encode(userCreateForm.getPassword1()))
+                .password(passwordEncoder.encode(newPassword))
                 .birthDate(findUser.getBirthDate())
                 .email(findUser.getEmail())
                 .nickname(findUser.getNickname())

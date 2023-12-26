@@ -7,7 +7,7 @@
         <meta name="_csrf" th:content="${_csrf.token}">
         <meta name="_csrf_header" th:content="${_csrf.headerName}">
         <div class="signup-area login-cnt-area w100per rel zi2">
-            <form action="/user/signup" method="post" th:object="${userCreateForm}">
+            <form action="/user/signup" method="post" th:object="${userCreateForm}" enctype="multipart/form-data">
             <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
             <div class="con w100per">
                 <h1 class="title-text lh120 tb tac wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">회원가입</h1>
@@ -17,47 +17,43 @@
                             <h3 class="c333 f18 tb mb16">프로필 사진</h3>
                             <div class="file-type-1 rel flex aie g20">
                                 <div class="user-img-box">
-                                    <img th:src="@{/img/user_img.svg}" alt="">
+                                    <img id="previewImage" th:src="@{/img/user_img.svg}" alt="" style="width: 100px; height: 100px; border-radius: 50%;">
                                 </div>
                                 <div class="file-btn w16 abs xy-bl">
-                                    <label for="user_img" class="block img-box">
-                                        <img th:src="@{/img/ico_edit_999999.svg}" alt="">
-                                    </label>
-                                    <input type="file" id="user_img">
+                                    <img id="editIcon" th:src="@{/img/ico_edit_999999.svg}" alt="" style="cursor: pointer;">
+                                    <input type="file" id="user_img" name="profileImage" style="display: none" accept="image/*" onchange="previewFile()">
                                 </div>
-                                <button type="button" class="btn-type-3">기본 이미지</button>
+                                <button type="button" class="btn-type-3" id="resetImageBtn">기본 이미지</button>
                             </div>
                         </li>
                         <li>
+                            <h3 class="c333 f18 tb mb16">아이디<span class="tb cCC0000 inblock">*</span></h3>
                             <div class="input-btn-box flex g8">
                                 <div class="input-type-1">
                                     <input type="text" th:field="*{username}"  placeholder="아이디">
                                 </div>
-                                <button type="button" id="checkDuplicateBtn" class="btn-type-2">중복 확인</button>
+                                <button type="button" id="checkIdBtn" class="btn-type-2">중복 확인</button>
                             </div>
-                            <div class="error-text-box wsn flex g8 mt8">
+                            <div id="checkId" class="error-text-box wsn flex g8 mt8">
                                 <span th:if="${#fields.hasErrors('username')}" class="error-text f14 cCC0000" th:errors="*{username}"></span>
-                                <span class="error-text f14 cCC0000">중복된 아이디 입니다.</span>
-                                <span class="confirm-text f14 c009521">사용가능한 아이디 입니다.</span>
+                                <span class="confirm-text message-box f14"></span>
                             </div>
                         </li>
                         <li>
                             <h3 class="c333 f18 tb mb16">비밀번호<span class="tb cCC0000 inblock">*</span></h3>
                             <div class="input-type-1">
-                                <input type="password" th:field="*{password1}" placeholder="비밀번호(최소 8자 이상, 영문, 숫자, 특수문자 3가지 조합)">
+                                <input type="password" th:field="*{password1}" placeholder="비밀번호">
+                                <span class="f14">* 최소 8자 이상, 영문, 숫자, 특수문자 3가지 조합</span>
                             </div>
                             <div class="error-text-box wsn flex g8 mt8">
                                 <span th:if="${#fields.hasErrors('password1')}" class="error-text f14 cCC0000" th:errors="*{password1}"></span>
-                                <span class="error-text f14 cCC0000">사용할 수 없는 비밀번호 입니다.</span>
-                                <span class="confirm-text f14 c009521">사용가능한 비밀번호 입니다.</span>
                             </div>
                             <div class="input-type-1 mt8">
                                 <input type="password" th:field="*{password2}" placeholder="비밀번호 확인">
                             </div>
                             <div class="error-text-box wsn flex g8 mt8">
                                 <span th:if="${#fields.hasErrors('password2')}" class="error-text f14 cCC0000" th:errors="*{password2}"></span>
-                                <span class="error-text f14 cCC0000">비밀번호가 일치하지 않습니다.</span>
-                                <span class="confirm-text f14 c009521">비밀번호가 일치합니다.</span>
+                                <span id="passwordMatch" class="confirm-text f14"></span>
                             </div>
                         </li>
                         <li>
@@ -78,9 +74,8 @@
                                 </div>
                                 <button type="button" id="verifyBtn" class="btn-type-2">확인</button>
                             </div>
-                            <div class="error-text-box wsn flex g8 mt8">
-                                <span class="error-text f14 cCC0000">인증번호가 일치하지 않습니다.</span>
-                                <span class="confirm-text f14 c009521">인증번호가 일치합니다.</span>
+                            <div class="error-text-box wsn flex g8 mt8" id="verify">
+                                <span class="confirm-text f14"></span>
                             </div>
                         </li>
                         <li>
@@ -169,8 +164,49 @@
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
-    $(document).ready(function () {
+    // 이미지 미리보기 함수
+    function previewFile() {
+        var fileInput = $("#user_img")[0];
+        var file = fileInput.files[0];
 
+        if (file) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                // 이미지 미리보기 업데이트
+                $("#previewImage").attr("src", e.target.result);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+    $(document).ready(function () {
+        // 이미지를 클릭하면 파일 선택 다이얼로그 열기
+        $("#editIcon").click(function () {
+            $("#user_img").click();
+        });
+        // 파일 선택이 변경되었을 때 이미지 미리보기 업데이트
+        $("#user_img").change(function () {
+            previewFile();
+            if ($("#user_img")[0].files.length === 0) {
+                $("#previewImage").removeAttr("src");
+                // 이미지가 선택되지 않았을 때 profileImgUrl을 null로 설정
+                $("input[name='profileImage']").val(""); // 추가된 부분
+            }
+        });
+        // 이미지가 없는 경우 기본 이미지로 설정
+        if ($("#user_img")[0].files.length === 0) {
+            $("#previewImage").attr("src", "/img/user_img.svg");
+        }
+        // 기본 이미지로 변경 버튼 클릭 시 처리
+        $("#resetImageBtn").click(function () {
+            // 파일 선택 input 초기화
+            $("#user_img").val("");
+            // 미리보기 이미지를 기본 이미지로 변경
+            $("#previewImage").attr("src", "/img/user_img.svg");
+            // 서버에 null 값을 전송
+            $("input[name='profileImage']").val("");
+        });
         //개인정보 수집 및 이용 동의 체크박스
         $("#privacy").change(function () {
             // 만약 체크박스가 체크되어 있다면 오류 메시지를 숨깁니다
@@ -223,13 +259,17 @@
             });
             }
         });
-        // 확인 버튼 클릭 시 처리
+        // 이메일 확인 버튼 클릭 시 처리
         $("#verifyBtn").click(function () {
-            console.log("확인 버튼이 클릭되었습니다.");
-            var verificationCode = $("input[name='verificationCode']").val();
+          console.log("확인 버튼이 클릭되었습니다.");
+          var verificationCode = $("input[name='verificationCode']").val();
+          var email = $("input[name='email']").val();
 
-            // TODO: 서버에 인증번호 검증 요청을 보내고 결과에 따라 메시지 업데이트
-            var email = $("input[name='email']").val();
+          // TODO: 서버에 인증번호 검증 요청을 보내고 결과에 따라 메시지 업데이트
+           verifyCodeOnServer(email, verificationCode);
+        });
+
+        function verifyCodeOnServer(email, verificationCode) {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
 
@@ -239,24 +279,66 @@
             };
 
             $.ajax({
-                type: "POST",
-                url: "/verify",
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify(verifyData),
-                beforeSend: function (xhr) {
-                    // CSRF 토큰을 헤더에 포함
-                    xhr.setRequestHeader(header, token);
-                },
-                success: function (message) {
+            type: "POST",
+            url: "/verify",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(verifyData),
+            beforeSend: function (xhr) {
+                // CSRF 토큰을 헤더에 포함
+                xhr.setRequestHeader(header, token);
+            },
+            success: function (message) {
+                // 성공 시 사용자에게 메시지 표시 또는 다른 처리 수행
+                updateVerifyMessage("인증 성공", true);
+            },
+            error: function (error) {
+                // 실패 시 사용자에게 메시지 표시 또는 다른 처리 수행
+                updateVerifyMessage("인증 실패", false);
+                }
+            });
+        }
+
+        // 중복 확인 버튼 클릭 시 처리
+        $("#checkIdBtn").click(function () {
+            var username = $("input[name='username']").val();
+
+            $.ajax({
+                type: "GET",
+                url: "/user/checkUsername",
+                data: { "username": username },
+                cache: false,
+                success: function (data) {
                     // 성공 시 사용자에게 메시지 표시 또는 다른 처리 수행
-                    updateVerifyMessage("인증 성공");
+                    updateUsernameMessage(data, true);
                 },
-                error: function (error) {
+                error: function (xhr, status, error) {
                     // 실패 시 사용자에게 메시지 표시 또는 다른 처리 수행
-                    updateVerifyMessage("인증 실패");
+                    var errorMessage = "아이디 중복 확인에 실패하였습니다. 다시 시도해주세요.";
+                    if (xhr.status === 409) {
+                        errorMessage = "이미 사용 중인 아이디입니다.";
+                    }
+                    updateUsernameMessage(errorMessage, false);
                 }
             });
         });
+
+        function updateUsernameMessage(message, isSuccess) {
+            // 아이디 중복 확인 결과 메시지 업데이트
+            const messageBox = $("#checkId").find(".message-box");
+
+            // isSuccess 값에 따라 메시지 색상 변경
+            if (isSuccess) {
+                messageBox.removeClass("error-text").addClass("confirm-text");
+                messageBox.css("color", "#009521"); // 성공 시 색상
+            } else {
+                messageBox.removeClass("confirm-text").addClass("error-text");
+                messageBox.css("color", "#CC0000"); // 실패 시 색상
+            }
+
+            // 결과 메시지 업데이트
+            messageBox.text(message);
+
+        }
         function validateEmail(email) {
              // 간단한 이메일 유효성 검사 로직을 사용
              var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -265,14 +347,15 @@
         // 에러 메시지 업데이트 함수
         function updateErrorMessage(errorType, inputBox) {
             // 에러 메시지를 표시할 요소
-            var errorBox = inputBox.closest(".input-btn-box").find("#emailMessage");
+            var errorBox = $("#emailMessage");
 
             // 유효한 이메일에 대한 에러 처리
             if (errorType === "invalidEmail") {
-                errorBox.find(".error-text.f14.cCC0000").show().text("유효한 이메일 주소를 입력하세요.");
+                var errorTextElement = errorBox.find(".error-text.f14.cCC0000");
+                errorTextElement.show().text("유효한 이메일 주소를 입력하세요.");
 
-                // 기존에 표시된 성공 메시지 지우기
-                errorBox.find(".confirm-text.f14.c009521").empty();
+                var confirmTextElement = errorBox.find(".confirm-text.f14.c009521");
+                confirmTextElement.empty();
             }
         }
          function displayErrorMessages(errors) {
@@ -299,7 +382,7 @@
          }
         function updateVerifyMessage(message, isSuccess) {
             // 인증 결과 메시지 업데이트
-            var messageBox = $(".error-text-box.wsn.flex.g8.mt8").find("span");
+            var messageBox = $("#verify").find(".confirm-text");
             messageBox.text(message);
 
             // isSuccess 값에 따라 메시지 색상 변경
@@ -311,5 +394,42 @@
                 messageBox.css("color", "#CC0000"); // 실패 시 색상
             }
         }
+        function checkPasswordMatch() {
+            var password1 = $("input[name='password1']").val();
+            var password2 = $("input[name='password2']").val();
+
+            if (!password2.trim()) {
+                updatePasswordMatchMessage("", true);
+                return;
+            }
+            // 비밀번호 일치 여부 확인
+            if (password1 === password2) {
+                updatePasswordMatchMessage("비밀번호가 일치합니다.", true);
+            } else {
+                updatePasswordMatchMessage("비밀번호가 일치하지 않습니다.", false);
+            }
+        }
+
+        // 비밀번호 확인 결과 메시지 업데이트 함수
+        function updatePasswordMatchMessage(message, isSuccess) {
+            var messageBox = $("#passwordMatch");
+
+            // isSuccess 값에 따라 메시지 색상 변경
+            if (isSuccess) {
+                messageBox.removeClass("error-text").addClass("confirm-text");
+                messageBox.css("color", "#009521"); // 성공 시 색상
+            } else {
+                messageBox.removeClass("confirm-text").addClass("error-text");
+                messageBox.css("color", "#CC0000"); // 실패 시 색상
+            }
+
+            // 결과 메시지 업데이트
+            messageBox.text(message);
+        }
+        $("input[name='password2']").on("input", function () {
+            // 입력 값이 변경되면 메시지를 숨김
+            updatePasswordMatchMessage("", true);
+            checkPasswordMatch(); // 비밀번호 일치 여부 확인
+        });
     });
 </script>

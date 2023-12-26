@@ -73,3 +73,9 @@
 .login-area .sns-login-box > h3::after {
     right: 0;
 }
+
+/* 에러 색상 */
+.error-class {
+    color: red;
+    border-color: red;
+}

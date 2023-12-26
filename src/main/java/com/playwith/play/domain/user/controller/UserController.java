@@ -26,7 +26,6 @@ public class UserController {
     private SiteUser findUser;
 
     //로그인
-
     @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false) String error,
@@ -37,6 +36,7 @@ public class UserController {
         return "login";
     }
 
+    //회원가입
     @PreAuthorize("isAnonymous()")
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
@@ -67,6 +67,7 @@ public class UserController {
         }
     }
 
+    //아이디 찾기
     @PreAuthorize("isAnonymous()")
     @GetMapping("/id_search")
     public String id_search() {
@@ -75,30 +76,29 @@ public class UserController {
 
     @PreAuthorize("isAnonymous()")
     @PostMapping("/id_search")
-    public String id_search(Model model, @RequestParam("email") String email, @RequestParam("name") String name) {
-        Optional<SiteUser> os = this.userService.getEmailAndName(email, name);
-        SiteUser findUser = os.get();
+    public ResponseEntity<String> id_search(Model model, @RequestParam("email") String inputEmail,
+                                            @RequestParam("name") String inputName) {
+        // 사용자의 메일, 이름 얻기
+        Optional<SiteUser> foundUser = this.userService.getUserByEmailAndName(inputEmail, inputName);
 
-        //메일 일치 시, 아이디 알려주기
-        if (findUser.getEmail().equals(email)) {
-            model.addAttribute("findUsername", findUser.getUsername());
+        if (foundUser.isPresent()) {
+            findUser = foundUser.get();
+            // 사용자 찾음
+            model.addAttribute("findUsername", this.findUser);
+            return ResponseEntity.ok("id_search_result");
+        } else {
+            return ResponseEntity.ok("입력한 정보가 올바르지 않거나 존재하지 않음");
         }
-        //url 결과 보여 주기
-        return userService.getEmailAndName(email, name)
-                .map(siteUser ->
-                        rq.redirect(
-                                "/user/id_search_result?username=%s".formatted(siteUser.getUsername()),
-                                "해당 회원의 아이디는 `%s` 입니다.".formatted(siteUser.getUsername())
-                        )
-                )
-                .orElse(rq.historyBack("`%s` (은)는 존재하지 않은 회원입니다."));
     }
 
-
+    //아이디 찾기 결과
     @PreAuthorize("isAnonymous()")
     @GetMapping("/id_search_result")
-    public String id_search_result(Model model, @RequestParam(value = "username") String username) {
-        model.addAttribute("findUsername", username);
+    public String id_search_result(Model model) {
+        // findUser가 null이 아닌 경우에만 모델에 추가
+        if (this.findUser != null) {
+            model.addAttribute("findUsername", this.findUser.getUsername());
+        }
         return "id_search_result";
     }
 
@@ -111,20 +111,40 @@ public class UserController {
 
     @PreAuthorize("isAnonymous()")
     @PostMapping("/password_search_modify")
-    public String password_search(@RequestParam("username") String username, @RequestParam("email") String email,
-                                  @RequestParam("name") String name, Model model) {
-        Optional<SiteUser> os = this.userService.getUserUsernameAndMailAndName(username, email, name);
-        findUser = os.get();
-        model.addAttribute("userCreateForm", new UserCreateForm());
+    public ResponseEntity<String> password_search(Model model, @RequestParam("username") String inputUsername,
+                                                  @RequestParam("email") String inputEmail, @RequestParam("name") String inputName) {
+        // 사용자의 아이디, 메일, 이름 얻기
+        Optional<SiteUser> founUser = this.userService.getUserUsernameAndMailAndName(inputUsername, inputEmail, inputName);
+        findUser = founUser.get();
 
+        model.addAttribute("newPasswordForm", new UserCreateForm());
+        return ResponseEntity.ok("password_search_modify");
+
+    }
+
+    @PreAuthorize("isAnonymous()")
+    @GetMapping("/password_search_modify")
+    public String password_search_modify(Model model) {
+        model.addAttribute("newPasswordForm", this.findUser);
         return "password_search_modify";
     }
 
     @PreAuthorize("isAnonymous()")
     @PostMapping("/password_search_result")
-    public String modifyPassword(@ModelAttribute("userCreateForm") UserCreateForm userCreateForm) {
-        this.userService.modifyPassword(userCreateForm, findUser);
-        return "login";
+    public ResponseEntity<String> modifyPassword(Model model, @ModelAttribute("newPasswordForm") NewPasswordForm newPasswordForm) {
+        this.userService.modifyPassword(newPasswordForm, findUser);
+//        model.addAttribute("newPasswordForm", findUser);
+        return ResponseEntity.ok("login");
     }
 
+    @GetMapping("/mypage")
+    public String mypage(UserCreateForm userCreateForm) {
+        return "mypage";
+    }
+
+    @GetMapping("/team")
+    public String team(UserCreateForm userCreateForm) {
+        return "team";
+    }
 }
+

@@ -14,11 +14,8 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -46,7 +43,6 @@ public class SiteUser extends BaseEntity {
     private String level;
     private String nickname;
     private String profileImgUrl;
-    private String rating;
 
     @OneToMany
     private List<ReportArticle> reportArticleList;
@@ -54,19 +50,24 @@ public class SiteUser extends BaseEntity {
     private List<SoldierArticle> soldierArticleList;
     @OneToMany
     private List<WishList> wishLists;
-    public boolean isSocialMember() {
-        return username.startsWith("KAKAO_");
-    }  //사용자명이 카카오로 시작하는지 확인
-    public List<? extends GrantedAuthority> getGrantedAuthorities() {
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        // 모든 멤버는 member 권한을 가진다.
-        grantedAuthorities.add(new SimpleGrantedAuthority("user"));
-        // username이 admin인 회원은 추가로 admin 권한도 가진다.
-        if (isAdmin()) {
-            grantedAuthorities.add(new SimpleGrantedAuthority("admin"));
-        }
-        return grantedAuthorities;
-    }
+
+//    @ManyToOne
+//    private Matching matching;
+
+
+//    public boolean isSocialMember() {
+//        return username.startsWith("KAKAO_");
+//    }  //사용자명이 카카오로 시작하는지 확인
+//    public List<? extends GrantedAuthority> getGrantedAuthorities() {
+//        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+//        // 모든 멤버는 member 권한을 가진다.
+//        grantedAuthorities.add(new SimpleGrantedAuthority("user"));
+//        // username이 admin인 회원은 추가로 admin 권한도 가진다.
+//        if (isAdmin()) {
+//            grantedAuthorities.add(new SimpleGrantedAuthority("admin"));
+//        }
+//        return grantedAuthorities;
+//    }
     public boolean isAdmin() {
         return "admin".equals(username);
     }

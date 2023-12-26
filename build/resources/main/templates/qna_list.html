@@ -34,9 +34,9 @@
                                 <td th:text="${loop.count}"></td>
                                 <td class="tal lh140" th:text="${qna.title}"></td>
                                 <td class="wsw tal lh140" th:utext="${qna.content}"></td>
-                                <td th:text="${#temporals.format(qna.createDate, 'yy-MM-dd HH:mm')}"></td>
+                                <td th:text="${#temporals.format(qna.createdDate, 'yy-MM-dd HH:mm')}"></td>
                                 <td>
-                                    <span th:if="${qna.modifyDate != null}" th:text="${#temporals.format(qna.modifyDate, 'yy-MM-dd HH:mm')}"></span>
+                                    <span th:if="${qna.modifiedDate != null}" th:text="${#temporals.format(qna.modifiedDate, 'yy-MM-dd HH:mm')}"></span>
                                 </td>
                                 <td>
                                     <div class="btn-box inflex g8">

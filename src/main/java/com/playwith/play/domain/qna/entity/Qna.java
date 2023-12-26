@@ -8,13 +8,13 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
 @Entity
-public class Qna {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@SuperBuilder
+@ToString
+public class Qna extends BaseEntity {
 
     @Column(columnDefinition = "TEXT")
     private String title;
@@ -22,7 +22,4 @@ public class Qna {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    private LocalDateTime createDate;
-
-    private LocalDateTime modifyDate;
 }
