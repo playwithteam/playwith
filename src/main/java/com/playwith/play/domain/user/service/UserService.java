@@ -1,10 +1,9 @@
 package com.playwith.play.domain.user.service;
 
 
-import com.playwith.play.domain.user.controller.UserCreateForm;
+import com.playwith.play.domain.user.controller.NewPasswordForm;
 import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.domain.user.repository.UserRepository;
-import com.playwith.play.global.util.DataNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,47 +39,48 @@ public class UserService {
 
     @Transactional
     public SiteUser whenSocialLogin(String providerTypeCode, String username, String nickname) {
-        Optional<SiteUser> opMember = getUsername(username);
-        if (opMember.isPresent()) return opMember.get();
-
-        // 소셜 로그인를 통한 가입시 비번은 없다.
-        return join(null, username, null, null, null, null, nickname, null); // 최초 로그인 시 딱 한번 실행
-    }
-
-    //유저 아이디 찾기
-    public Optional<SiteUser> getUsername(String username) {
         Optional<SiteUser> os = this.userRepository.findByUsername(username);
-        if (os.isPresent()) {
-            return os;
-        } else {
-            throw new DataNotFoundException("siteuser not found");
-        }
+        if (os.isPresent()) return os.get();
+
+        return join("", username, "", "", "", "", nickname, null); // 최초 로그인 시 딱 한번 실행
     }
 
-    //이메일&이름 찾기
-    public Optional<SiteUser> getEmailAndName(String email, String name) {
-        Optional<SiteUser> os = this.userRepository.findByEmailAndName(email, name);
-        if (os.isPresent()) {
-            return os;
-        } else {
-            throw new DataNotFoundException("email and name not found");
-        }
+    //유저아이디 찾기
+    public Optional<SiteUser> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
-    //유저아이디&메일&이름 찾기
-    public SiteUser getUserUsernameAndMailAndName(String username, String email, String name) {
+
+    //이메일, 이름 찾기
+    public Optional<SiteUser> getUserByEmailAndName(String email, String name) {
+
+        Optional<SiteUser> os = userRepository.findByEmailAndName(email, name);
+
+        // 입력된 이메일,이름이 일치하는 경우에만 사용자 정보를 반환
+        return os.filter(u -> u
+                .getEmail().equals(email) && u.getName().equals(name));
+    }
+
+
+    //유저 아이디,메일,이름 찾기
+    public Optional<SiteUser> getUserUsernameAndMailAndName(String username, String email, String name) {
         Optional<SiteUser> os = this.userRepository.findByUsernameAndEmailAndName(username, email, name);
-        return os.get();
+
+        // 입력된 아이디,이메일,이름이 일치하는 경우에만 사용자 정보를 반환
+        return os.filter(u -> u
+                .getUsername().equals(username) && u.getEmail().equals(email) && u.getName().equals(name));
     }
 
     //비번 수정
-    public SiteUser modifyPassword(UserCreateForm userCreateForm, SiteUser findUser) {
+    public SiteUser modifyPassword(NewPasswordForm newPasswordForm, SiteUser findUser) {
+        String newPassword = newPasswordForm.getPassword1();
+
         SiteUser siteUserPassword = SiteUser
                 .builder()
                 .username(findUser.getUsername())
                 .name(findUser.getName())
                 .id(findUser.getId())
-                .password(passwordEncoder.encode(userCreateForm.getPassword1()))
+                .password(passwordEncoder.encode(newPassword))
                 .birthDate(findUser.getBirthDate())
                 .email(findUser.getEmail())
                 .nickname(findUser.getNickname())

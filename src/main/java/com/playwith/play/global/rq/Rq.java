@@ -61,7 +61,7 @@ public class Rq {
         }
 
         if (siteUser == null) {
-            siteUser = userService.getUsername(user.getUsername()).orElseThrow();
+            siteUser = userService.findByUsername(user.getUsername()).orElseThrow();
         }
 
         return siteUser;
