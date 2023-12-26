@@ -111,7 +111,12 @@
                             <li th:each="matching : ${matchingList}" th:if="${matching.matchingType.toString() == 'TYPE_1'}">
                                 <a href="" class="flex aic jcsb">
                                     <div class="left-box flex aic g40">
-                                        <span class="time-text f18" th:text="${matching.gameTime}"></span>
+                                        <div class="flex aic g20">
+                                            <button class="favor-box img-box w24" id="favor_btn">
+                                                <img th:src="@{/img/ico_heart.svg}" alt="">
+                                            </button>
+                                            <span class="time-text f18" th:text="${matching.gameTime}"></span>
+                                        </div>
                                         <div class="text-box flex aic g8">
                                             <span th:if="${matching.level} == '하'" class="difficulty-text f16 type-1" th:text="${matching.level}"></span>
                                             <span th:if="${matching.level} == '중'" class="difficulty-text f16 type-2" th:text="${matching.level}"></span>
@@ -199,7 +204,12 @@
                             <li th:each="matching : ${matchingList}" th:if="${matching.matchingType.toString() == 'TYPE_2'}">
                                 <a href="" class="flex aic jcsb">
                                     <div class="left-box flex aic g40">
-                                        <span class="time-text f18" th:text="${matching.gameTime}"></span>
+                                        <div class="flex aic g20">
+                                            <button class="favor-box img-box w24" id="favor_btn">
+                                                <img th:src="@{/img/ico_heart.svg}" alt="">
+                                            </button>
+                                            <span class="time-text f18" th:text="${matching.gameTime}"></span>
+                                        </div>
                                         <div class="text-box flex aic g8">
                                             <span th:if="${matching.level} == '하'" class="difficulty-text f16 type-1" th:text="${matching.level}"></span>
                                             <span th:if="${matching.level} == '중'" class="difficulty-text f16 type-2" th:text="${matching.level}"></span>

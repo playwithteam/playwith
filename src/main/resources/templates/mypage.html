@@ -1,0 +1,145 @@
+<html layout:decorate="~{/common/layout}">
+<div layout:fragment="content">
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- CSRF 토큰 설정 -->
+        <meta name="_csrf" th:content="${_csrf.token}">
+        <meta name="_csrf_header" th:content="${_csrf.headerName}">
+        <div class="signup-area login-cnt-area w100per rel zi2">
+            <form action="/user/signup" method="post" th:object="${userCreateForm}">
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+            <div class="con w100per">
+                <h1 class="title-text lh120 tb tac wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">내 정보</h1>
+                <div class="signup-box flex fdc wow fadeInUp" data-wow-delay="0.6s" data-wow-duration="0.6s">
+                    <ul class="flex fdc g36">
+                        <li>
+                            <h3 class="c333 f18 tb mb16">프로필 사진</h3>
+                            <div class="file-type-1 rel flex aie g20">
+                                <div class="user-img-box">
+                                    <img th:src="@{/img/user_img.svg}" alt="">
+                                </div>
+                                <div class="file-btn w16 abs xy-bl">
+                                    <label for="user_img" class="block img-box">
+                                        <img th:src="@{/img/ico_edit_999999.svg}" alt="">
+                                    </label>
+                                    <input type="file" id="user_img">
+                                </div>
+                                <button type="button" class="btn-type-3">기본 이미지</button>
+                            </div>
+                        </li>
+                        <li>
+                            <h3 class="c333 f18 tb mb16">기존 비밀번호</h3>
+                            <div class="input-btn-box flex g8">
+                                <div class="input-type-1">
+                                    <input type="password" th:field="*{username}"  placeholder="기존 비밀번호">
+                                </div>
+                                <button type="button" id="" class="btn-type-2">확인</button>
+                            </div>
+                            <div class="error-text-box wsn flex g8 mt8">
+                                <span th:if="${#fields.hasErrors('username')}" class="error-text f14 cCC0000" th:errors="*{username}"></span>
+                                <span class="error-text f14 cCC0000">비밀번호가 일치하지 않습니다.</span>
+                                <span class="confirm-text f14 c009521">비밀번호가 일치합니다.</span>
+                            </div>
+                        </li>
+                        <!--위에 기존 비밀번호 확인 버튼 눌러서 비밀번호 일치하면 아래 새로운 비밀번호 input 태그 disabled제거하여 새로운 비밀번호 설정할 수 있게-->
+                        <li>
+                            <h3 class="c333 f18 tb mb16">새로운 비밀번호</h3>
+                            <div class="input-type-1">
+                                <input type="password" th:field="*{password1}" placeholder="새로운 비밀번호" disabled>
+                            </div>
+                            <div class="error-text-box wsn flex g8 mt8">
+                                <span th:if="${#fields.hasErrors('password1')}" class="error-text f14 cCC0000" th:errors="*{password1}"></span>
+                                <span class="error-text f14 cCC0000">사용할 수 없는 비밀번호 입니다.</span>
+                                <span class="confirm-text f14 c009521">사용가능한 비밀번호 입니다.</span>
+                            </div>
+                            <div class="input-type-1 mt8">
+                                <input type="password" th:field="*{password2}" placeholder="비밀번호 확인" disabled>
+                            </div>
+                            <div class="error-text-box wsn flex g8 mt8">
+                                <span th:if="${#fields.hasErrors('password2')}" class="error-text f14 cCC0000" th:errors="*{password2}"></span>
+                                <span class="error-text f14 cCC0000">비밀번호가 일치하지 않습니다.</span>
+                                <span class="confirm-text f14 c009521">비밀번호가 일치합니다.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <h3 class="c333 f18 tb mb16">이메일</h3>
+                            <div class="input-type-1">
+                                <input type="text" th:field="*{email}" placeholder="이메일" disabled>
+                            </div>
+                        </li>
+                        <li>
+                            <h3 class="c333 f18 tb mb16">이름</h3>
+                            <div class="input-type-1">
+                                <input type="text" th:field="*{name}" placeholder="이름">
+                            </div>
+                            <div class="error-text-box wsn flex g8 mt8">
+                                <span th:if="${#fields.hasErrors('name')}" class="error-text f14 cCC0000" th:errors="*{name}"></span>
+                            </div>
+                        </li>
+                        <li>
+                            <h3 class="c333 f18 tb mb16">생년월일</h3>
+                            <div class="date-type-1">
+                                <input type="date" th:field="*{birthDate}" disabled>
+                            </div>
+                            <div class="error-text-box wsn flex g8 mt8">
+                                <span th:if="${#fields.hasErrors('birthDate')}" class="error-text f14 cCC0000" th:errors="*{birthDate}"></span>
+                            </div>
+                        </li>
+                        <li>
+                            <ul class="flex g8">
+                                <li class="w50per">
+                                    <h3 class="c333 f18 tb mb16">지역</h3>
+                                    <div class="select-type-2 rel">
+                                        <select id="area" th:field="*{area}">
+                                            <option value="">지역</option>
+                                            <option value="강원도">강원도</option>
+                                            <option value="경기도">경기도</option>
+                                            <option value="충청도">충청도</option>
+                                            <option value="전라도">전라도</option>
+                                            <option value="경상도">경상도</option>
+                                            <option value="제주">제주</option>
+                                            <option value="서울">서울</option>
+                                            <option value="인천">인천</option>
+                                            <option value="대전">대전</option>
+                                            <option value="부산">부산</option>
+                                            <option value="대구">대구</option>
+                                            <option value="울산">울산</option>
+                                            <option value="광주">광주</option>
+                                        </select>
+                                        <span class="arrow img-box abs y-middle">
+                                        <img th:src="@{/img/arrow_bottom_999999.svg}" alt="">
+                                    </span>
+                                    </div>
+                                    <div class="error-text-box wsn flex g8 mt8">
+                                        <span th:if="${#fields.hasErrors('area')}" class="error-text f14 cCC0000" th:errors="*{area}"></span>
+                                    </div>
+                                </li>
+                                <li class="w50per">
+                                    <h3 class="c333 f18 tb mb16">레벨<span class="tb cCC0000 inblock">*</span></h3>
+                                    <div class="select-type-2 rel">
+                                        <select id="level" th:field="*{level}" disabled>
+                                            <option value="">레벨</option>
+                                            <option value="하">하</option>
+                                            <option value="중">중</option>
+                                            <option value="상">상</option>
+                                        </select>
+                                        <span class="arrow img-box abs y-middle">
+                                        <img th:src="@{/img/arrow_bottom_999999.svg}" alt="">
+                                    </span>
+                                    </div>
+                                    <div class="error-text-box wsn flex g8 mt8">
+                                        <span th:if="${#fields.hasErrors('level')}" class="error-text f14 cCC0000" th:errors="*{level}"></span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <!--수정하는 내용이 있을 경우 confirm창으로 정말 수정하시겠습니까? 한 번 물어보고 확인 누를 경우 빈 값 혹은 유효성 검사 후 수정 진행-->
+                    <button type="submit" class="btn-type-1 mt100">수정하기</button>
+                </div>
+            </div>
+            </form>
+        </div>
+</div>
+</html>

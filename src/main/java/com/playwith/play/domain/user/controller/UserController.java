@@ -134,4 +134,14 @@ public class UserController {
         this.userService.modifyPassword(userCreateForm, findUser);
         return "login";
     }
+
+    @GetMapping("/mypage")
+    public String mypage(UserCreateForm userCreateForm) {
+        return "mypage";
+    }
+
+    @GetMapping("/team")
+    public String team(UserCreateForm userCreateForm) {
+        return "team";
+    }
 }
