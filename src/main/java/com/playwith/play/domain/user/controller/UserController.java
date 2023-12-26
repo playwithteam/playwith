@@ -35,6 +35,7 @@ public class UserController {
         return "login";
     }
 
+    //회원가입
     @PreAuthorize("isAnonymous()")
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
