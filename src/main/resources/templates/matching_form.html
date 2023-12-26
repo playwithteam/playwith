@@ -72,21 +72,11 @@
                                 <li class="w50per">
                                     <h3 class="c333 f18 tb mb16">지역<span class="tb cCC0000 inblock">*</span></h3>
                                     <div class="select-type-2 rel">
-                                        <select th:field="*{area}">
+                                        <select th:field="*{area}" id="areaSelect">
                                             <option value="">지역</option>
-                                            <option value="강원도">강원도</option>
-                                            <option value="경기도">경기도</option>
-                                            <option value="충청도">충청도</option>
-                                            <option value="전라도">전라도</option>
-                                            <option value="경상도">경상도</option>
-                                            <option value="제주">제주</option>
                                             <option value="서울">서울</option>
-                                            <option value="인천">인천</option>
                                             <option value="대전">대전</option>
                                             <option value="부산">부산</option>
-                                            <option value="대구">대구</option>
-                                            <option value="울산">울산</option>
-                                            <option value="광주">광주</option>
                                         </select>
                                         <span class="arrow img-box abs y-middle">
                                             <img th:src="@{/img/arrow_bottom_999999.svg}" alt="">
@@ -99,11 +89,8 @@
                                 <li class="w50per">
                                     <h3 class="c333 f18 tb mb16">구장<span class="tb cCC0000 inblock">*</span></h3>
                                     <div class="select-type-2 rel">
-                                        <select th:field="*{betel}">
+                                        <select th:field="*{betel}" id="stadiumSelect">
                                             <option value="">구장</option>
-                                            <option value="ㅇㅇㅇ구장">ㅇㅇㅇ구장</option>
-                                            <option value="ㅇㅇㅇ구장">ㅇㅇㅇ구장</option>
-                                            <option value="ㅇㅇㅇ구장">ㅇㅇㅇ구장</option>
                                         </select>
                                         <span class="arrow img-box abs y-middle">
                                             <img th:src="@{/img/arrow_bottom_999999.svg}" alt="">
@@ -125,5 +112,5 @@
         </div>
     </div>
 
-</div>
+    </div>
 </html>

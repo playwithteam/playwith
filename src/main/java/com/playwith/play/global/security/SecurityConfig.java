@@ -41,9 +41,8 @@ public class SecurityConfig {
                 .csrf((csrf) -> csrf
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/qna/*")))
                 .csrf((csrf) -> csrf
-                        .ignoringRequestMatchers(new AntPathRequestMatcher("/user/id_search*")))
-                ;
-
+                        .ignoringRequestMatchers(new AntPathRequestMatcher("/stadium/*")))
+        ;
         return http.build();
     }
 

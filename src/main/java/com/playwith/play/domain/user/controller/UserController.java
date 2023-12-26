@@ -35,7 +35,6 @@ public class UserController {
         return "login";
     }
 
-    //회원가입
     @PreAuthorize("isAnonymous()")
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
@@ -139,6 +138,16 @@ public class UserController {
         this.userService.modifyPassword(newPasswordForm, findUser);
 //        model.addAttribute("newPasswordForm", findUser);
         return ResponseEntity.ok("login");
+    }
+
+    @GetMapping("/mypage")
+    public String mypage(UserCreateForm userCreateForm) {
+        return "mypage";
+    }
+
+    @GetMapping("/team")
+    public String team(UserCreateForm userCreateForm) {
+        return "team";
     }
 }
 

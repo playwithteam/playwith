@@ -136,4 +136,49 @@ $(document).ready(function(){
         $(this).val(modifiedTime);
       });
 
+      $("#areaSelect").change(function () {
+          var selectedArea = $(this).val();
+
+          // Ajax 호출을 통해 서버에서 해당 지역의 구장 리스트를 가져옴
+          $.ajax({
+              type: "GET",
+              url: "/stadium/stadiumList", // 여기에 실제 백엔드 API 엔드포인트를 넣어주세요
+              data: { area: selectedArea },
+              success: function (stadiums) {
+                  // 가져온 데이터를 바탕으로 두 번째 select 박스 업데이트
+                  var stadiumSelect = $("#stadiumSelect");
+                  stadiumSelect.empty(); // 기존 옵션 제거
+
+                  stadiumSelect.append('<option value="">구장</option>'); // 기본 옵션 추가
+
+                  $.each(stadiums, function (index, stadium) {
+                      stadiumSelect.append('<option value="' + stadium.name + '">' + stadium.name + '</option>');
+                  });
+              },
+              error: function (error) {
+                  console.log("Error fetching stadiums: " + error);
+              }
+          });
+      });
+
+      // gameDate input 요소에 change 이벤트 리스너 등록
+      $("#gameDate").on("change", function () {
+          // 현재 날짜 가져오기
+          var currentDate = new Date();
+
+          // 선택된 날짜 가져오기
+          var selectedDate = new Date($(this).val());
+
+          // 선택된 날짜가 오늘 날짜보다 이전인 경우 경고 메시지 표시
+          if (selectedDate <= currentDate) {
+                $(this).val("");
+              alert("최소 1일 전 매칭만 등록 가능합니다.");
+          }
+      });
+
+      $('button#favor_btn').click(function(event) {
+          event.preventDefault();
+          $(this).toggleClass("active");
+        });
+
 });

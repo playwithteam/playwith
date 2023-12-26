@@ -1,5 +1,6 @@
 package com.playwith.play.domain.matching.entity;
 
+import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.global.jpa.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -24,4 +26,6 @@ public class Matching extends BaseEntity {
     private String area;
     private String betel;
     private String managerName;
+//    @OneToMany(mappedBy = "matching", cascade = CascadeType.REMOVE)
+//    private List<Matching> matchingList;
 }
