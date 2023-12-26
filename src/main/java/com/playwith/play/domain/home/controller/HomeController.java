@@ -37,4 +37,9 @@ public class HomeController {
         return "index";
     }
 
+    @GetMapping("/t")
+    public String wishlist() {
+        return "matching_detail";
+    }
+
 }

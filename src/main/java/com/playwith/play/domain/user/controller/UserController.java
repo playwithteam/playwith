@@ -139,9 +139,4 @@ public class UserController {
     public String mypage(UserCreateForm userCreateForm) {
         return "mypage";
     }
-
-    @GetMapping("/team")
-    public String team(UserCreateForm userCreateForm) {
-        return "team";
-    }
 }
