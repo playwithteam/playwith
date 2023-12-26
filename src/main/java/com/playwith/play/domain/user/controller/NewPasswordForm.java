@@ -2,7 +2,6 @@ package com.playwith.play.domain.user.controller;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,15 +14,4 @@ public class NewPasswordForm {
 
     @NotBlank(message = "필수 입력 항목 입니다.")
     private String password2;
-
-    @Size(min = 3, max = 25, message = "아이디는 3자 ~ 25자를 사용하세요.")
-    @NotBlank(message = "필수 입력 항목 입니다.")
-    private String username;
-
-    @NotBlank(message = "필수 입력 항목 입니다.")
-    private String name;
-
-    @NotBlank(message = "필수 입력 항목 입니다.")
-    @Pattern(regexp = "^(?:\\w+\\.?)*\\w+@(?:\\w+\\.)+\\w+$", message = "이메일 형식이 올바르지 않습니다.")
-    private String email;
 }

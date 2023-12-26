@@ -72,12 +72,14 @@ public class UserService {
 
     //비번 수정
     public SiteUser modifyPassword(NewPasswordForm newPasswordForm, SiteUser findUser) {
+        String newPassword = newPasswordForm.getPassword1();
+
         SiteUser siteUserPassword = SiteUser
                 .builder()
                 .username(findUser.getUsername())
                 .name(findUser.getName())
                 .id(findUser.getId())
-                .password(passwordEncoder.encode(newPasswordForm.getPassword1()))
+                .password(passwordEncoder.encode(newPassword))
                 .birthDate(findUser.getBirthDate())
                 .email(findUser.getEmail())
                 .nickname(findUser.getNickname())

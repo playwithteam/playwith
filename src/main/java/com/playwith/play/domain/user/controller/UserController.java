@@ -113,29 +113,31 @@ public class UserController {
         return "password_search";
     }
 
-    @PreAuthorize("permitAll()")
-    @PostMapping("/password_search")
+    @PreAuthorize("isAnonymous()")
+    @PostMapping("/password_search_modify")
     public ResponseEntity<String> password_search(Model model, @RequestParam("username") String inputUsername,
                                                   @RequestParam("email") String inputEmail, @RequestParam("name") String inputName) {
         // 사용자의 아이디, 메일, 이름 얻기
-      Optional<SiteUser> findUser= this.userService.getUserUsernameAndMailAndName(inputUsername, inputEmail, inputName);
+        Optional<SiteUser> founUser = this.userService.getUserUsernameAndMailAndName(inputUsername, inputEmail, inputName);
+        findUser = founUser.get();
 
-            model.addAttribute("newPasswordForm", findUser);
-            return ResponseEntity.ok("password_search_modify");
+        model.addAttribute("newPasswordForm", new UserCreateForm());
+        return ResponseEntity.ok("password_search_modify");
 
     }
-    @PreAuthorize("permitAll()")
+
+    @PreAuthorize("isAnonymous()")
     @GetMapping("/password_search_modify")
     public String password_search_modify(Model model) {
         model.addAttribute("newPasswordForm", this.findUser);
         return "password_search_modify";
     }
 
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("isAnonymous()")
     @PostMapping("/password_search_result")
-    public ResponseEntity<String> modifyPassword(Model model, NewPasswordForm newPasswordForm) {
+    public ResponseEntity<String> modifyPassword(Model model, @ModelAttribute("newPasswordForm") NewPasswordForm newPasswordForm) {
         this.userService.modifyPassword(newPasswordForm, findUser);
-        model.addAttribute("newPasswordForm", findUser);
+//        model.addAttribute("newPasswordForm", findUser);
         return ResponseEntity.ok("login");
     }
 }
