@@ -141,6 +141,7 @@ public class UserController {
         return ResponseEntity.ok("login");
     }
 
+}
 
     @GetMapping("/mypage")
     public String mypage(UserCreateForm userCreateForm) {
