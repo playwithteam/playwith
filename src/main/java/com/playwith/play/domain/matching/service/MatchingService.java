@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,5 +29,9 @@ public class MatchingService {
                 .createdDate(LocalDateTime.now())
                 .build();
         this.matchingRepository.save(matching);
+    }
+
+    public List<Matching> getList() {
+        return this.matchingRepository.findAll();
     }
 }

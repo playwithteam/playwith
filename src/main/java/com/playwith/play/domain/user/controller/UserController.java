@@ -140,5 +140,17 @@ public class UserController {
 //        model.addAttribute("newPasswordForm", findUser);
         return ResponseEntity.ok("login");
     }
+
+}
+
+    @GetMapping("/mypage")
+    public String mypage(UserCreateForm userCreateForm) {
+        return "mypage";
+    }
+
+    @GetMapping("/team")
+    public String team(UserCreateForm userCreateForm) {
+        return "team";
+    }
 }
 
