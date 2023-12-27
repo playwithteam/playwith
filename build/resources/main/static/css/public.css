@@ -57,6 +57,12 @@ body {
     padding: 80px 0 0 0;
 }
 
+input:disabled,
+select:disabled,
+textarea:disabled {
+    background: #eee !important;
+}
+
 .top-btn-box {
     width: 3.125vw;
     right: 2.0833vw;
@@ -351,6 +357,37 @@ body {
     color: #999;
 }
 
+.check-text-type-3 input {
+    display: none;
+}
+.check-text-type-3 input + label {
+    display: inline-block;
+    cursor: pointer;
+    padding-left: 24px;
+    position: relative;
+}
+.check-text-type-3 input + label::before {
+    content: "";
+    display: block;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    background: url(../img/ico_check_2.svg) no-repeat center center/cover;
+}
+.check-text-type-3 input:checked + label::before {
+    background: url(../img/ico_check_2_active.svg) no-repeat center center/cover;
+}
+.check-text-type-3 input + label .text {
+    font-size: 16px;
+    color: #999;
+}
+.check-text-type-3 input:checked + label .text {
+    color: #333;
+}
+
 .file-type-1 {
     box-sizing: border-box;
     padding: 0 0 8px 8px;
@@ -414,6 +451,10 @@ body {
     border-right: none;
 }
 
+.favor-box.active > img {
+    content: url(../img/ico_heart_active.svg);
+}
+
 /* ------------------------------------------------------------------------------- */
 
 /* 헤더 영역 */
@@ -438,6 +479,11 @@ body {
 .header-area .left-box .menu-box li a:hover {
     color: #030095;
     font-family: "Pretendard-Bold";
+}
+.header-area .right-box .user-name-box > .img-box {
+    border-radius: 50%;
+    height: 28px;
+    overflow: hidden;
 }
 .header-area .right-box .sub-menu-box li a {
     transition: all 0.3s;

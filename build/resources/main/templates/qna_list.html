@@ -1,4 +1,4 @@
-<html layout:decorate="~{layout}">
+<html layout:decorate="~{/common/layout}">
 <div layout:fragment="content">
 
     <div class="qna-list-area sub-cnt-area w100per rel zi2">
@@ -9,7 +9,12 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>선택</th>
+                                <th>
+                                    <div class="check-type-1 inblock">
+                                        <input type="checkbox" id="cbx_chkAll">
+                                        <label for="cbx_chkAll"></label>
+                                    </div>
+                                </th>
                                 <th>번호</th>
                                 <th>제목</th>
                                 <th>내용</th>
@@ -22,16 +27,16 @@
                             <tr th:each="qna, loop : ${qnaList}">
                                 <td>
                                     <div class="check-type-1 inblock">
-                                        <input type="checkbox" th:id="${qna.id}" th:value="${qna.id}">
+                                        <input type="checkbox" th:id="${qna.id}" th:value="${qna.id}" name="chk">
                                         <label th:for="${qna.id}"></label>
                                     </div>
                                 </td>
                                 <td th:text="${loop.count}"></td>
                                 <td class="tal lh140" th:text="${qna.title}"></td>
                                 <td class="wsw tal lh140" th:utext="${qna.content}"></td>
-                                <td th:text="${#temporals.format(qna.createDate, 'yy-MM-dd HH:mm')}"></td>
+                                <td th:text="${#temporals.format(qna.createdDate, 'yy-MM-dd HH:mm')}"></td>
                                 <td>
-                                    <span th:if="${qna.modifyDate != null}" th:text="${#temporals.format(qna.modifyDate, 'yy-MM-dd HH:mm')}"></span>
+                                    <span th:if="${qna.modifiedDate != null}" th:text="${#temporals.format(qna.modifiedDate, 'yy-MM-dd HH:mm')}"></span>
                                 </td>
                                 <td>
                                     <div class="btn-box inflex g8">
@@ -45,7 +50,8 @@
                 </div>
                 <div class="flex jce mt20 g8">
                     <button type="button" class="btn-type-5" id="selectDelBtn">선택 삭제</button>
-                    <form th:action="@{/qna/deleteAll}" method="get" onsubmit="return confirm('정말로 전체 삭제하시겠습니까?')">
+                    <button type="button" class="btn-type-5" th:if="${qnaList.size() == 0}" onclick="alert('게시글이 존재하지 않습니다.')">전체 삭제</button>
+                    <form th:if="${qnaList.size() != 0}" onsubmit="return confirm('정말로 전체 삭제하시겠습니까?')" th:action="@{/qna/deleteAll}" method="get">
                         <button type="submit" class="btn-type-5">전체 삭제</button>
                     </form>
                 </div>
