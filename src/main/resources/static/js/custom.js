@@ -179,6 +179,21 @@ $(document).ready(function(){
       $('button#favor_btn').click(function(event) {
           event.preventDefault();
           $(this).toggleClass("active");
+      });
+
+        //매칭 상세에서 주소 복사 버튼 클릭시
+        $("#copyButton").on("click", function() {
+          var address = $("#addressDisplay").text();
+          copyToClipboard(address);
+          alert("구장 주소가 복사되었습니다.");
         });
+        function copyToClipboard(text) {
+          var textarea = $("<textarea>")
+              .val(text)
+              .appendTo("body")
+              .select();
+          document.execCommand("copy");
+          textarea.remove();
+        }
 
 });

@@ -27,7 +27,7 @@ public class Matching extends BaseEntity {
     private String area;
     private String betel;
     private String managerName;
-    @OneToOne
+    @ManyToOne
     private Stadium stadium;
     @OneToMany(mappedBy = "matching", cascade = CascadeType.REMOVE)
     private List<SiteUser> userList;

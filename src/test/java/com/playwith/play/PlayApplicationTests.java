@@ -17,14 +17,14 @@ class PlayApplicationTests {
     @Autowired
     StadiumService stadiumService;
 
-    @Test
-    @DisplayName("테스트 아이디")
-    void test01() {
-        IntStream.rangeClosed(1, 1).forEach(i -> {
-            userService.join("","test","신짱구", "qwer1234!", "test@test.com", "대전", "상",
-                    null);
-        });
-    }
+//    @Test
+//    @DisplayName("테스트 아이디")
+//    void test01() {
+//        IntStream.rangeClosed(1, 1).forEach(i -> {
+//            userService.join("","test","신짱구", "qwer1234!", "test@test.com", "대전", "상",
+//                    null);
+//        });
+//    }
     @Test
     @DisplayName("테스트 구장")
     void test02(StadiumService stadiumService) {

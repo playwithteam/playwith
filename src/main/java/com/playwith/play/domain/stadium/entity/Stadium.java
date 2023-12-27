@@ -14,6 +14,8 @@ import lombok.experimental.SuperBuilder;
 import org.checkerframework.checker.units.qual.A;
 import org.checkerframework.checker.units.qual.Area;
 
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,6 +28,6 @@ public class Stadium extends BaseEntity {
     private String address;
     @Column(columnDefinition = "TEXT")
     private String mapUrl;
-    @ManyToOne
-    private Matching matching;
+    @OneToMany
+    private List<Matching> matchingList;
 }
