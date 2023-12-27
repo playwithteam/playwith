@@ -21,6 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
+
 import java.util.Objects;
 import java.util.Optional;
 
@@ -37,9 +38,13 @@ public class UserService {
     @Transactional
     public SiteUser join(MultipartFile profileImage, String username, String name, String password,
                          String email, String area, String level, LocalDate birthdate) {
+
+   
+
         String profileImgUrl = saveProfileImage(profileImage);
 
         SiteUser siteUser = SiteUser.builder()
+
                 .profileImgUrl(profileImgUrl)
                 .username(username)
                 .name(name)
