@@ -180,6 +180,10 @@
             reader.readAsDataURL(file);
         }
     }
+    let message = "[[${msg}]]";
+    if(message != ""){
+        alert(message);
+    }
     $(document).ready(function () {
         // 이미지를 클릭하면 파일 선택 다이얼로그 열기
         $("#editIcon").click(function () {

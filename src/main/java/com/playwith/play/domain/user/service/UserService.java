@@ -152,5 +152,8 @@ public class UserService {
                 .build();
         return this.userRepository.save(siteUserPassword);
     }
-
+    public String getProfileImageUrlByUsername(String username) {
+        Optional<SiteUser> userOptional = userRepository.findByUsername(username);
+        return userOptional.map(SiteUser::getProfileImgUrl).orElse("/img/user_img.svg");
+    }
 }
