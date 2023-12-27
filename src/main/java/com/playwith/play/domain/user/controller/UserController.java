@@ -5,12 +5,14 @@ import com.playwith.play.domain.user.service.UserService;
 import com.playwith.play.global.rq.Rq;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -34,6 +36,7 @@ public class UserController {
         return "login";
     }
 
+    //회원가입
     @PreAuthorize("isAnonymous()")
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
@@ -46,97 +49,104 @@ public class UserController {
             return "signup";
         }
 
-        if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
-            bindingResult.rejectValue("password2", "passwordInCorrect",
-                    "2개의 패스워드가 일치하지 않습니다.");
-            return "signup";
-        }
-
-        // 아이디 중복
-        try {
-            userService.join(userCreateForm.getProfileImgUrl(), userCreateForm.getUsername(), userCreateForm.getName(),
-                    userCreateForm.getPassword1(), userCreateForm.getEmail(), userCreateForm.getArea(), userCreateForm.getLevel(), userCreateForm.getBirthDate());
-        } catch (DataIntegrityViolationException e) {
-            e.printStackTrace();
-            bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
-            return "signup";
-        } catch (Exception e) {
-            e.printStackTrace();
-            bindingResult.reject("signupFailed", e.getMessage());
-            return "signup";
-        }
+        MultipartFile profileImage = userCreateForm.getProfileImage();
+        userService.join(profileImage, userCreateForm.getUsername(), userCreateForm.getName(),
+                userCreateForm.getPassword1(), userCreateForm.getEmail(),
+                userCreateForm.getArea(), userCreateForm.getLevel(), userCreateForm.getBirthDate());
 
         return "redirect:/user/login";
     }
 
+    @GetMapping("/checkUsername")
+    @ResponseBody
+    public ResponseEntity<String> checkUsername(@RequestParam("username") String username) {
+        if (userService.isUsernameUnique(username)) {
+            return ResponseEntity.ok("사용 가능한 아이디입니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 사용 중인 아이디입니다.");
+        }
+    }
+
+    //아이디 찾기
     @PreAuthorize("isAnonymous()")
     @GetMapping("/id_search")
-    public String id_search(UserCreateForm userCreateForm) {
+    public String id_search() {
         return "id_search";
     }
 
     @PreAuthorize("isAnonymous()")
     @PostMapping("/id_search")
-    public String id_search(@Valid UserCreateForm userCreateForm, BindingResult bindingResult,
-                            Model model, @RequestParam("email") String email, @RequestParam("name") String name) {
-        Optional<SiteUser> os = this.userService.getEmailAndName(userCreateForm.getEmail(), userCreateForm.getName());
+    public ResponseEntity<String> id_search(Model model, @RequestParam("email") String inputEmail,
+                                            @RequestParam("name") String inputName) {
+        // 사용자의 메일, 이름 얻기
+        Optional<SiteUser> foundUser = this.userService.getUserByEmailAndName(inputEmail, inputName);
 
-        SiteUser findUser = os.get();
-
-        //메일 일치 시, 아이디 알려주기
-        if (findUser.getEmail().equals(email)) {
-            model.addAttribute("findUsername", findUser.getUsername());
+        if (foundUser.isPresent()) {
+            findUser = foundUser.get();
+            // 사용자 찾음
+            model.addAttribute("findUsername", this.findUser);
+            return ResponseEntity.ok("id_search_result");
+        } else {
+            return ResponseEntity.ok("입력한 정보가 올바르지 않거나 존재하지 않음");
         }
-        //url 결과 보여 주기
-        return userService.getEmailAndName(email, name)
-                .map(siteUser ->
-                        rq.redirect(
-                                "/user/id_search_result?username=%s".formatted(siteUser.getUsername()),
-                                "해당 회원의 아이디는 `%s` 입니다.".formatted(siteUser.getUsername())
-                        )
-                )
-                .orElse(rq.historyBack("`%s` (은)는 존재하지 않은 회원입니다."));
     }
 
-
+    //아이디 찾기 결과
     @PreAuthorize("isAnonymous()")
     @GetMapping("/id_search_result")
-    public String id_search_result(Model model, @RequestParam(value = "username") String username) {
-        model.addAttribute("findUsername", username);
+    public String id_search_result(Model model) {
+        // findUser가 null이 아닌 경우에만 모델에 추가
+        if (this.findUser != null) {
+            model.addAttribute("findUsername", this.findUser.getUsername());
+        }
         return "id_search_result";
     }
 
     // 비번 찾기
     @PreAuthorize("isAnonymous()")
     @GetMapping("/password_search")
-    public String password_search(UserCreateForm userCreateForm) {
+    public String password_search() {
         return "password_search";
     }
 
     @PreAuthorize("isAnonymous()")
     @PostMapping("/password_search_modify")
-    public String password_search(@Valid UserCreateForm userCreateForm, BindingResult bindingResult,
-                                  @RequestParam("username") String username, @RequestParam("email") String email,
-                                  @RequestParam("name") String name, Model model) {
-        findUser = this.userService.getUserUsernameAndMailAndName(userCreateForm.getUsername(), userCreateForm.getEmail(),
-                userCreateForm.getName());
-        if(findUser.getEmail().equals(email)&&findUser.getUsername().equals(username)) {
-            model.addAttribute("userCreateForm", new UserCreateForm());
-        }else {
-            throw new RuntimeException("일치하는 값이 존재하지 않습니다.");
-        }
-        return "password_search_modify";
+    public ResponseEntity<String> password_search(Model model, @RequestParam("username") String inputUsername,
+                                                  @RequestParam("email") String inputEmail, @RequestParam("name") String inputName) {
+        // 사용자의 아이디, 메일, 이름 얻기
+        Optional<SiteUser> founUser = this.userService.getUserUsernameAndMailAndName(inputUsername, inputEmail, inputName);
+        findUser = founUser.get();
+
+        return ResponseEntity.ok("password_search_modify");
+
     }
 
     @PreAuthorize("isAnonymous()")
-    @PostMapping("/password_search_result")
-    public String modifyPassword(@ModelAttribute("userCreateForm") UserCreateForm userCreateForm) {
-        this.userService.modifyPassword(userCreateForm, findUser);
-        return "login";
+    @GetMapping("/password_search_modify")
+    public String password_search_modify(Model model) {
+        model.addAttribute("newPasswordForm", this.findUser);
+        return "password_search_modify";
     }
 
+    //비번 찾은 후 로그인 페이지 이동
+    @PreAuthorize("isAnonymous()")
+    @PostMapping("/password_search_result")
+    public ResponseEntity<String> modifyPassword(@ModelAttribute("newPasswordForm") NewPasswordForm newPasswordForm) {
+        this.userService.modifyPassword(newPasswordForm, findUser);
+        return ResponseEntity.ok("login");
+    }
+
+
+    //내정보
     @GetMapping("/mypage")
     public String mypage(UserCreateForm userCreateForm) {
         return "mypage";
     }
+
+    //팀정보
+    @GetMapping("/team")
+    public String team(UserCreateForm userCreateForm) {
+        return "team";
+    }
 }
+

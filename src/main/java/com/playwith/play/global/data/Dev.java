@@ -2,7 +2,6 @@ package com.playwith.play.global.data;
 
 import com.playwith.play.domain.qna.service.QnaService;
 import com.playwith.play.domain.stadium.service.StadiumService;
-import com.playwith.play.domain.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -41,5 +40,11 @@ public class Dev {
 //            stadiumService.create("부산", "HM풋살장", "부산광역시 북구 금곡동 금곡대로 469", "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d208618.21647197718!2d128.66986319453125!3d35.21494620000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568959244f252e5%3A0x5c84880006211ac4!2zSE3tkovsgrQg67aA7IKw67aB6rWs!5e0!3m2!1sko!2skr!4v1703209844069!5m2!1sko!2skr");
 //        };
 //    }
+    @Bean
+    public ApplicationRunner initQna(QnaService qnaService) {
+        return args -> {
+            qnaService.create("자주 묻는 질문입니다.", "자주 묻는 내용입니다. 자주 묻는 내용입니다.");
+        };
+    }
 }
 

@@ -20,8 +20,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: rhkddhks18@gmail.com
-    password: tldrnbyosaeyujmq
+    username: rhkddhks12@gmail.com
+    password:
     properties:
       mail:
         smtp:
@@ -32,6 +32,7 @@ spring:
             logging:
               level:
                 org.springframework.mail: DEBUG
+
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     jpa:
@@ -48,3 +49,8 @@ spring:
         org.hibernate.orm.jdbc.bind: TRACE
         org.hibernate.orm.jdbc.extract: TRACE
         org.springframework.transaction.interceptor: TRACE
+multipart:
+  max-file-size: 10MB
+  max-request-size: 10MB
+  profile-images.location: src/main/resources/static/profile-images
+  enabled: true

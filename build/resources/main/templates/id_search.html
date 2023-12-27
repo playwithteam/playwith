@@ -1,34 +1,110 @@
-<html layout:decorate="~{layout}">
+<html layout:decorate="~{/common/layout}">
 <div layout:fragment="content">
 
-    <div class="id-search-area login-cnt-area w100per rel zi2">
-        <div class="con w100per">
-            <h1 class="title-text lh120 tb tac wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">아이디 찾기</h1>
-            <div class="flex fdc wow fadeInUp" data-wow-delay="0.6s" data-wow-duration="0.6s">
-                <ul class="flex fdc g36">
-                    <li>
-                        <h3 class="c333 f18 tb mb16">이메일<span class="tb cCC0000 inblock">*</span></h3>
-                        <div class="input-type-1">
-                            <input type="text" placeholder="이메일">
-                        </div>
-                        <div class="error-text-box wsn flex g8 mt8">
-                            <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
-                        </div>
-                    </li>
-                    <li>
-                        <h3 class="c333 f18 tb mb16">이름<span class="tb cCC0000 inblock">*</span></h3>
-                        <div class="input-type-1">
-                            <input type="text" placeholder="이름">
-                        </div>
-                        <div class="error-text-box wsn flex g8 mt8">
-                            <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
-                        </div>
-                    </li>
-                </ul>
-                <button type="button" class="btn-type-1 mt80">아이디 찾기</button>
+    <form id="idSearchForm" method="post">
+        <meta name="_csrf_header" th:content="${_csrf.headerName}">
+        <meta name="_csrf" th:content="${_csrf.token}">
+        <div class="id-search-area login-cnt-area w100per rel zi2">
+            <div class="con w100per">
+                <h1 class="title-text lh120 tb tac wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">아이디
+                    찾기</h1>
+                <div class="flex fdc wow fadeInUp" data-wow-delay="0.6s" data-wow-duration="0.6s">
+                    <ul class="flex fdc g36">
+                        <li>
+                            <h3 class="c333 f18 tb mb16">이메일<span class="tb cCC0000 inblock">*</span></h3>
+                            <div class="input-type-1">
+                                <input type="email" id="email" name="email" placeholder="이메일">
+                            </div>
+                        </li>
+                        <li>
+                            <h3 class="c333 f18 tb mb16">이름<span class="tb cCC0000 inblock">*</span></h3>
+                            <div class="input-type-1">
+                                <input type="text" id="name" name="name" placeholder="이름">
+                            </div>
+                        </li>
+                    </ul>
+                    <br/>
+                    <button type="submit" class="btn-type-1 mt80">아이디 찾기</button>
+                </div>
             </div>
         </div>
-    </div>
-
+    </form>
 </div>
 </html>
+<script>
+    $(document).ready(function () {
+        // 폼이 제출 되면 AJAX 호출 실행
+        $('#idSearchForm').submit(function (event) {
+            // 기본 폼 제출 방지
+            event.preventDefault();
+
+            // 이메일, 이름 값 가져오기
+            var email = $('#email').val();
+            var name = $('#name').val();
+
+            // 기존에 생성된 에러 메시지가 있다면 삭제
+            $('#emailError').remove();
+            $('#nameError').remove();
+
+            // 에러 메시지를 담을 변수 생성
+            var emailError = null;
+            var nameError = null;
+
+            if (email == '') {
+                console.log('메일을 입력하지 않음');
+                emailError = $('<p id="emailError" style="color: red;">메일은 필수 항목입니다.</p>');
+            }
+            if (name == '') {
+                console.log('이름을 입력하지 않음');
+                nameError = $('<p id="nameError" style="color: red;">이름은 필수 항목입니다.</p>');
+            }
+
+            // 에러 메시지를 각각의 위치에 추가
+            if (emailError !== null) {
+                emailError.insertAfter('#email');
+            }
+            if (nameError !== null) {
+                nameError.insertAfter('#name');
+            }
+
+            //CSRF 생성
+            var header = $("meta[name='_csrf_header']").attr('content');
+            var token = $("meta[name='_csrf']").attr('content');
+
+            // 콘솔에 에러 로그 출력
+            if (emailError !== null || nameError !== null) {
+                console.error('입력 필드를 확인해주세요.');
+            } else {
+                // AJAX 호출
+                $.ajax({
+                    url: "/user/id_search",
+                    method: "post",
+                    data: {
+                        'email': email,
+                        'name': name,
+                    },
+                    dataType: "text",
+                    beforeSend: function (xhr) {
+                        // CSRF 토큰 설정
+                        xhr.setRequestHeader(header, token);
+                    },
+                    success: function (data) {
+                        console.log('서버에서 받은 데이터:', data);
+
+                        // 서버에서 받은 데이터(data)를 처리
+                        if (data === "id_search_result") {
+                            // 사용자의 이메일, 이름이 일치하면 결과 페이지로 리디렉션
+                            window.location.href = "/user/id_search_result";
+                        } else {
+                            $('#result').html("해당 정보가 없습니다.");
+                            alert("입력하신 정보가 없습니다. 다시 입력해 주세요.");
+                            // 이전에 입력한 값을 지우기
+                            $('#email').val('');
+                            $('#name').val('');
+                        }
+                    },
+                });
+            }
+        });
+    });
+</script>
