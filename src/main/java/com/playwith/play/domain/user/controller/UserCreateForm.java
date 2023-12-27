@@ -8,13 +8,14 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
 public class UserCreateForm {
-    private String profileImgUrl;
+    private MultipartFile profileImage;
     @Size(min = 3, max = 25, message = "아이디는 3자 ~ 25자를 사용하세요.")
     @NotBlank(message = "필수 입력 항목 입니다.")
     private String username;
