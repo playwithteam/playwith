@@ -121,7 +121,6 @@ public class UserController {
         Optional<SiteUser> founUser = this.userService.getUserUsernameAndMailAndName(inputUsername, inputEmail, inputName);
         findUser = founUser.get();
 
-        model.addAttribute("newPasswordForm", new UserCreateForm());
         return ResponseEntity.ok("password_search_modify");
 
     }
@@ -133,19 +132,21 @@ public class UserController {
         return "password_search_modify";
     }
 
+    //비번 찾은 후 로그인 페이지 이동
     @PreAuthorize("isAnonymous()")
     @PostMapping("/password_search_result")
-    public ResponseEntity<String> modifyPassword(Model model, @ModelAttribute("newPasswordForm") NewPasswordForm newPasswordForm) {
+    public ResponseEntity<String> modifyPassword(@ModelAttribute("newPasswordForm") NewPasswordForm newPasswordForm) {
         this.userService.modifyPassword(newPasswordForm, findUser);
-//        model.addAttribute("newPasswordForm", findUser);
         return ResponseEntity.ok("login");
     }
 
+    //내정보
     @GetMapping("/mypage")
     public String mypage(UserCreateForm userCreateForm) {
         return "mypage";
     }
 
+    //팀정보
     @GetMapping("/team")
     public String team(UserCreateForm userCreateForm) {
         return "team";

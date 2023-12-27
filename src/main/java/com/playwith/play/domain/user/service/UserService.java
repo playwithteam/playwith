@@ -10,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,7 +22,8 @@ public class UserService {
     //일반 유저
     public SiteUser join(String profileImgUrl, String username, String name, String password,
                          String email, String area, String level, LocalDate birthdate) {
-        SiteUser siteUser = SiteUser.builder()
+        SiteUser siteUser = SiteUser
+                .builder()
                 .profileImgUrl(profileImgUrl)
                 .username(username)
                 .name(name)
