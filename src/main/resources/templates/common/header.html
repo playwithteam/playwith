@@ -22,12 +22,14 @@
                 </li>
             </ul>
         </div>
+
         <div class="right-box flex aic g40">
             <div sec:authorize="isAuthenticated()" class="user-name-box flex aic jcc f16 tm c777">
                 <span class="img-box w28 mr8">
-                    <img th:src="@{/img/user_img.svg}" alt="">
+                    <img th:if="${@rq.profileImgUrl != null}" th:src="@{|/gen${@rq.profileImgUrl}|}" alt="Profile Image">
+                    <img th:unless="${@rq.profileImgUrl != null}" th:src="@{/img/user_img.svg}" alt="Default Image">
                 </span>
-                <span class="c333 tb inblock" th:text="${#authentication.name}"></span>님
+                <span class="c333 tb inblock" th:text="${@rq.member.name}"></span>님
             </div>
             <ul class="sub-menu-box flex aic g12">
                 <li sec:authorize="isAnonymous()">
