@@ -26,7 +26,6 @@ public class SecurityConfig {
 
                 .formLogin((formLogin) -> formLogin
                         .loginPage("/user/login")
-                        .successHandler(new CustomSimpleUrlAuthenticationSuccessHandler())
                         .failureHandler(new CustomSimpleUrlAuthenticationFailureHandler())
                         .defaultSuccessUrl("/")
                 )
@@ -40,7 +39,7 @@ public class SecurityConfig {
                         .invalidateHttpSession(true))
                 .csrf((csrf) -> csrf
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/qna/*")))
-                .csrf((csrf) -> csrf             
+                .csrf((csrf) -> csrf
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/stadium/*")))
         ;
         return http.build();

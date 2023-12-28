@@ -2,7 +2,6 @@ package com.playwith.play.domain.user.controller;
 
 import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.domain.user.service.UserService;
-import com.playwith.play.global.rq.Rq;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,17 +22,12 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-    private final Rq rq;
     private SiteUser findUser;
 
     //로그인
     @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
-    public String login(@RequestParam(value = "error", required = false) String error,
-                        @RequestParam(value = "exception", required = false) String exception,
-                        Model model) {
-        model.addAttribute("error", error);
-        model.addAttribute("exception", exception);
+    public String login() {
         return "login";
     }
 
@@ -49,7 +43,6 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "signup";
         }
-
         MultipartFile profileImage = userCreateForm.getProfileImage();
         userService.join(profileImage, userCreateForm.getUsername(), userCreateForm.getName(),
                 userCreateForm.getPassword1(), userCreateForm.getEmail(),
@@ -78,15 +71,14 @@ public class UserController {
 
     @PreAuthorize("isAnonymous()")
     @PostMapping("/id_search")
-    public ResponseEntity<String> id_search(Model model, @RequestParam("email") String inputEmail,
+    public ResponseEntity<String> id_search(@RequestParam("email") String inputEmail,
                                             @RequestParam("name") String inputName) {
         // 사용자의 메일, 이름 얻기
         Optional<SiteUser> foundUser = this.userService.getUserByEmailAndName(inputEmail, inputName);
 
         if (foundUser.isPresent()) {
             findUser = foundUser.get();
-            // 사용자 찾음
-            model.addAttribute("findUsername", this.findUser);
+
             return ResponseEntity.ok("id_search_result");
         } else {
             return ResponseEntity.ok("입력한 정보가 올바르지 않거나 존재하지 않음");
@@ -113,15 +105,13 @@ public class UserController {
 
     @PreAuthorize("isAnonymous()")
     @PostMapping("/password_search_modify")
-    public ResponseEntity<String> password_search(Model model, @RequestParam("username") String inputUsername,
+    public ResponseEntity<String> password_search(@RequestParam("username") String inputUsername,
                                                   @RequestParam("email") String inputEmail, @RequestParam("name") String inputName) {
         // 사용자의 아이디, 메일, 이름 얻기
         Optional<SiteUser> founUser = this.userService.getUserUsernameAndMailAndName(inputUsername, inputEmail, inputName);
         findUser = founUser.get();
 
-        model.addAttribute("newPasswordForm", new UserCreateForm());
         return ResponseEntity.ok("password_search_modify");
-
     }
 
     @PreAuthorize("isAnonymous()")
@@ -131,23 +121,18 @@ public class UserController {
         return "password_search_modify";
     }
 
+    //비번 찾은 후 로그인 페이지 이동
     @PreAuthorize("isAnonymous()")
     @PostMapping("/password_search_result")
-    public ResponseEntity<String> modifyPassword(Model model, @ModelAttribute("newPasswordForm") NewPasswordForm newPasswordForm) {
+    public ResponseEntity<String> modifyPassword(@ModelAttribute("newPasswordForm") NewPasswordForm newPasswordForm) {
         this.userService.modifyPassword(newPasswordForm, findUser);
-//        model.addAttribute("newPasswordForm", findUser);
         return ResponseEntity.ok("login");
     }
 
+    //내정보
     @GetMapping("/mypage")
     public String mypage(UserCreateForm userCreateForm) {
         return "mypage";
     }
-
-    @GetMapping("/team")
-    public String team(UserCreateForm userCreateForm) {
-        return "team";
-    }
-
 }
 
