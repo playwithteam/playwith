@@ -156,4 +156,9 @@ public class UserService {
         Optional<SiteUser> userOptional = userRepository.findByUsername(username);
         return userOptional.map(SiteUser::getProfileImgUrl).orElse("/img/user_img.svg");
     }
+
+    public String getFindProfileImgUrl(SiteUser user) {
+        return user.getProfileImgUrl();
+    }
+
 }

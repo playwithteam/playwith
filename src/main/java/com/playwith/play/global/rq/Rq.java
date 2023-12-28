@@ -1,13 +1,14 @@
 package com.playwith.play.global.rq;
 
-import com.playwith.play.global.data.RsData;
 import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.domain.user.service.UserService;
+import com.playwith.play.global.data.RsData;
 import com.playwith.play.global.util.Ut;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.ToString;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -16,6 +17,7 @@ import org.springframework.web.context.annotation.RequestScope;
 
 @Component
 @RequestScope
+@ToString
 public class Rq {
     private final UserService userService;
     private final HttpServletRequest req;
@@ -190,5 +192,9 @@ public class Rq {
     public String redirectOrBack(String url, RsData rs) {
         if (rs.isFail()) return historyBack(rs);
         return redirect(url, rs);
+    }
+
+    public String getProfileImgUrl() {
+        return this.userService.getFindProfileImgUrl(getMember());
     }
 }
