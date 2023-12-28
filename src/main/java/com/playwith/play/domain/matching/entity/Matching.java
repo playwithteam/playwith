@@ -1,5 +1,6 @@
 package com.playwith.play.domain.matching.entity;
 
+import com.playwith.play.domain.matchingdate.entity.MatchingDate;
 import com.playwith.play.domain.stadium.entity.Stadium;
 import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.global.jpa.BaseEntity;
@@ -25,11 +26,13 @@ public class Matching extends BaseEntity {
     private LocalTime gameTime;
     private String level;
     private String area;
-//    private String betel;
     private String managerName;
     @ManyToOne
     @JoinColumn(name = "stadium_id")
     private Stadium stadium;
+    @ManyToOne
+    @JoinColumn(name = "matching_date_id")
+    private MatchingDate matchingDate;
     @OneToMany(mappedBy = "matching", cascade = CascadeType.REMOVE)
     private List<SiteUser> userList;
 }

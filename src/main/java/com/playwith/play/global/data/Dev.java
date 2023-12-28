@@ -1,5 +1,6 @@
 package com.playwith.play.global.data;
 
+import com.playwith.play.domain.matchingdate.service.MatchingDateService;
 import com.playwith.play.domain.qna.service.QnaService;
 import com.playwith.play.domain.stadium.service.StadiumService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.time.LocalDate;
 
 @Configuration
 @Profile("dev")
@@ -20,6 +23,9 @@ public class Dev {
 
     @Autowired
     StadiumService stadiumService;
+
+    @Autowired
+    MatchingDateService matchingDateService;
 
     //구장 자동 생성
     @Bean
@@ -38,6 +44,19 @@ public class Dev {
         return args -> {
             for (int i = 1; i <= 10; i++) {
                 qnaService.create("자주 묻는 질문입니다" + i + ".", "자주 묻는 내용입니다. <br>자주 묻는 내용입니다.");
+            }
+        };
+    }
+
+    @Bean
+    public ApplicationRunner initMatchingDate(MatchingDateService matchingDateService) {
+        return args -> {
+            LocalDate currentDate = LocalDate.now().plusDays(1);
+            LocalDate endDate = currentDate.plusWeeks(2);
+
+            while (currentDate.isBefore(endDate)) {
+                matchingDateService.create(currentDate);
+                currentDate = currentDate.plusDays(1);
             }
         };
     }

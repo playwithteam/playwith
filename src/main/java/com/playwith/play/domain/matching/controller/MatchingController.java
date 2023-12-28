@@ -2,6 +2,8 @@ package com.playwith.play.domain.matching.controller;
 
 import com.playwith.play.domain.matching.entity.Matching;
 import com.playwith.play.domain.matching.service.MatchingService;
+import com.playwith.play.domain.matchingdate.entity.MatchingDate;
+import com.playwith.play.domain.matchingdate.service.MatchingDateService;
 import com.playwith.play.domain.qna.controller.QnaForm;
 import com.playwith.play.domain.stadium.entity.Stadium;
 import com.playwith.play.domain.stadium.service.StadiumService;
@@ -23,6 +25,7 @@ import java.time.format.DateTimeFormatter;
 public class MatchingController {
     private final MatchingService matchingService;
     private final StadiumService stadiumService;
+    private final MatchingDateService matchingDateService;
 
     @GetMapping("/create")
     public String create(MatchingForm matchingForm) {
@@ -34,8 +37,8 @@ public class MatchingController {
         if (bindingResult.hasErrors()) {
             return "matching_form";
         }
-//        Stadium stadium = this.stadiumService.getStadiumsByName(matchingForm.getBetel());
-        this.matchingService.create(matchingForm.getMatchingType(), matchingForm.getGameDate(), matchingForm.getGameTime(), matchingForm.getLevel(), matchingForm.getArea(), matchingForm.getStadium());
+        MatchingDate matchingDate = this.matchingDateService.getMatchingDate(matchingForm.getGameDate());
+        this.matchingService.create(matchingForm.getMatchingType(), matchingDate, matchingForm.getGameTime(), matchingForm.getLevel(), matchingForm.getArea(), matchingForm.getStadium());
         return "redirect:/";
     }
 

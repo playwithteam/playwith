@@ -62,11 +62,12 @@
                 <div class="swiper-box wh100per rel zi1">
                     <div class="swiper-2 swiper">
                         <ul class="swiper-wrapper tab-menu-box-1">
-                            <li class="swiper-slide">
-                                <a href="#tab1-1" class="active c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab1-2" class=" c999 lh140 tac">12월 12일<br>화요일</a>
+                            <li class="swiper-slide" th:each="matchingDate, loop : ${matchingDates}">
+                                <a th:href="@{|#tab1-${loop.count}|}"
+                                   th:class="${loop.first} ? 'active c999 tac' : 'c999 tac'">
+                                    <span class="lh140" th:text="${matchingDate.gameDate != null ? #temporals.format(matchingDate.gameDate, 'MM월 dd일') : ''}"></span>
+                                    <span class="lh140" th:text="${matchingDate.gameDate != null ? #temporals.format(matchingDate.gameDate, 'EEEE') : ''}"></span>
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -109,9 +110,9 @@
                     </div>
                 </div>
                 <ul class="tab-cnt-box-1 mt20">
-                    <li id="tab1-1">
+                    <li th:each="matchingDate, loop : ${matchingDates}" th:id="@{|tab1-${loop.count}|}">
                         <ul class="matching-list-box">
-                            <li th:each="matching : ${matchingList}" th:if="${matching.matchingType.toString() == 'TYPE_1'}">
+                            <li th:each="matching : ${matchingList}" th:if="${matching.matchingType.toString() == 'TYPE_1' and loop.count == matching.matchingDate.id}">
                                 <a th:href="@{|/matching/detail/${matching.id}|}" class="flex aic jcsb">
                                     <div class="left-box flex aic g40">
                                         <div class="flex aic g20">
@@ -134,9 +135,6 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
-                    <li id="tab1-2">
-
                     </li>
                 </ul>
             </div>

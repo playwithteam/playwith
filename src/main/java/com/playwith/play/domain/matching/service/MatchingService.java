@@ -4,6 +4,7 @@ import com.playwith.play.domain.matching.controller.MatchingForm;
 import com.playwith.play.domain.matching.entity.Matching;
 import com.playwith.play.domain.matching.entity.MatchingType;
 import com.playwith.play.domain.matching.repository.MatchingRepository;
+import com.playwith.play.domain.matchingdate.entity.MatchingDate;
 import com.playwith.play.domain.stadium.entity.Stadium;
 import com.playwith.play.domain.stadium.repository.StadiumRepository;
 import com.playwith.play.global.util.DataNotFoundException;
@@ -22,11 +23,11 @@ import java.util.Optional;
 public class MatchingService {
     private final MatchingRepository matchingRepository;
 
-    public void create(MatchingType matchingType, LocalDate gameDate, LocalTime gameTime, String level, String area, Stadium stadium) {
+    public void create(MatchingType matchingType, MatchingDate matchingDate, LocalTime gameTime, String level, String area, Stadium stadium) {
         Matching matching = Matching
                 .builder()
                 .matchingType(matchingType)
-                .gameDate(gameDate)
+                .matchingDate(matchingDate)
                 .gameTime(gameTime)
                 .level(level)
                 .area(area)

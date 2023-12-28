@@ -608,8 +608,10 @@ textarea:disabled {
 }
 .matching-list-area .swiper-box .swiper .swiper-slide > a.active {
     border-bottom: 4px solid #030095;
-    font-family: "Pretendard-Bold";
     color: #030095;
+}
+.matching-list-area .swiper-box .swiper .swiper-slide > a.active > span {
+    font-family: "Pretendard-Bold";
 }
 .matching-list-area .swiper-box .swiper-button-prev,
 .matching-list-area .swiper-box .swiper-button-next {
