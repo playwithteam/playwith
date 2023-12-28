@@ -39,8 +39,6 @@ public class UserService {
     public SiteUser join(MultipartFile profileImage, String username, String name, String password,
                          String email, String area, String level, LocalDate birthdate) {
 
-   
-
         String profileImgUrl = saveProfileImage(profileImage);
 
         SiteUser siteUser = SiteUser.builder()

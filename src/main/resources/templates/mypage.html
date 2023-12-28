@@ -17,15 +17,14 @@
                             <h3 class="c333 f18 tb mb16">프로필 사진</h3>
                             <div class="file-type-1 rel flex aie g20">
                                 <div class="user-img-box">
-                                    <img th:src="@{/img/user_img.svg}" alt="">
+                                    <img id="ProfileImage" th:if="${@rq.profileImgUrl != null}" th:src="@{|/gen${@rq.profileImgUrl}|}" alt="Profile Image" style="width: 100px; height: 100px; border-radius: 50%;">
+                                    <img id="previewImage" th:unless="${@rq.profileImgUrl != null}" th:src="@{/img/user_img.svg}" alt="Default Image" style="width: 100px; height: 100px; border-radius: 50%;">
                                 </div>
                                 <div class="file-btn w16 abs xy-bl">
-                                    <label for="user_img" class="block img-box">
-                                        <img th:src="@{/img/ico_edit_999999.svg}" alt="">
-                                    </label>
-                                    <input type="file" id="user_img">
+                                    <img id="editIcon" th:src="@{/img/ico_edit_999999.svg}" alt="" style="cursor: pointer;">
+                                    <input type="file" id="user_img" name="profileImage" style="display: none" accept="image/*" onchange="previewFile()">
                                 </div>
-                                <button type="button" class="btn-type-3">기본 이미지</button>
+                                <button type="button" class="btn-type-3" id="resetImageBtn">기본 이미지</button>
                             </div>
                         </li>
                         <li>
@@ -143,3 +142,42 @@
         </div>
 </div>
 </html>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    // 이미지 미리보기 함수
+    function previewFile() {
+        var fileInput = $("#user_img")[0];
+        var file = fileInput.files[0];
+
+        if (file) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                // 이미지 미리보기 업데이트
+                $("#ProfileImage, #previewImage").attr("src", e.target.result);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+    $(document).ready(function () {
+        // 이미지를 클릭하면 파일 선택 다이얼로그 열기
+        $("#editIcon").click(function () {
+            $("#user_img").click();
+        });
+        // 파일 선택이 변경되었을 때 이미지 미리보기 업데이트
+        $("#user_img").change(function () {
+            previewFile();
+        });
+        // 기본 이미지로 변경 버튼 클릭 시 처리
+        $("#resetImageBtn").click(function () {
+            // 파일 선택 input 초기화
+            $("#user_img").val("");
+            // 미리보기 이미지를 기본 이미지로 변경
+            $("#ProfileImage, #previewImage").attr("src", "/img/user_img.svg");
+            // 서버에 null 값을 전송
+            $("input[name='profileImage']").val("");
+        });
+    });
+</script>
