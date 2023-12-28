@@ -152,7 +152,7 @@ $(document).ready(function(){
                   stadiumSelect.append('<option value="">구장</option>'); // 기본 옵션 추가
 
                   $.each(stadiums, function (index, stadium) {
-                      stadiumSelect.append('<option value="' + stadium.name + '">' + stadium.name + '</option>');
+                      stadiumSelect.append('<option value="' + stadium.id + '">' + stadium.name + '</option>');
                   });
               },
               error: function (error) {

@@ -1,6 +1,7 @@
 package com.playwith.play.domain.matching.controller;
 
 import com.playwith.play.domain.matching.entity.MatchingType;
+import com.playwith.play.domain.stadium.entity.Stadium;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -32,6 +33,7 @@ public class MatchingForm {
     @NotBlank(message = "필수 입력 항목 입니다.")
     private String area;
 
-    @NotBlank(message = "필수 입력 항목 입니다.")
-    private String betel;
+    @NotNull(message = "필수 입력 항목 입니다.")
+//    private String betel;
+    private Stadium stadium;
 }

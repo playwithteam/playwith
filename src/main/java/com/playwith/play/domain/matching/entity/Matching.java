@@ -25,9 +25,10 @@ public class Matching extends BaseEntity {
     private LocalTime gameTime;
     private String level;
     private String area;
-    private String betel;
+//    private String betel;
     private String managerName;
     @ManyToOne
+    @JoinColumn(name = "stadium_id")
     private Stadium stadium;
     @OneToMany(mappedBy = "matching", cascade = CascadeType.REMOVE)
     private List<SiteUser> userList;

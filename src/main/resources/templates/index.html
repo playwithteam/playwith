@@ -65,6 +65,9 @@
                             <li class="swiper-slide">
                                 <a href="#tab1-1" class="active c999 lh140 tac">12월 11일<br>월요일</a>
                             </li>
+                            <li class="swiper-slide">
+                                <a href="#tab1-2" class=" c999 lh140 tac">12월 12일<br>화요일</a>
+                            </li>
                         </ul>
                     </div>
                     <div class="swiper-button-next swiper-button-next-2"></div>
@@ -115,7 +118,7 @@
                                             <button class="favor-box img-box w24" id="favor_btn">
                                                 <img th:src="@{/img/ico_heart.svg}" alt="">
                                             </button>
-                                            <span class="time-text f18" th:text="${matching.gameTime}"></span>
+                                            <span class="time-text f18" th:text="${matching.gameTime}" style="width: 50px;"></span>
                                         </div>
                                         <div class="text-box flex aic g8">
                                             <span th:if="${matching.level} == '하'" class="difficulty-text f16 type-1" th:text="${matching.level}"></span>
@@ -131,6 +134,9 @@
                                 </a>
                             </li>
                         </ul>
+                    </li>
+                    <li id="tab1-2">
+
                     </li>
                 </ul>
             </div>
@@ -210,7 +216,7 @@
                                             <button class="favor-box img-box w24" id="favor_btn">
                                                 <img th:src="@{/img/ico_heart.svg}" alt="">
                                             </button>
-                                            <span class="time-text f18" th:text="${matching.gameTime}"></span>
+                                            <span class="time-text f18" th:text="${matching.gameTime}" style="width: 50px;"></span>
                                         </div>
                                         <div class="text-box flex aic g8">
                                             <span th:if="${matching.level} == '하'" class="difficulty-text f16 type-1" th:text="${matching.level}"></span>

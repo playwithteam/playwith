@@ -34,8 +34,8 @@ public class MatchingController {
         if (bindingResult.hasErrors()) {
             return "matching_form";
         }
-        Stadium stadium = this.stadiumService.getStadiumsByName(matchingForm.getBetel());
-        this.matchingService.create(matchingForm.getMatchingType(), matchingForm.getGameDate(), matchingForm.getGameTime(), matchingForm.getLevel(), matchingForm.getArea(), stadium);
+//        Stadium stadium = this.stadiumService.getStadiumsByName(matchingForm.getBetel());
+        this.matchingService.create(matchingForm.getMatchingType(), matchingForm.getGameDate(), matchingForm.getGameTime(), matchingForm.getLevel(), matchingForm.getArea(), matchingForm.getStadium());
         return "redirect:/";
     }
 
