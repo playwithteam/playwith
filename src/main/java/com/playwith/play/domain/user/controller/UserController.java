@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
 
@@ -38,7 +39,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
+    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "signup";
         }
@@ -47,6 +48,7 @@ public class UserController {
                 userCreateForm.getPassword1(), userCreateForm.getEmail(),
                 userCreateForm.getArea(), userCreateForm.getLevel(), userCreateForm.getBirthDate());
 
+        redirectAttributes.addFlashAttribute("msg","회원가입이 완료되었습니다. 로그인페이지로 이동합니다.");
         return "redirect:/user/login";
     }
 
