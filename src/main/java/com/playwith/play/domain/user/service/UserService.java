@@ -39,8 +39,6 @@ public class UserService {
     public SiteUser join(MultipartFile profileImage, String username, String name, String password,
                          String email, String area, String level, LocalDate birthdate) {
 
-   
-
         String profileImgUrl = saveProfileImage(profileImage);
 
         SiteUser siteUser = SiteUser.builder()
@@ -79,7 +77,7 @@ public class UserService {
             } catch (IOException e) {
                 throw new FileStorageException("Failed to store file " + fileName, e);
             }
-        }  catch (IOException e) {
+        } catch (IOException e) {
             throw new FileStorageException("Failed to create upload directory", e);
         }
     }
@@ -105,11 +103,11 @@ public class UserService {
 
     //소셜 로그인
     @Transactional
-    public SiteUser whenSocialLogin(String providerTypeCode, String username, String nickname) {
+    public SiteUser whenSocialLogin(String providerTypeCode,String name, String username) {
         Optional<SiteUser> os = this.userRepository.findByUsername(username);
         if (os.isPresent()) return os.get();
 
-        return join(null, username, "", "", "", "", nickname, null); // 최초 로그인 시 딱 한번 실행
+        return join(null, name, username, "", "", "", "", null); // 최초 로그인 시 딱 한번 실행
     }
 
     //유저아이디 찾기
