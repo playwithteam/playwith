@@ -42,7 +42,8 @@
                     <a th:href="@{/user/mypage}" class="c999 f16">내 정보</a>
                 </li>
                 <li sec:authorize="isAuthenticated()">
-                    <a th:href="@{/user/}" class="c999 f16">팀 정보</a>
+                    <a th:if="${siteUser != null and siteUser.team != null}" th:href="@{/user/team/${team.id}}" class="c999 f16">팀 정보</a>
+                    <a th:if="${siteUser == null or siteUser.team == null}" th:href="@{/user/teamless}" class="c999 f16">팀 정보</a>
                 </li>
                 <li sec:authorize="isAuthenticated()">
                     <a th:href="@{/user/}" class="c999 f16">위시리스트</a>
