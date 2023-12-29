@@ -32,6 +32,6 @@ public class Team extends BaseEntity {
     @OneToMany
     private List<TeamArticle> teamArticleList;
 
-    @OneToMany
-    private List<SiteUser> siteUserList;
+    @OneToMany(mappedBy = "team")
+    private List<SiteUser> siteUsers;
 }

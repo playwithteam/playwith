@@ -45,6 +45,7 @@ public class SiteUser extends BaseEntity {
     private String profileImgUrl;
 
     @ManyToOne
+    @JoinColumn(name = "team_id")
     private Team team;
     @OneToMany
     private List<ReportArticle> reportArticleList;

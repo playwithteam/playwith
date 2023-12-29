@@ -46,9 +46,9 @@ public class UserController {
         MultipartFile profileImage = userCreateForm.getProfileImage();
         userService.join(profileImage, userCreateForm.getUsername(), userCreateForm.getName(),
                 userCreateForm.getPassword1(), userCreateForm.getEmail(),
-                userCreateForm.getArea(), userCreateForm.getLevel(), userCreateForm.getBirthDate());
+                userCreateForm.getArea(), userCreateForm.getLevel(), userCreateForm.getBirthDate(), userCreateForm.getTeam());
 
-        redirectAttributes.addFlashAttribute("msg","회원가입이 완료되었습니다. 로그인페이지로 이동합니다.");
+        redirectAttributes.addFlashAttribute("msg", "회원가입이 완료되었습니다. 로그인페이지로 이동합니다.");
         return "redirect:/user/login";
     }
 

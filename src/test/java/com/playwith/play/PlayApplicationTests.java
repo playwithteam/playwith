@@ -22,7 +22,7 @@ class PlayApplicationTests {
     void test01() {
         IntStream.rangeClosed(1, 1).forEach(i -> {
             userService.join(null,"test","신짱구", "qwer1234!", "test@test.com", "대전", "상",
-                    null);
+                    null,null);
         });
     }
 //    @Test

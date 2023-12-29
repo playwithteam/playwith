@@ -1,6 +1,7 @@
 package com.playwith.play.domain.user.service;
 
 
+import com.playwith.play.domain.team.entity.Team;
 import com.playwith.play.domain.user.controller.NewPasswordForm;
 import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.domain.user.repository.UserRepository;
@@ -21,7 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
-
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -37,7 +38,7 @@ public class UserService {
 
     @Transactional
     public SiteUser join(MultipartFile profileImage, String username, String name, String password,
-                         String email, String area, String level, LocalDate birthdate) {
+                         String email, String area, String level, LocalDate birthdate, Team team) {
 
         String profileImgUrl = saveProfileImage(profileImage);
 
@@ -51,6 +52,7 @@ public class UserService {
                 .area(area)
                 .level(level)
                 .birthDate(birthdate)
+                .team(team)
                 .build();
 
         return this.userRepository.save(siteUser);
@@ -103,11 +105,11 @@ public class UserService {
 
     //소셜 로그인
     @Transactional
-    public SiteUser whenSocialLogin(String providerTypeCode,String name, String username) {
-        Optional<SiteUser> os = this.userRepository.findByUsername(username);
+    public SiteUser whenSocialLogin(String providerTypeCode,String username, String nickname) {
+        Optional<SiteUser> os = this.userRepository.findByUsername(nickname);
         if (os.isPresent()) return os.get();
 
-        return join(null, name, username, "", "", "", "", null); // 최초 로그인 시 딱 한번 실행
+        return join(null, username, nickname, "", "", "", "", null, null); // 최초 로그인 시 딱 한번 실행
     }
 
     //유저아이디 찾기
@@ -155,6 +157,7 @@ public class UserService {
                 .build();
         return this.userRepository.save(siteUserPassword);
     }
+
     public String getProfileImageUrlByUsername(String username) {
         Optional<SiteUser> userOptional = userRepository.findByUsername(username);
         return userOptional.map(SiteUser::getProfileImgUrl).orElse("/img/user_img.svg");
@@ -163,5 +166,11 @@ public class UserService {
     public String getFindProfileImgUrl(SiteUser user) {
         return user.getProfileImgUrl();
     }
+
+    public List<SiteUser> getTeamId(Long teamId) {
+        // 해당 팀에 속한 유저들을 가져오는 로직
+        return userRepository.findByTeamId(teamId);
+    }
+
 
 }

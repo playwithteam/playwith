@@ -2,6 +2,7 @@ package com.playwith.play.domain.team.service;
 
 import com.playwith.play.domain.team.entity.Team;
 import com.playwith.play.domain.team.repository.TeamRepository;
+import com.playwith.play.domain.user.repository.UserRepository;
 import com.playwith.play.domain.user.service.FileStorageException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
@@ -23,31 +24,30 @@ import java.util.Objects;
 public class TeamService {
 
     private final TeamRepository teamRepository;
+    private final UserRepository userRepository;
     @Value("${multipart.profile-images.location}")
     private String profileImageLocation;
 
     //팀 생성
-    public void createTeam(MultipartFile profileImage, String teamName, String area, String level) {
-
+    public Team createTeam(MultipartFile profileImage, String teamName, String area, String level) {
+        // 사용자에게 팀 설정
         String profileImgUrl = saveProfileImage(profileImage);
 
-        Team team = Team
+        Team updatedTeam = Team
                 .builder()
                 .profileImgUrl(profileImgUrl)
                 .teamName(teamName)
                 .area(area)
                 .level(level)
                 .build();
-        this.teamRepository.save(team);
+
+        // 팀 저장 (연관된 사용자 정보도 자동으로 업데이트됨)
+       return teamRepository.save(updatedTeam);
     }
+
     public boolean isTeamNameUnique(String teamname) {
         return !teamRepository.existsByTeamName(teamname);
     }
-    public void getTeamList(Long id) {
-        this.teamRepository.findById(id);
-    }
-
-
 
     private String saveProfileImage(MultipartFile profileImage) {
         if (profileImage == null || profileImage.isEmpty()) {

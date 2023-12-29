@@ -12,8 +12,7 @@ public class TeamCreateForm {
 
     private MultipartFile profileImage;
 
-    @NotNull(message = "필수 입력 항목 입니다.")
-    @Size(min = 1, max = 8)
+    @Size(min = 1, max = 8, message = "팀명은 1자 ~ 8자를 사용하세요.")
     private String teamName;
     @NotNull(message = "필수 입력 항목 입니다.")
     private String area;
