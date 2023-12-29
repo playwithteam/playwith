@@ -39,7 +39,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         String username = providerTypeCode + "__%s".formatted(oauthId);
 
-        SiteUser siteUser = userService.whenSocialLogin(providerTypeCode, username, nickname);
+        SiteUser siteUser = userService.whenSocialLogin(providerTypeCode,username, nickname);
 
         List<GrantedAuthority> authorityList = new ArrayList<>();
 
@@ -49,7 +49,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 class CustomOAuth2User extends User implements OAuth2User {
 
-    public  CustomOAuth2User(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public CustomOAuth2User(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
     }
 

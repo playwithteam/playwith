@@ -58,7 +58,7 @@
                 용병 매칭을 이용해 보세요!<br>
                 자도 OK, 친구랑 같이도 OK!
             </p>
-            <div th:if="${type1Count != 0}" class="matching-list-area inner wow fadeInUp" data-wow-delay="0.9s" data-wow-duration="0.6s">
+            <div class="matching-list-area inner wow fadeInUp" data-wow-delay="0.9s" data-wow-duration="0.6s">
                 <div class="swiper-box wh100per rel zi1">
                     <div class="swiper-2 swiper">
                         <ul class="swiper-wrapper tab-menu-box-1">
@@ -137,9 +137,6 @@
                         </ul>
                     </li>
                 </ul>
-            </div>
-            <div th:if="${type1Count == 0}" class="matching-none-area wow fadeInUp" data-wow-delay="0.9s" data-wow-duration="0.6s">
-                <p class="tac tb c333">현재 진행중인 매치가 없습니다.</p>
             </div>
             <div class="btn-box-type-1 flex jcc wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">
                 <a th:href="@{/matching/create}" class="btn-type-1">매칭 등록</a>

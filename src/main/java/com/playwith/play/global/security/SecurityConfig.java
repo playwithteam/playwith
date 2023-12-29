@@ -26,7 +26,6 @@ public class SecurityConfig {
 
                 .formLogin((formLogin) -> formLogin
                         .loginPage("/user/login")
-                        .successHandler(new CustomSimpleUrlAuthenticationSuccessHandler())
                         .failureHandler(new CustomSimpleUrlAuthenticationFailureHandler())
                         .defaultSuccessUrl("/")
                 )

@@ -3,6 +3,7 @@ package com.playwith.play.global.data;
 import com.playwith.play.domain.matchingdate.service.MatchingDateService;
 import com.playwith.play.domain.qna.service.QnaService;
 import com.playwith.play.domain.stadium.service.StadiumService;
+import com.playwith.play.domain.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +27,17 @@ public class Dev {
 
     @Autowired
     MatchingDateService matchingDateService;
+
+    @Autowired
+    UserService userService;
+
+    @Bean
+    public ApplicationRunner initManager(UserService userService) {
+        return args -> {
+            userService.join(null, "mg123", "빵빵이", "1234", "", "", "", null, 2);
+            userService.join(null, "mg1234", "끼꼬", "1234", "", "", "", null, 2);
+        };
+    }
 
     //구장 자동 생성
     @Bean

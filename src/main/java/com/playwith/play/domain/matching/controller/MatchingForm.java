@@ -34,6 +34,5 @@ public class MatchingForm {
     private String area;
 
     @NotNull(message = "필수 입력 항목 입니다.")
-//    private String betel;
     private Stadium stadium;
 }

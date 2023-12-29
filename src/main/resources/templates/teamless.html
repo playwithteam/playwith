@@ -1,0 +1,17 @@
+<html layout:decorate="~{/common/layout}">
+<div layout:fragment="content">
+
+    <div class="login-cnt-area w100per rel zi2">
+        <div class="con w100per">
+            <h1 class="title-text lh120 tb tac wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">팀
+                정보</h1>
+            <div class="no-team-box pt40 wow fadeInUp" data-wow-delay="0.6s" data-wow-duration="0.6s">
+                <p class="tac f20 c333 tb">등록된 팀이 없습니다.</p>
+                <a th:href="@{/team/team_create}">
+                <button type="submit" class="w100per btn-type-1 mt80">
+                    팀 등록</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

@@ -23,7 +23,7 @@ import java.util.Optional;
 public class MatchingService {
     private final MatchingRepository matchingRepository;
 
-    public void create(MatchingType matchingType, MatchingDate matchingDate, LocalTime gameTime, String level, String area, Stadium stadium) {
+    public void create(MatchingType matchingType, MatchingDate matchingDate, LocalTime gameTime, String level, String area, Stadium stadium, String managerName) {
         Matching matching = Matching
                 .builder()
                 .matchingType(matchingType)
@@ -33,6 +33,7 @@ public class MatchingService {
                 .area(area)
                 .createdDate(LocalDateTime.now())
                 .stadium(stadium)
+                .managerName(managerName)
                 .build();
         this.matchingRepository.save(matching);
     }

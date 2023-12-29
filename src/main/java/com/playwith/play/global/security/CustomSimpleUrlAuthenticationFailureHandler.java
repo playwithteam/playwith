@@ -1,6 +1,5 @@
 package com.playwith.play.global.security;
 
-import com.playwith.play.global.util.Ut;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,7 +20,7 @@ public class CustomSimpleUrlAuthenticationFailureHandler extends SimpleUrlAuthen
 
         String errorMessage;
         if (exception instanceof BadCredentialsException) {
-            errorMessage = "아이디 또는 비밀번호가 맞지 않습니다. 다시 확인해 주세요.";
+            errorMessage = "아이디또는비밀번호가맞지않습니다.";
         } else if (exception instanceof InternalAuthenticationServiceException) {
             errorMessage = "내부적으로 발생한 시스템 문제로 인해 요청을 처리할 수 없습니다. 관리자에게 문의하세요.";
         } else if (exception instanceof UsernameNotFoundException) {

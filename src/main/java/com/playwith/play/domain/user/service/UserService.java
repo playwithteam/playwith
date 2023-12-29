@@ -4,6 +4,7 @@ package com.playwith.play.domain.user.service;
 import com.playwith.play.domain.user.controller.NewPasswordForm;
 import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.domain.user.repository.UserRepository;
+import com.playwith.play.global.util.DataNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
@@ -37,9 +38,7 @@ public class UserService {
 
     @Transactional
     public SiteUser join(MultipartFile profileImage, String username, String name, String password,
-                         String email, String area, String level, LocalDate birthdate) {
-
-   
+                         String email, String area, String level, LocalDate birthdate, int rating) {
 
         String profileImgUrl = saveProfileImage(profileImage);
 
@@ -53,6 +52,7 @@ public class UserService {
                 .area(area)
                 .level(level)
                 .birthDate(birthdate)
+                .rating(rating)
                 .build();
 
         return this.userRepository.save(siteUser);
@@ -79,7 +79,7 @@ public class UserService {
             } catch (IOException e) {
                 throw new FileStorageException("Failed to store file " + fileName, e);
             }
-        }  catch (IOException e) {
+        } catch (IOException e) {
             throw new FileStorageException("Failed to create upload directory", e);
         }
     }
@@ -105,11 +105,11 @@ public class UserService {
 
     //소셜 로그인
     @Transactional
-    public SiteUser whenSocialLogin(String providerTypeCode, String username, String nickname) {
+    public SiteUser whenSocialLogin(String providerTypeCode,String name, String username) {
         Optional<SiteUser> os = this.userRepository.findByUsername(username);
         if (os.isPresent()) return os.get();
 
-        return join(null, username, "", "", "", "", nickname, null); // 최초 로그인 시 딱 한번 실행
+        return join(null, name, username, "", "", "", "", null, 1); // 최초 로그인 시 딱 한번 실행
     }
 
     //유저아이디 찾기
@@ -157,5 +157,26 @@ public class UserService {
                 .build();
         return this.userRepository.save(siteUserPassword);
     }
+    public String getProfileImageUrlByUsername(String username) {
+        Optional<SiteUser> userOptional = userRepository.findByUsername(username);
+        return userOptional.map(SiteUser::getProfileImgUrl).orElse("/img/user_img.svg");
+    }
 
+    public String getFindProfileImgUrl(SiteUser user) {
+        return user.getProfileImgUrl();
+    }
+
+    public int getFindRating(SiteUser user) {
+        return user.getRating();
+    }
+
+    public SiteUser getUserByName(String name) {
+        Optional<SiteUser> siteUser = this.userRepository.findByUsername(name);
+        if (siteUser.isPresent()) {
+            return siteUser.get();
+        }
+        else {
+            throw new DataNotFoundException("user not found");
+        }
+    }
 }

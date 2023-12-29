@@ -3,12 +3,14 @@ package com.playwith.play.domain.user.entity;
 import com.playwith.play.domain.matching.entity.Matching;
 import com.playwith.play.domain.reportarticle.entity.ReportArticle;
 import com.playwith.play.domain.soldierarticle.entity.SoldierArticle;
+import com.playwith.play.domain.team.entity.Team;
 import com.playwith.play.domain.wishlist.entity.WishList;
 import com.playwith.play.global.jpa.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,7 +47,10 @@ public class SiteUser extends BaseEntity {
     private String level;
     private String nickname;
     private String profileImgUrl;
+    private int rating;
 
+    @ManyToOne
+    private Team team;
     @OneToMany
     private List<ReportArticle> reportArticleList;
     @OneToMany
