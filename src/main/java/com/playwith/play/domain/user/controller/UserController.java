@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.Optional;
 
 @RequestMapping("/user")
@@ -133,8 +134,26 @@ public class UserController {
 
     //내정보
     @GetMapping("/mypage")
-    public String mypage(UserCreateForm userCreateForm) {
+    public String mypage(Model model) {
+        // 현재 로그인한 사용자의 정보를 가져오기
+        SiteUser  user = rq.getMember();
+
+        // 가져온 정보를 모델에 추가
+        model.addAttribute("user", user);
+        model.addAttribute("userCreateForm", new UserCreateForm());
+
         return "mypage";
+    }
+
+    @PostMapping("/checkPassword")
+    public ResponseEntity<String> checkPassword(@RequestBody String enteredPassword, Principal principal) {
+        boolean isPasswordMatch = userService.isPasswordMatching(enteredPassword, principal);
+
+        if (isPasswordMatch) {
+            return ResponseEntity.ok("비밀번호가 일치합니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 일치하지 않습니다.");
+        }
     }
 }
 

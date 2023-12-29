@@ -7,7 +7,7 @@
         <meta name="_csrf" th:content="${_csrf.token}">
         <meta name="_csrf_header" th:content="${_csrf.headerName}">
         <div class="signup-area login-cnt-area w100per rel zi2">
-            <form action="/user/signup" method="post" th:object="${userCreateForm}">
+            <form method="post" th:object="${userCreateForm}">
             <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
             <div class="con w100per">
                 <h1 class="title-text lh120 tb tac wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">내 정보</h1>
@@ -31,14 +31,13 @@
                             <h3 class="c333 f18 tb mb16">기존 비밀번호</h3>
                             <div class="input-btn-box flex g8">
                                 <div class="input-type-1">
-                                    <input type="password" th:field="*{username}"  placeholder="기존 비밀번호">
+                                    <input type="password" id="enteredPassword" placeholder="기존 비밀번호">
                                 </div>
-                                <button type="button" id="" class="btn-type-2">확인</button>
+                                <button type="button" id="checkPassword" class="btn-type-2">확인</button>
                             </div>
                             <div class="error-text-box wsn flex g8 mt8">
-                                <span th:if="${#fields.hasErrors('username')}" class="error-text f14 cCC0000" th:errors="*{username}"></span>
-                                <span class="error-text f14 cCC0000">비밀번호가 일치하지 않습니다.</span>
-                                <span class="confirm-text f14 c009521">비밀번호가 일치합니다.</span>
+                                <span class="error-text f14 cCC0000"></span>
+                                <span class="confirm-text f14 c009521"></span>
                             </div>
                         </li>
                         <!--위에 기존 비밀번호 확인 버튼 눌러서 비밀번호 일치하면 아래 새로운 비밀번호 input 태그 disabled제거하여 새로운 비밀번호 설정할 수 있게-->
@@ -64,13 +63,13 @@
                         <li>
                             <h3 class="c333 f18 tb mb16">이메일</h3>
                             <div class="input-type-1">
-                                <input type="text" th:field="*{email}" placeholder="이메일" disabled>
+                                <input type="text" placeholder="이메일" th:value="${@rq.member.email}" disabled>
                             </div>
                         </li>
                         <li>
                             <h3 class="c333 f18 tb mb16">이름</h3>
                             <div class="input-type-1">
-                                <input type="text" th:field="*{name}" placeholder="이름">
+                                <input type="text" th:value="${@rq.member.name}" placeholder="이름">
                             </div>
                             <div class="error-text-box wsn flex g8 mt8">
                                 <span th:if="${#fields.hasErrors('name')}" class="error-text f14 cCC0000" th:errors="*{name}"></span>
@@ -79,7 +78,7 @@
                         <li>
                             <h3 class="c333 f18 tb mb16">생년월일</h3>
                             <div class="date-type-1">
-                                <input type="date" th:field="*{birthDate}" disabled>
+                                <input type="date" th:value="${@rq.member.birthDate}" disabled>
                             </div>
                             <div class="error-text-box wsn flex g8 mt8">
                                 <span th:if="${#fields.hasErrors('birthDate')}" class="error-text f14 cCC0000" th:errors="*{birthDate}"></span>
@@ -90,21 +89,21 @@
                                 <li class="w50per">
                                     <h3 class="c333 f18 tb mb16">지역</h3>
                                     <div class="select-type-2 rel">
-                                        <select id="area" th:field="*{area}">
+                                        <select id="area" th:value="${@rq.member.area}">
                                             <option value="">지역</option>
-                                            <option value="강원도">강원도</option>
-                                            <option value="경기도">경기도</option>
-                                            <option value="충청도">충청도</option>
-                                            <option value="전라도">전라도</option>
-                                            <option value="경상도">경상도</option>
-                                            <option value="제주">제주</option>
-                                            <option value="서울">서울</option>
-                                            <option value="인천">인천</option>
-                                            <option value="대전">대전</option>
-                                            <option value="부산">부산</option>
-                                            <option value="대구">대구</option>
-                                            <option value="울산">울산</option>
-                                            <option value="광주">광주</option>
+                                            <option value="강원도" th:selected="${@rq.member.area == '강원도'}">강원도</option>
+                                            <option value="경기도" th:selected="${@rq.member.area == '경기도'}">경기도</option>
+                                            <option value="충청도" th:selected="${@rq.member.area == '충청도'}">충청도</option>
+                                            <option value="전라도" th:selected="${@rq.member.area == '전라도'}">전라도</option>
+                                            <option value="경상도" th:selected="${@rq.member.area == '경상도'}">경상도</option>
+                                            <option value="제주" th:selected="${@rq.member.area == '제주'}">제주</option>
+                                            <option value="서울" th:selected="${@rq.member.area == '서울'}">서울</option>
+                                            <option value="인천" th:selected="${@rq.member.area == '인천'}">인천</option>
+                                            <option value="대전" th:selected="${@rq.member.area == '대전'}">대전</option>
+                                            <option value="부산" th:selected="${@rq.member.area == '부산'}">부산</option>
+                                            <option value="대구" th:selected="${@rq.member.area == '대구'}">대구</option>
+                                            <option value="울산" th:selected="${@rq.member.area == '울산'}">울산</option>
+                                            <option value="광주" th:selected="${@rq.member.area == '광주'}">광주</option>
                                         </select>
                                         <span class="arrow img-box abs y-middle">
                                         <img th:src="@{/img/arrow_bottom_999999.svg}" alt="">
@@ -117,11 +116,11 @@
                                 <li class="w50per">
                                     <h3 class="c333 f18 tb mb16">레벨<span class="tb cCC0000 inblock">*</span></h3>
                                     <div class="select-type-2 rel">
-                                        <select id="level" th:field="*{level}" disabled>
+                                        <select id="level" th:value="${@rq.member.level}" disabled>
                                             <option value="">레벨</option>
-                                            <option value="하">하</option>
-                                            <option value="중">중</option>
-                                            <option value="상">상</option>
+                                            <option value="하" th:selected="${@rq.member.level == '하'}">하</option>
+                                            <option value="중" th:selected="${@rq.member.level == '중'}">중</option>
+                                            <option value="상" th:selected="${@rq.member.level == '상'}">상</option>
                                         </select>
                                         <span class="arrow img-box abs y-middle">
                                         <img th:src="@{/img/arrow_bottom_999999.svg}" alt="">
@@ -178,6 +177,35 @@
             $("#ProfileImage, #previewImage").attr("src", "/img/user_img.svg");
             // 서버에 null 값을 전송
             $("input[name='profileImage']").val("");
+        });
+
+        // 확인 버튼 클릭 시
+        $("#checkPassword").click(function () {
+            var enteredPassword = $("#enteredPassword").val();
+
+            // 비밀번호 확인 API 호출
+            $.ajax({
+                type: "POST",
+                url: "/user/checkPassword",
+                contentType: "application/json",
+                data: JSON.stringify(enteredPassword),
+                beforeSend: function (xhr) {
+                // CSRF 토큰을 헤더에 포함
+                xhr.setRequestHeader(header, token);
+                },
+                success: function (response) {
+                    // 비밀번호가 일치하는 경우
+                    $("#passwordError").text("");
+                    $("#passwordMatch").text(response);
+                    // 기존 비밀번호 입력 필드를 비활성화
+                    $("#enteredPassword").prop("disabled", true);
+                },
+                error: function (error) {
+                    // 비밀번호가 일치하지 않는 경우
+                    $("#passwordError").text(error.responseText);
+                    $("#passwordMatch").text("");
+                }
+            });
         });
     });
 </script>
