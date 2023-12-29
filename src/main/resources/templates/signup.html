@@ -40,11 +40,10 @@
                             </div>
                         </li>
                         <li>
-                            <h3 class="c333 f18 tb mb16">비밀번호<span class="tb cCC0000 inblock">*</span></h3>
+                            <h3 class="c333 f18 tb mb16">비밀번호<span class="tb cCC0000 inblock">*</span><span class="c999 f14 inblock ml4">(최소 8자 이상, 영문, 숫자, 특수문자 3가지 조합)</span></h3>
                             <div class="input-type-1">
                                 <input type="password" th:field="*{password1}" placeholder="비밀번호">
                             </div>
-                            <span class="f14">* 최소 8자 이상, 영문, 숫자, 특수문자 3가지 조합</span>
                             <div class="error-text-box wsn flex g8 mt8">
                                 <span th:if="${#fields.hasErrors('password1')}" class="error-text f14 cCC0000" th:errors="*{password1}"></span>
                             </div>

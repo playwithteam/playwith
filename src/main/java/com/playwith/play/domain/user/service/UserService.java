@@ -104,10 +104,10 @@ public class UserService {
     //소셜 로그인
     @Transactional
     public SiteUser whenSocialLogin(String providerTypeCode, String username, String nickname) {
-        Optional<SiteUser> os = this.userRepository.findByUsername(username);
+        Optional<SiteUser> os = this.userRepository.findByUsername(nickname);
         if (os.isPresent()) return os.get();
 
-        return join(null, username, "", "", "", "", nickname, null); // 최초 로그인 시 딱 한번 실행
+        return join(null, username, nickname, "", "", "", "", null); // 최초 로그인 시 딱 한번 실행
     }
 
     //유저아이디 찾기
