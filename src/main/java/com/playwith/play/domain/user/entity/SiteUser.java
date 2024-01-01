@@ -7,10 +7,7 @@ import com.playwith.play.domain.team.entity.Team;
 import com.playwith.play.domain.wishlist.entity.WishList;
 import com.playwith.play.global.jpa.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @SuperBuilder
 @ToString
 @Entity

@@ -141,18 +141,39 @@ public class UserController {
         // 가져온 정보를 모델에 추가
         model.addAttribute("user", user);
         model.addAttribute("userCreateForm", new UserCreateForm());
+        model.addAttribute("userProfileUpdateForm", new UserProfileUpdateForm());
 
         return "mypage";
     }
 
+    @PostMapping("/mypage")
+    public String mypage(@Valid UserProfileUpdateForm userProfileUpdateForm, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "mypage";
+        }
+        MultipartFile profileImage = userProfileUpdateForm.getProfileImage();
+        // 현재 로그인한 사용자 정보 가져오기
+        SiteUser loggedInUser = rq.getMember();
+
+        // 사용자 정보 수정
+        userService.modifyUser(profileImage, loggedInUser.getUsername(), userProfileUpdateForm.getName(),
+                userProfileUpdateForm.getPassword1(), userProfileUpdateForm.getEmail(),
+                userProfileUpdateForm.getArea(), userProfileUpdateForm.getLevel(), userProfileUpdateForm.getBirthDate());
+
+        model.addAttribute("userProfileUpdateForm", userProfileUpdateForm);
+
+        return "redirect:/";
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/checkPassword")
-    public ResponseEntity<String> checkPassword(@RequestBody String enteredPassword, Principal principal) {
+    public ResponseEntity<String> checkCurrentPassword(@RequestParam("enteredPassword") String enteredPassword, Principal principal) {
         boolean isPasswordMatch = userService.isPasswordMatching(enteredPassword, principal);
 
         if (isPasswordMatch) {
-            return ResponseEntity.ok("비밀번호가 일치합니다.");
+            return ResponseEntity.ok("현재 비밀번호가 일치합니다.");
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 일치하지 않습니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("현재 비밀번호가 일치하지 않습니다.");
         }
     }
 }
