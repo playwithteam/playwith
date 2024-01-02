@@ -61,11 +61,9 @@ public class Rq {
         if (isLogout()) {
             return null;
         }
-
         if (siteUser == null) {
-            siteUser = userService.findByUsername(user.getUsername()).orElseThrow();
+            siteUser = userService.findByUsername(user.getUsername());
         }
-
         return siteUser;
     }
 
@@ -196,5 +194,8 @@ public class Rq {
 
     public String getProfileImgUrl() {
         return this.userService.getFindProfileImgUrl(getMember());
+    }
+    public int getRating() {
+        return this.userService.getFindRating(getMember());
     }
 }

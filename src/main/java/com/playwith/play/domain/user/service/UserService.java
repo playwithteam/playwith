@@ -1,9 +1,12 @@
 package com.playwith.play.domain.user.service;
 
 
+import com.playwith.play.domain.team.entity.Team;
+import com.playwith.play.domain.team.service.TeamService;
 import com.playwith.play.domain.user.controller.NewPasswordForm;
 import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.domain.user.repository.UserRepository;
+import com.playwith.play.global.util.DataNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
@@ -35,10 +38,11 @@ public class UserService {
     private final Environment environment;
     @Value("${multipart.profile-images.location}")
     private String profileImageLocation;
+    private final TeamService teamService;
 
     @Transactional
     public SiteUser join(MultipartFile profileImage, String username, String name, String password,
-                         String email, String area, String level, LocalDate birthdate) {
+                         String email, String area, String level, LocalDate birthdate,Team team, int rating) {
 
         String profileImgUrl = saveProfileImage(profileImage);
 
@@ -52,8 +56,9 @@ public class UserService {
                 .area(area)
                 .level(level)
                 .birthDate(birthdate)
+                .rating(rating)
                 .build();
-
+        siteUser.setTeam(team);
         return this.userRepository.save(siteUser);
     }
 
@@ -104,16 +109,22 @@ public class UserService {
 
     //소셜 로그인
     @Transactional
-    public SiteUser whenSocialLogin(String providerTypeCode,String name, String username) {
+
+    public SiteUser whenSocialLogin(String providerTypeCode, String name, String username) {
         Optional<SiteUser> os = this.userRepository.findByUsername(username);
         if (os.isPresent()) return os.get();
 
-        return join(null, name, username, "", "", "", "", null); // 최초 로그인 시 딱 한번 실행
+        return join(null, name, username, "", "", "", "", null, null, 1); // 최초 로그인 시 딱 한번 실행
     }
 
     //유저아이디 찾기
-    public Optional<SiteUser> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public SiteUser findByUsername(String username) {
+        Optional<SiteUser> os = this.userRepository.findByUsername(username);
+        if (os.isPresent()) {
+            return os.get();
+        } else {
+            throw new DataNotFoundException("siteuser not found");
+        }
     }
 
 
@@ -208,6 +219,19 @@ public class UserService {
             return this.userRepository.save(updatedUser);
         } else {
             return null;
+        }
+    }
+    public int getFindRating(SiteUser user) {
+        return user.getRating();
+    }
+
+    public SiteUser getUserByName(String name) {
+        Optional<SiteUser> siteUser = this.userRepository.findByUsername(name);
+        if (siteUser.isPresent()) {
+            return siteUser.get();
+        }
+        else {
+            throw new DataNotFoundException("user not found");
         }
     }
 }

@@ -1,0 +1,100 @@
+<html layout:decorate="~{/common/layout}">
+<div layout:fragment="content">
+
+    <div class="login-cnt-area w100per rel zi2">
+        <div class="con w100per">
+            <h1 class="title-text lh120 tb tac wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">팀 정보</h1>
+            <div class="no-team-box pt40 wow fadeInUp" data-wow-delay="0.6s" data-wow-duration="0.6s">
+                <p class="tac f20 c333 tb">등록된 팀이 없습니다.</p>
+                <button type="submit" class="w100per btn-type-1 mt80">팀 등록</button>
+            </div>
+            <div class="flex fdc wow fadeInUp" data-wow-delay="0.6s" data-wow-duration="0.6s">
+                <ul class="flex fdc g36">
+                    <li>
+                        <h3 class="c333 f18 tb mb16">팀 엠블럼</h3>
+                        <div class="file-type-1 rel flex aie g20">
+                            <div class="user-img-box">
+                                <img th:src="@{/img/emblem_img.svg}" alt="">
+                            </div>
+                            <div class="file-btn w16 abs xy-bl">
+                                <label for="user_img" class="block img-box">
+                                    <img th:src="@{/img/ico_edit_999999.svg}" alt="">
+                                </label>
+                                <input type="file" id="user_img">
+                            </div>
+                            <button type="button" class="btn-type-3">기본 엠블럼</button>
+                        </div>
+                    </li>
+                    <li>
+                        <h3 class="c333 f18 tb mb16">팀명</h3>
+                        <div class="input-btn-box flex g8">
+                            <div class="input-type-1">
+                                <input type="text" placeholder="팀명">
+                            </div>
+                            <button type="button" id="checkDuplicateBtn" class="btn-type-2">중복 확인</button>
+                        </div>
+                        <div class="error-text-box wsn flex g8 mt8">
+                            <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                            <span class="error-text f14 cCC0000">중복된 팀명 입니다.</span>
+                            <span class="confirm-text f14 c009521">사용가능한 팀명 입니다.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <ul class="flex g8">
+                            <li class="w50per">
+                                <h3 class="c333 f18 tb mb16">지역</h3>
+                                <div class="select-type-2 rel">
+                                    <select id="area">
+                                        <option value="">지역</option>
+                                        <option value="강원도">강원도</option>
+                                        <option value="경기도">경기도</option>
+                                        <option value="충청도">충청도</option>
+                                        <option value="전라도">전라도</option>
+                                        <option value="경상도">경상도</option>
+                                        <option value="제주">제주</option>
+                                        <option value="서울">서울</option>
+                                        <option value="인천">인천</option>
+                                        <option value="대전">대전</option>
+                                        <option value="부산">부산</option>
+                                        <option value="대구">대구</option>
+                                        <option value="울산">울산</option>
+                                        <option value="광주">광주</option>
+                                    </select>
+                                    <span class="arrow img-box abs y-middle">
+                                        <img th:src="@{/img/arrow_bottom_999999.svg}" alt="">
+                                    </span>
+                                </div>
+                                <div class="error-text-box wsn flex g8 mt8">
+                                    <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                                </div>
+                            </li>
+                            <li class="w50per">
+                                <h3 class="c333 f18 tb mb16">레벨</h3>
+                                <div class="select-type-2 rel">
+                                    <select id="level" disabled>
+                                        <option value="">레벨</option>
+                                        <option value="하">하</option>
+                                        <option value="중">중</option>
+                                        <option value="상">상</option>
+                                    </select>
+                                    <span class="arrow img-box abs y-middle">
+                                        <img th:src="@{/img/arrow_bottom_999999.svg}" alt="">
+                                    </span>
+                                </div>
+                                <div class="error-text-box wsn flex g8 mt8">
+                                    <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="flex g8 mt80">
+                    <button type="submit" class="w100per btn-type-1">수정</button>
+                    <button type="submit" class="w100per btn-type-1-2">팀 삭제</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>1111
+</html>

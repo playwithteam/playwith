@@ -6,19 +6,16 @@
             </a>
             <ul class="menu-box flex aic g60">
                 <li>
-                    <a href="#area_0" class="scroll-btn c777 f20">홈</a>
+                    <a th:href="@{/#area_0}" class="scroll-btn c777 f20">홈</a>
                 </li>
                 <li>
-                    <a href="#area_1" class="scroll-btn c777 f20">용병 매칭</a>
+                    <a th:href="@{/#area_1}" class="scroll-btn c777 f20">용병 매칭</a>
                 </li>
                 <li>
-                    <a href="#area_2" class="scroll-btn c777 f20">팀 매칭</a>
+                    <a th:href="@{/#area_2}" class="scroll-btn c777 f20">팀 매칭</a>
                 </li>
                 <li>
-                    <a href="" class="scroll-btn c777 f20">신고하기</a>
-                </li>
-                <li>
-                    <a href="#area_3" class="scroll-btn c777 f20">자주 묻는 질문</a>
+                    <a th:href="@{/#area_3}" class="scroll-btn c777 f20">자주 묻는 질문</a>
                 </li>
             </ul>
         </div>
@@ -42,8 +39,7 @@
                     <a th:href="@{/user/mypage}" class="c999 f16">내 정보</a>
                 </li>
                 <li sec:authorize="isAuthenticated()">
-                    <a th:if="${siteUser != null and siteUser.team != null}" th:href="@{/team/team/${team.id}}" class="c999 f16">팀 정보</a>
-                    <a th:if="${siteUser == null or siteUser.team == null}" th:href="@{/team/teamless}" class="c999 f16">팀 정보</a>
+                    <a th:href="@{/team/team_list}" class="c999 f16">팀 정보</a>
                 </li>
                 <li sec:authorize="isAuthenticated()">
                     <a th:href="@{/user/}" class="c999 f16">위시리스트</a>
