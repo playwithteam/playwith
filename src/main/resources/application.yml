@@ -56,4 +56,4 @@ multipart:
   enabled: true
 custom:
   genFile:
-    dirPath: C:\work\playwith\src\main\resources\static\  #절대경로라서 본인 컴퓨터에서 사용되는 주소로 입력 (profile-images > 우클릭 > Copy path > Absolute path 복사)
+    dirPath: C:\Users\SBS\Desktop\work\playwith\src\main\resources\static\  #절대경로라서 본인 컴퓨터에서 사용되는 주소로 입력 (profile-images > 우클릭 > Copy path > Absolute path 복사 > static\ 까지만 입력)
