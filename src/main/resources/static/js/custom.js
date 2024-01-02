@@ -36,7 +36,7 @@ $(document).ready(function(){
         return false;
     });
 
-    $(".scroll-btn").click(function (event) {
+    $(".main-page").siblings(".header-area").find(".scroll-btn").click(function (event) {
         event.preventDefault();
         $('html,body').animate({ scrollTop: $(this.hash).offset().top }, 500);
     });
@@ -52,26 +52,29 @@ $(document).ready(function(){
             $(".top-btn-box").removeClass("active");
         }
 
-        let area0 = $("#area_0").offset().top - 80,
-            area1 = $("#area_1").offset().top - 80,
-            area2 = $("#area_2").offset().top - 80,
-            area3 = $("#area_3").offset().top - 80
+        if ($(".header-area").siblings().hasClass("main-page")) {
 
-        if ($(this).scrollTop() >= area0) {
-            $(".header-area .menu-box li a").removeClass("active");
-            $(".header-area .menu-box li:nth-child(1) a").addClass("active");
-        }
-        if ($(this).scrollTop() >= area1) {
-            $(".header-area .menu-box li a").removeClass("active");
-            $(".header-area .menu-box li:nth-child(2) a").addClass("active");
-        }
-        if ($(this).scrollTop() >= area2) {
-            $(".header-area .menu-box li a").removeClass("active");
-            $(".header-area .menu-box li:nth-child(3) a").addClass("active");
-        }
-        if ($(this).scrollTop() >= area3) {
-            $(".header-area .menu-box li a").removeClass("active");
-            $(".header-area .menu-box li:nth-child(5) a").addClass("active");
+            let area0 = $("#area_0").offset().top - 80,
+                area1 = $("#area_1").offset().top - 80,
+                area2 = $("#area_2").offset().top - 80,
+                area3 = $("#area_3").offset().top - 80
+
+            if ($(this).scrollTop() >= area0) {
+                $(".header-area .menu-box li a").removeClass("active");
+                $(".header-area .menu-box li:nth-child(1) a").addClass("active");
+            }
+            if ($(this).scrollTop() >= area1) {
+                $(".header-area .menu-box li a").removeClass("active");
+                $(".header-area .menu-box li:nth-child(2) a").addClass("active");
+            }
+            if ($(this).scrollTop() >= area2) {
+                $(".header-area .menu-box li a").removeClass("active");
+                $(".header-area .menu-box li:nth-child(3) a").addClass("active");
+            }
+            if ($(this).scrollTop() >= area3) {
+                $(".header-area .menu-box li a").removeClass("active");
+                $(".header-area .menu-box li:nth-child(4) a").addClass("active");
+            }
         }
 
     });
@@ -152,7 +155,7 @@ $(document).ready(function(){
                   stadiumSelect.append('<option value="">구장</option>'); // 기본 옵션 추가
 
                   $.each(stadiums, function (index, stadium) {
-                      stadiumSelect.append('<option value="' + stadium.name + '">' + stadium.name + '</option>');
+                      stadiumSelect.append('<option value="' + stadium.id + '">' + stadium.name + '</option>');
                   });
               },
               error: function (error) {
@@ -161,7 +164,6 @@ $(document).ready(function(){
           });
       });
 
-      // gameDate input 요소에 change 이벤트 리스너 등록
       $("#gameDate").on("change", function () {
           // 현재 날짜 가져오기
           var currentDate = new Date();
@@ -169,16 +171,35 @@ $(document).ready(function(){
           // 선택된 날짜 가져오기
           var selectedDate = new Date($(this).val());
 
-          // 선택된 날짜가 오늘 날짜보다 이전인 경우 경고 메시지 표시
-          if (selectedDate <= currentDate) {
-                $(this).val("");
-              alert("최소 1일 전 매칭만 등록 가능합니다.");
+          // 2주 후의 날짜 계산
+          var maxDate = new Date();
+          maxDate.setDate(currentDate.getDate() + 14);
+
+          // 선택된 날짜가 오늘로부터 2주 이전이거나 2주 이후인 경우 경고 메시지 표시
+          if (selectedDate <= currentDate || selectedDate > maxDate) {
+              $(this).val("");
+              alert("최소 1일 전 매칭과 최대 2주 매칭 등록이 가능합니다.");
           }
       });
 
       $('button#favor_btn').click(function(event) {
           event.preventDefault();
           $(this).toggleClass("active");
+      });
+
+        //매칭 상세에서 주소 복사 버튼 클릭시
+        $("#copyButton").on("click", function() {
+          var address = $("#addressDisplay").text();
+          copyToClipboard(address);
+          alert("구장 주소가 복사되었습니다.");
         });
+        function copyToClipboard(text) {
+          var textarea = $("<textarea>")
+              .val(text)
+              .appendTo("body")
+              .select();
+          document.execCommand("copy");
+          textarea.remove();
+        }
 
 });

@@ -2,6 +2,7 @@ package com.playwith.play.domain.user.controller;
 
 import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.domain.user.service.UserService;
+import com.playwith.play.global.rq.Rq;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.Optional;
 
 @RequestMapping("/user")
@@ -22,6 +24,7 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final Rq rq;
     private SiteUser findUser;
 
     //로그인
@@ -46,9 +49,9 @@ public class UserController {
         MultipartFile profileImage = userCreateForm.getProfileImage();
         userService.join(profileImage, userCreateForm.getUsername(), userCreateForm.getName(),
                 userCreateForm.getPassword1(), userCreateForm.getEmail(),
-                userCreateForm.getArea(), userCreateForm.getLevel(), userCreateForm.getBirthDate(), null);
+                userCreateForm.getArea(), userCreateForm.getLevel(), userCreateForm.getBirthDate(), null, 1);
 
-        redirectAttributes.addFlashAttribute("msg", "회원가입이 완료되었습니다. 로그인페이지로 이동합니다.");
+        redirectAttributes.addFlashAttribute("msg","회원가입이 완료되었습니다. 로그인페이지로 이동합니다.");
         return "redirect:/user/login";
     }
 
@@ -131,8 +134,47 @@ public class UserController {
 
     //내정보
     @GetMapping("/mypage")
-    public String mypage(UserCreateForm userCreateForm) {
+    public String mypage(Model model) {
+        // 현재 로그인한 사용자의 정보를 가져오기
+        SiteUser  user = rq.getMember();
+
+        // 가져온 정보를 모델에 추가
+        model.addAttribute("user", user);
+        model.addAttribute("userCreateForm", new UserCreateForm());
+        model.addAttribute("userProfileUpdateForm", new UserProfileUpdateForm());
+
         return "mypage";
+    }
+
+    @PostMapping("/mypage")
+    public String mypage(@Valid UserProfileUpdateForm userProfileUpdateForm, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "mypage";
+        }
+        MultipartFile profileImage = userProfileUpdateForm.getProfileImage();
+        // 현재 로그인한 사용자 정보 가져오기
+        SiteUser loggedInUser = rq.getMember();
+
+        // 사용자 정보 수정
+        userService.modifyUser(profileImage, loggedInUser.getUsername(), userProfileUpdateForm.getName(),
+                userProfileUpdateForm.getPassword1(), userProfileUpdateForm.getEmail(),
+                userProfileUpdateForm.getArea(), userProfileUpdateForm.getLevel(), userProfileUpdateForm.getBirthDate());
+
+        model.addAttribute("userProfileUpdateForm", userProfileUpdateForm);
+
+        return "redirect:/";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/checkPassword")
+    public ResponseEntity<String> checkCurrentPassword(@RequestParam("enteredPassword") String enteredPassword, Principal principal) {
+        boolean isPasswordMatch = userService.isPasswordMatching(enteredPassword, principal);
+
+        if (isPasswordMatch) {
+            return ResponseEntity.ok("현재 비밀번호가 일치합니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("현재 비밀번호가 일치하지 않습니다.");
+        }
     }
 }
 

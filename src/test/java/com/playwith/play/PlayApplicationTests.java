@@ -1,13 +1,15 @@
 package com.playwith.play;
 
+import com.playwith.play.domain.matchingdate.service.MatchingDateService;
+import com.playwith.play.domain.qna.service.QnaService;
 import com.playwith.play.domain.stadium.service.StadiumService;
-import com.playwith.play.domain.team.service.TeamService;
 import com.playwith.play.domain.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.util.stream.IntStream;
 
 @SpringBootTest
@@ -18,19 +20,38 @@ class PlayApplicationTests {
     @Autowired
     StadiumService stadiumService;
     @Autowired
-    TeamService teamService;
+    QnaService qnaService;
+    @Autowired
+    MatchingDateService matchingDateService;
 
     @Test
-    @DisplayName("테스트 아이디")
+    @DisplayName("기본 데이터 생성")
     void test01() {
-        IntStream.rangeClosed(1, 1).forEach(i -> {
-            userService.join(null, "test", "신짱아", "qwer1234!", "test@test.com", "대전", "상", null, null);
-        });
-    }
+        // 매니저 아아디 생성
+        userService.join(null,"test1","빵빵이", "1234", "test1@test.com", "", "", null, 2);
+        userService.join(null,"test2","신짱아", "1234", "test2@test.com", "", "", null, 2);
+        userService.join(null,"test3","뚱이", "1234", "test3@test.com", "", "", null, 2);
 
-//    @Test
-//    @DisplayName("테스트 구장")
-//    void test02(StadiumService stadiumService) {
-//        stadiumService.create("서울", "로꼬풋살장", "KR 서울특별시 송파구 잠실동 40-1 롯데마트 제타플렉스점 R층", "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d202412.1888398174!2d126.8427373825985!3d37.56235622779598!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357ca5c150f26537%3A0x6946a93f4d550d0!2z66Gc6rys7ZKL7IK07Iqk7YOA65SU7JuAIOyeoOyLpOygnO2DgO2UjOugieyKpOygkA!5e0!3m2!1sko!2skr!4v1703209534380!5m2!1sko!2skr");
-//    }
+        // 기본 구장 생성
+        stadiumService.create("서울", "로꼬풋살장", "KR 서울특별시 송파구 잠실동 40-1 롯데마트 제타플렉스점 R층", "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d202412.1888398174!2d126.8427373825985!3d37.56235622779598!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357ca5c150f26537%3A0x6946a93f4d550d0!2z66Gc6rys7ZKL7IK07Iqk7YOA65SU7JuAIOyeoOyLpOygnO2DgO2UjOugieyKpOygkA!5e0!3m2!1sko!2skr!4v1703209534380!5m2!1sko!2skr");
+        stadiumService.create("서울", "루다풋살장", "서울특별시 도봉구 방학동 271-2", "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d202412.1888398174!2d126.8427373825985!3d37.56235622779598!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357cbfc2be51bdb7%3A0xf7fd2c558d26beff!2z66Oo64ukIO2Si-yCtOyepQ!5e0!3m2!1sko!2skr!4v1703209664306!5m2!1sko!2skr");
+        stadiumService.create("대전", "금강풋살장", "대전광역시 대덕구 석봉동 대덕대로 1575", "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3209.2913357683046!2d127.42010327533369!3d36.45051508733418!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x356536de54e117a7%3A0x762abfe306877f68!2z6riI6rCV7ZKL7IK07J6l!5e0!3m2!1sko!2skr!4v1703209298748!5m2!1sko!2skr");
+        stadiumService.create("대전", "가장풋살장", "가장동 21-4번지 서구 대전광역시 KR", "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3214.2551653071855!2d127.3884220753281!3d36.33036519404405!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35654952e0a0f503%3A0x3140319938448f3a!2z6rCA7J6l7ZKL7IK06rWs7J6l!5e0!3m2!1sko!2skr!4v1703209328604!5m2!1sko!2skr");
+        stadiumService.create("부산", "첼시풋살장", "부산광역시 강서구 대저1동 742-1","https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d208618.21647197718!2d128.66986319453125!3d35.21494620000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568c1fe707bd6cd%3A0xabf28c60f8a20a88!2z67aA7IKw7LK87Iuc7ZKL7IK07J6l!5e0!3m2!1sko!2skr!4v1703209792317!5m2!1sko!2sk");
+        stadiumService.create("부산", "HM풋살장", "부산광역시 북구 금곡동 금곡대로 469", "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d208618.21647197718!2d128.66986319453125!3d35.21494620000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568959244f252e5%3A0x5c84880006211ac4!2zSE3tkovsgrQg67aA7IKw67aB6rWs!5e0!3m2!1sko!2skr!4v1703209844069!5m2!1sko!2skr");
+
+        // 자주 묻는 질문 생성
+        for (int i = 1; i <= 10; i++) {
+            qnaService.create("자주 묻는 질문입니다" + i + ".", "자주 묻는 내용입니다. <br>자주 묻는 내용입니다.");
+        }
+
+        // 오늘 날짜+1 기준으로 2주 매칭 날짜 생성
+        LocalDate currentDate = LocalDate.now().plusDays(1);
+        LocalDate endDate = currentDate.plusWeeks(2);
+
+        while (currentDate.isBefore(endDate)) {
+            matchingDateService.create(currentDate);
+            currentDate = currentDate.plusDays(1);
+        }
+    }
 }

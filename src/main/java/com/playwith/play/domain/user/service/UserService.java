@@ -23,7 +23,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.Principal;
 import java.time.LocalDate;
+
 import java.util.Objects;
 import java.util.Optional;
 
@@ -40,7 +42,8 @@ public class UserService {
 
     @Transactional
     public SiteUser join(MultipartFile profileImage, String username, String name, String password,
-                         String email, String area, String level, LocalDate birthdate, Team team) {
+                         String email, String area, String level, LocalDate birthdate,Team team, int rating) {
+
         String profileImgUrl = saveProfileImage(profileImage);
 
         SiteUser siteUser = SiteUser.builder()
@@ -53,6 +56,7 @@ public class UserService {
                 .area(area)
                 .level(level)
                 .birthDate(birthdate)
+                .rating(rating)
                 .build();
         siteUser.setTeam(team);
         return this.userRepository.save(siteUser);
@@ -109,7 +113,7 @@ public class UserService {
         Optional<SiteUser> os = this.userRepository.findByUsername(username);
         if (os.isPresent()) return os.get();
 
-        return join(null, name, username, "", "", "", "", null, null); // 최초 로그인 시 딱 한번 실행
+        return join(null, name, username, "", "", "", "", null, null, 1); // 최초 로그인 시 딱 한번 실행
     }
 
     //유저아이디 찾기
@@ -121,6 +125,7 @@ public class UserService {
             throw new DataNotFoundException("siteuser not found");
         }
     }
+
 
     //이메일, 이름 찾기
     public Optional<SiteUser> getUserByEmailAndName(String email, String name) {
@@ -161,7 +166,6 @@ public class UserService {
                 .build();
         return this.userRepository.save(siteUserPassword);
     }
-
     public String getProfileImageUrlByUsername(String username) {
         Optional<SiteUser> userOptional = userRepository.findByUsername(username);
         return userOptional.map(SiteUser::getProfileImgUrl).orElse("/img/user_img.svg");
@@ -171,4 +175,62 @@ public class UserService {
         return user.getProfileImgUrl();
     }
 
+    public boolean isPasswordMatching(String enteredPassword, Principal principal) {
+        String username = principal.getName();
+        Optional<SiteUser> optionalUser = userRepository.findByUsername(username);
+
+        return optionalUser.map(user -> passwordEncoder.matches(enteredPassword, user.getPassword()))
+                .orElse(false);
+    }
+
+    public SiteUser modifyUser(MultipartFile profileImage, String username, String name, String password,
+                               String email, String area, String level, LocalDate birthdate) {
+
+        Optional<SiteUser> existingUserOptional = this.userRepository.findByUsername(username);
+
+        if (existingUserOptional.isPresent()) {
+            SiteUser existingUser = existingUserOptional.get();
+
+            // 프로필 이미지 업데이트
+            String profileImgUrl = saveProfileImage(profileImage);
+
+            // 기존 사용자 정보를 업데이트
+            SiteUser updatedUser = SiteUser.builder()
+                    .id(existingUser.getId())
+                    .profileImgUrl(profileImgUrl != null ? profileImgUrl : existingUser.getProfileImgUrl())
+                    .username(username)
+                    .name(name != null ? name : existingUser.getName())
+                    .email(email != null ? email : existingUser.getEmail())
+                    .area(area != null ? area : existingUser.getArea())
+                    .level(level != null ? level : existingUser.getLevel())
+                    .birthDate(birthdate != null ? birthdate : existingUser.getBirthDate())
+                    .build();
+
+            // 비밀번호가 입력된 경우에만 업데이트
+            if (!StringUtils.isEmpty(password)) {
+                updatedUser.setPassword(passwordEncoder.encode(password));
+            } else {
+                // 사용자가 비밀번호를 변경하지 않은 경우 기존 비밀번호 유지
+                updatedUser.setPassword(existingUser.getPassword());
+            }
+
+            // 업데이트된 사용자 정보를 저장
+            return this.userRepository.save(updatedUser);
+        } else {
+            return null;
+        }
+    }
+    public int getFindRating(SiteUser user) {
+        return user.getRating();
+    }
+
+    public SiteUser getUserByName(String name) {
+        Optional<SiteUser> siteUser = this.userRepository.findByUsername(name);
+        if (siteUser.isPresent()) {
+            return siteUser.get();
+        }
+        else {
+            throw new DataNotFoundException("user not found");
+        }
+    }
 }
