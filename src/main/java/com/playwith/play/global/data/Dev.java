@@ -28,17 +28,6 @@ public class Dev {
     @Autowired
     MatchingDateService matchingDateService;
 
-    @Autowired
-    UserService userService;
-
-    @Bean
-    public ApplicationRunner initManager(UserService userService) {
-        return args -> {
-            userService.join(null, "mg123", "빵빵이", "1234", "", "", "", null, 2);
-            userService.join(null, "mg1234", "끼꼬", "1234", "", "", "", null, 2);
-        };
-    }
-
     //구장 자동 생성
     @Bean
     public ApplicationRunner init(StadiumService stadiumService) {
