@@ -2,6 +2,24 @@ DROP DATABASE IF EXISTS play_dev;
 CREATE DATABASE play_dev;
 USE play_dev;
 
+SELECT * FROM site_user;
+
+# 팀 생성
+INSERT INTO team
+SET modified_date = now(),
+created_date = now(),
+profile_img_url = null,
+team_name = '서울FC',
+area = '서울',
+level ='하';
+
+INSERT INTO team
+SET modified_date = now(),
+created_date = now(),
+profile_img_url = null,
+team_name = '대전FC',
+area = '대전',
+level ='상';
 SHOW DATABASES;
 SHOW TABLES;
 

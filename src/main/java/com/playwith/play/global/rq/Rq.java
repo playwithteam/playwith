@@ -61,11 +61,9 @@ public class Rq {
         if (isLogout()) {
             return null;
         }
-
         if (siteUser == null) {
-            siteUser = userService.findByUsername(user.getUsername()).orElseThrow();
+            siteUser = userService.findByUsername(user.getUsername());
         }
-
         return siteUser;
     }
 

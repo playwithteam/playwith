@@ -2,7 +2,10 @@ package com.playwith.play.domain.team.service;
 
 import com.playwith.play.domain.team.entity.Team;
 import com.playwith.play.domain.team.repository.TeamRepository;
+import com.playwith.play.domain.user.entity.SiteUser;
+import com.playwith.play.domain.user.repository.UserRepository;
 import com.playwith.play.domain.user.service.FileStorageException;
+import com.playwith.play.global.util.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Objects;
 
 @RequiredArgsConstructor
@@ -23,31 +27,40 @@ import java.util.Objects;
 public class TeamService {
 
     private final TeamRepository teamRepository;
+    private final UserRepository userRepository;
     @Value("${multipart.profile-images.location}")
     private String profileImageLocation;
 
     //팀 생성
-    public void createTeam(MultipartFile profileImage, String teamName, String area, String level) {
-
+    public Team createTeam(MultipartFile profileImage, String teamName, String area, String level, SiteUser user) {
         String profileImgUrl = saveProfileImage(profileImage);
-
-        Team team = Team
+        Team createdTeam = Team
                 .builder()
                 .profileImgUrl(profileImgUrl)
                 .teamName(teamName)
                 .area(area)
                 .level(level)
                 .build();
-        this.teamRepository.save(team);
+
+        createdTeam.addMember(user);
+
+        return teamRepository.save(createdTeam);
     }
+
+    // 아이디로 팀 조회
+    public Team getTeam(Long teamId) {
+        return teamRepository.findById(teamId)
+                .orElseThrow(() -> new DataNotFoundException("팀이 존재하지 않습니다. teamId: " + teamId));
+    }
+
+    public List<Team> getTeamList() {
+        return this.teamRepository.findAll();
+    }
+
+
     public boolean isTeamNameUnique(String teamname) {
         return !teamRepository.existsByTeamName(teamname);
     }
-    public void getTeamList(Long id) {
-        this.teamRepository.findById(id);
-    }
-
-
 
     private String saveProfileImage(MultipartFile profileImage) {
         if (profileImage == null || profileImage.isEmpty()) {
@@ -57,7 +70,6 @@ public class TeamService {
         try {
             String fileName = generateUniqueFileName(profileImage);
             Path uploadPath = Paths.get(profileImageLocation).toAbsolutePath();
-
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }

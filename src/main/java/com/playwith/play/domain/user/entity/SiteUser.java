@@ -25,7 +25,7 @@ import java.util.List;
 @Getter
 @Setter
 @SuperBuilder
-@ToString
+//@ToString(exclude = "team")
 @Entity
 public class SiteUser extends BaseEntity {
 
@@ -47,8 +47,23 @@ public class SiteUser extends BaseEntity {
     private String profileImgUrl;
     private int rating;
 
+
+
     @ManyToOne
+    @JoinColumn(name = "team_id")
     private Team team;
+
+    public void setTeam(Team team) {
+        if (this.team != null) {
+            this.team.getSiteUsers().remove(this);
+        }
+        this.team = team;
+        if (team != null) {
+            team.getSiteUsers().add(this);
+        }
+    }
+
+
     @OneToMany
     private List<ReportArticle> reportArticleList;
     @OneToMany
