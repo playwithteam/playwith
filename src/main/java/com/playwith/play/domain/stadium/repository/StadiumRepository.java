@@ -14,4 +14,7 @@ public interface StadiumRepository extends JpaRepository<Stadium, Long> {
 
     @Query(value = "SELECT * FROM STADIUM WHERE area = :area", nativeQuery = true)
     List<Stadium> getStadiumsByArea(@Param("area") String area);
+
+    @Query(value = "SELECT * FROM STADIUM WHERE name = :name", nativeQuery = true)
+    Stadium getStadiumsByName(@Param("name") String name);
 }

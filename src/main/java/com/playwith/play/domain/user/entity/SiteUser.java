@@ -6,6 +6,10 @@ import com.playwith.play.domain.soldierarticle.entity.SoldierArticle;
 import com.playwith.play.domain.team.entity.Team;
 import com.playwith.play.domain.wishlist.entity.WishList;
 import com.playwith.play.global.jpa.BaseEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -21,7 +25,7 @@ import java.util.List;
 @Getter
 @Setter
 @SuperBuilder
-@ToString
+//@ToString(exclude = "team")
 @Entity
 public class SiteUser extends BaseEntity {
 
@@ -41,9 +45,25 @@ public class SiteUser extends BaseEntity {
     private String level;
     private String nickname;
     private String profileImgUrl;
+    private int rating;
+
+
 
     @ManyToOne
+    @JoinColumn(name = "team_id")
     private Team team;
+
+    public void setTeam(Team team) {
+        if (this.team != null) {
+            this.team.getSiteUsers().remove(this);
+        }
+        this.team = team;
+        if (team != null) {
+            team.getSiteUsers().add(this);
+        }
+    }
+
+
     @OneToMany
     private List<ReportArticle> reportArticleList;
     @OneToMany
@@ -51,8 +71,8 @@ public class SiteUser extends BaseEntity {
     @OneToMany
     private List<WishList> wishLists;
 
-    @ManyToMany
-    private List<Matching> matchingList;
+    @ManyToOne
+    private Matching matching;
 
 
 //    public boolean isSocialMember() {

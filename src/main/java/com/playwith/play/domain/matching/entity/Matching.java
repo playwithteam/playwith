@@ -1,17 +1,17 @@
 package com.playwith.play.domain.matching.entity;
 
+import com.playwith.play.domain.matchingdate.entity.MatchingDate;
+import com.playwith.play.domain.stadium.entity.Stadium;
+import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.global.jpa.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -26,8 +26,13 @@ public class Matching extends BaseEntity {
     private LocalTime gameTime;
     private String level;
     private String area;
-    private String betel;
     private String managerName;
-//    @ManyToMany(mappedBy = "matching", cascade = CascadeType.REMOVE)
-//    private List<SiteUser> siteUserList;
+    @ManyToOne
+    @JoinColumn(name = "stadium_id")
+    private Stadium stadium;
+    @ManyToOne
+    @JoinColumn(name = "matching_date_id")
+    private MatchingDate matchingDate;
+    @OneToMany(mappedBy = "matching", cascade = CascadeType.REMOVE)
+    private List<SiteUser> userList;
 }
