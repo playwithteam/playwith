@@ -6,6 +6,10 @@ import com.playwith.play.domain.soldierarticle.entity.SoldierArticle;
 import com.playwith.play.domain.team.entity.Team;
 import com.playwith.play.domain.wishlist.entity.WishList;
 import com.playwith.play.global.jpa.BaseEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -41,6 +45,7 @@ public class SiteUser extends BaseEntity {
     private String level;
     private String nickname;
     private String profileImgUrl;
+    private int rating;
 
     @ManyToOne
     private Team team;
@@ -51,8 +56,8 @@ public class SiteUser extends BaseEntity {
     @OneToMany
     private List<WishList> wishLists;
 
-    @ManyToMany
-    private List<Matching> matchingList;
+    @ManyToOne
+    private Matching matching;
 
 
 //    public boolean isSocialMember() {

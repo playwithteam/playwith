@@ -213,6 +213,33 @@ textarea:disabled {
     font-family: "Pretendard-Bold";
     cursor: pointer;
 }
+.btn-type-1-3 {
+    height: 52px;
+    box-sizing: border-box;
+    font-size: 18px;
+    border-radius: 4px;
+    color: #fff;
+    background: #CC0000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Pretendard-Bold";
+    cursor: pointer;
+}
+.btn-type-1-4 {
+    height: 52px;
+    box-sizing: border-box;
+    font-size: 18px;
+    border-radius: 4px;
+    color: #fff;
+    background: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Pretendard-Bold";
+    cursor: inherit;
+}
+
 .btn-type-2 {
     min-width: 96px;
     height: 52px;
@@ -451,6 +478,22 @@ textarea:disabled {
     border-right: none;
 }
 
+.table-type-2 table {
+    border-collapse: separate;
+    border-spacing: 8px;
+}
+.table-type-2 tr td {
+    font-size: 18px;
+    font-weight: inherit;
+    color: #555;
+    background: inherit;
+    box-sizing: border-box;
+    padding: 0;
+    white-space: nowrap;
+    border: none;
+    text-align: left;
+}
+
 .favor-box.active > img {
     content: url(../img/ico_heart_active.svg);
 }
@@ -531,6 +574,12 @@ textarea:disabled {
     margin-bottom: 4.1666vw;
 }
 
+.matching-detail-area {
+    min-height: calc(100vh - 254px);
+    box-sizing: border-box;
+    padding: 0 0 6.25vw 0;
+}
+
 /* ------------------------------------------------------------------------------- */
 
 /* 매칭 리스트 영역 */
@@ -559,8 +608,10 @@ textarea:disabled {
 }
 .matching-list-area .swiper-box .swiper .swiper-slide > a.active {
     border-bottom: 4px solid #030095;
-    font-family: "Pretendard-Bold";
     color: #030095;
+}
+.matching-list-area .swiper-box .swiper .swiper-slide > a.active > span {
+    font-family: "Pretendard-Bold";
 }
 .matching-list-area .swiper-box .swiper-button-prev,
 .matching-list-area .swiper-box .swiper-button-next {

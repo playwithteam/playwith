@@ -4,6 +4,7 @@ package com.playwith.play.domain.user.service;
 import com.playwith.play.domain.user.controller.NewPasswordForm;
 import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.domain.user.repository.UserRepository;
+import com.playwith.play.global.util.DataNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
@@ -22,6 +23,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.time.LocalDate;
+
 import java.util.Objects;
 import java.util.Optional;
 
@@ -37,7 +39,7 @@ public class UserService {
 
     @Transactional
     public SiteUser join(MultipartFile profileImage, String username, String name, String password,
-                         String email, String area, String level, LocalDate birthdate) {
+                         String email, String area, String level, LocalDate birthdate, int rating) {
 
         String profileImgUrl = saveProfileImage(profileImage);
 
@@ -51,6 +53,7 @@ public class UserService {
                 .area(area)
                 .level(level)
                 .birthDate(birthdate)
+                .rating(rating)
                 .build();
 
         return this.userRepository.save(siteUser);
@@ -108,7 +111,7 @@ public class UserService {
         Optional<SiteUser> os = this.userRepository.findByUsername(nickname);
         if (os.isPresent()) return os.get();
 
-        return join(null, username, nickname, "", "", "", "", null); // 최초 로그인 시 딱 한번 실행
+        return join(null, username, nickname, "", "", "", "", null, 1); // 최초 로그인 시 딱 한번 실행
 
     }
 
@@ -209,6 +212,19 @@ public class UserService {
             return this.userRepository.save(updatedUser);
         } else {
             return null;
+        }
+    }
+    public int getFindRating(SiteUser user) {
+        return user.getRating();
+    }
+
+    public SiteUser getUserByName(String name) {
+        Optional<SiteUser> siteUser = this.userRepository.findByUsername(name);
+        if (siteUser.isPresent()) {
+            return siteUser.get();
+        }
+        else {
+            throw new DataNotFoundException("user not found");
         }
     }
 }

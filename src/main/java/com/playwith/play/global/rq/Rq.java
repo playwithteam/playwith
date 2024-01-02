@@ -197,4 +197,7 @@ public class Rq {
     public String getProfileImgUrl() {
         return this.userService.getFindProfileImgUrl(getMember());
     }
+    public int getRating() {
+        return this.userService.getFindRating(getMember());
+    }
 }
