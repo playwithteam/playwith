@@ -12,11 +12,13 @@ import com.playwith.play.domain.user.service.UserService;
 import com.playwith.play.global.rq.Rq;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.time.format.DateTimeFormatter;
@@ -53,12 +55,12 @@ public class MatchingController {
     @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable("id") Long id, Principal principal) {
         Matching matching = this.matchingService.getMatching(id);
-//        String currentUsername = principal.getName();
-//        List<SiteUser> userList = matching.getUserList();
-//        boolean isCurrentUserInList = userList.stream()
-//                .anyMatch(user -> user.getUsername().equals(currentUsername));
+        String currentUsername = principal.getName();
+        List<SiteUser> userList = matching.getUserList();
+        boolean isCurrentUserInList = userList.stream()
+                .anyMatch(user -> user.getUsername().equals(currentUsername));
         model.addAttribute("matching", matching);
-//        model.addAttribute("isCurrentUserInList", isCurrentUserInList);
+        model.addAttribute("isCurrentUserInList", isCurrentUserInList);
         return "matching_detail";
     }
 
@@ -67,6 +69,14 @@ public class MatchingController {
         Matching matching = this.matchingService.getMatching(id);
         SiteUser siteUser = this.userService.getUserByName(principal.getName());
         this.matchingService.mercenary(matching, siteUser);
+        return String.format("redirect:/matching/detail/%s", id);
+    }
+
+    @GetMapping("/mercenary/delete/{id}")
+    public String mercenaryDelete(@PathVariable("id") Long id, Principal principal) {
+        Matching matching = this.matchingService.getMatching(id);
+        SiteUser siteUser = this.userService.getUserByName(principal.getName());
+        this.matchingService.mercenaryDelete(matching, siteUser);
         return String.format("redirect:/matching/detail/%s", id);
     }
 }

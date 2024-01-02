@@ -59,4 +59,9 @@ public class MatchingService {
         this.matchingRepository.save(matching);
     }
 
+    public void mercenaryDelete(Matching matching, SiteUser siteUser) {
+        matching.getUserList().remove(siteUser);
+        this.matchingRepository.save(matching);
+    }
+
 }

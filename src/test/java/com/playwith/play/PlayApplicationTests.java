@@ -31,7 +31,21 @@ class PlayApplicationTests {
         userService.join(null,"test1","빵빵이", "1234", "test1@test.com", "", "", null, null, 2);
         userService.join(null,"test2","신짱아", "1234", "test2@test.com", "", "", null, null, 2);
         userService.join(null,"test3","뚱이", "1234", "test3@test.com", "", "", null, null, 2);
-        userService.join(null,"user1","손흥민", "1234", "user1@test.com", "대전", "상", null, null, 1);
+        userService.join(null,"user1","손흥민", "1234", "user1@test.com", "춘천", "상", LocalDate.of(1992, 7, 8), null, 1);
+        userService.join(null,"user2","김민재", "1234", "user2@test.com", "통영", "상", LocalDate.of(1996, 11, 15), null, 1);
+        userService.join(null,"user3","이강인", "1234", "user3@test.com", "인천", "상", LocalDate.of(2001, 2, 19), null, 1);
+        userService.join(null,"user4","차두리", "1234", "user4@test.com", "서울", "상", LocalDate.of(1980, 7, 25), null, 1);
+        userService.join(null,"user5","김경호", "1234", "user5@test.com", "대전", "하", LocalDate.of(1996, 8, 21), null, 1);
+        userService.join(null,"user6","송강호", "1234", "user6@test.com", "부산", "중", LocalDate.of(1973, 12, 1), null, 1);
+        userService.join(null,"user7","정우성", "1234", "user7@test.com", "서울", "상", LocalDate.of(1975, 7, 19), null, 1);
+        userService.join(null,"user8","강동원", "1234", "user8@test.com", "포항", "중", LocalDate.of(1977, 12, 3), null, 1);
+        userService.join(null,"user9","설영우", "1234", "user9@test.com", "수원", "상", LocalDate.of(1998, 7, 2), null, 1);
+        userService.join(null,"user10","이기제", "1234", "user10@test.com", "수원", "상", LocalDate.of(1991, 9, 4), null, 1);
+        userService.join(null,"user11","김영권", "1234", "user11@test.com", "인천", "중", LocalDate.of(1988, 4, 15), null, 1);
+        userService.join(null,"user12","송민규", "1234", "user12@test.com", "서울", "상", LocalDate.of(1998, 3, 21), null, 1);
+        userService.join(null,"user13","오현규", "1234", "user13@test.com", "수원", "하", LocalDate.of(2000, 1, 3), null, 1);
+        userService.join(null,"user14","이청용", "1234", "user14@test.com", "대구", "상", LocalDate.of(1988, 4, 24), null, 1);
+
 
         // 기본 구장 생성
         stadiumService.create("서울", "로꼬풋살장", "KR 서울특별시 송파구 잠실동 40-1 롯데마트 제타플렉스점 R층", "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d202412.1888398174!2d126.8427373825985!3d37.56235622779598!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357ca5c150f26537%3A0x6946a93f4d550d0!2z66Gc6rys7ZKL7IK07Iqk7YOA65SU7JuAIOyeoOyLpOygnO2DgO2UjOugieyKpOygkA!5e0!3m2!1sko!2skr!4v1703209534380!5m2!1sko!2skr");
