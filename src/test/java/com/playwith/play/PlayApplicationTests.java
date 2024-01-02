@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
-import java.util.stream.IntStream;
 
 @SpringBootTest
 class PlayApplicationTests {
@@ -28,9 +27,9 @@ class PlayApplicationTests {
     @DisplayName("기본 데이터 생성")
     void test01() {
         // 매니저 아아디 생성
-        userService.join(null,"test1","빵빵이", "1234", "test1@test.com", "", "", null, 2);
-        userService.join(null,"test2","신짱아", "1234", "test2@test.com", "", "", null, 2);
-        userService.join(null,"test3","뚱이", "1234", "test3@test.com", "", "", null, 2);
+        userService.join(null,"test1","빵빵이", "1234", "test1@test.com", "", "", null, null,2);
+        userService.join(null,"test2","신짱아", "1234", "test2@test.com", "", "", null, null, 2);
+        userService.join(null,"test3","뚱이", "1234", "test3@test.com", "", "", null, null, 2);
 
         // 기본 구장 생성
         stadiumService.create("서울", "로꼬풋살장", "KR 서울특별시 송파구 잠실동 40-1 롯데마트 제타플렉스점 R층", "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d202412.1888398174!2d126.8427373825985!3d37.56235622779598!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357ca5c150f26537%3A0x6946a93f4d550d0!2z66Gc6rys7ZKL7IK07Iqk7YOA65SU7JuAIOyeoOyLpOygnO2DgO2UjOugieyKpOygkA!5e0!3m2!1sko!2skr!4v1703209534380!5m2!1sko!2skr");
