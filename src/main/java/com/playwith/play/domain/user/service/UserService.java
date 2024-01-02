@@ -187,7 +187,7 @@ public class UserService {
             // 기존 사용자 정보를 업데이트
             SiteUser updatedUser = SiteUser.builder()
                     .id(existingUser.getId())
-                    .profileImgUrl(profileImgUrl != null ? profileImgUrl : existingUser.getProfileImgUrl())
+                    .profileImgUrl(profileImgUrl)
                     .username(username)
                     .name(name != null ? name : existingUser.getName())
                     .email(email != null ? email : existingUser.getEmail())
