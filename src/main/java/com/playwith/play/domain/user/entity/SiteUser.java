@@ -10,7 +10,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @SuperBuilder
-@ToString
+//@ToString(exclude = "team")
 @Entity
 public class SiteUser extends BaseEntity {
 
@@ -44,9 +43,23 @@ public class SiteUser extends BaseEntity {
     private String nickname;
     private String profileImgUrl;
 
+
+
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
+
+    public void setTeam(Team team) {
+        if (this.team != null) {
+            this.team.getSiteUsers().remove(this);
+        }
+        this.team = team;
+        if (team != null) {
+            team.getSiteUsers().add(this);
+        }
+    }
+
+
     @OneToMany
     private List<ReportArticle> reportArticleList;
     @OneToMany
@@ -58,7 +71,7 @@ public class SiteUser extends BaseEntity {
     private List<Matching> matchingList;
 
 
-//    public boolean isSocialMember() {
+    //    public boolean isSocialMember() {
 //        return username.startsWith("KAKAO_");
 //    }  //사용자명이 카카오로 시작하는지 확인
 //    public List<? extends GrantedAuthority> getGrantedAuthorities() {

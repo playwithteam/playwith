@@ -1,5 +1,7 @@
 package com.playwith.play.domain.team.controller;
 
+import com.playwith.play.domain.team.entity.Team;
+import com.playwith.play.domain.user.entity.SiteUser;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -18,4 +20,6 @@ public class TeamCreateForm {
     private String area;
     @NotNull(message = "필수 입력 항목 입니다.")
     private String level;
+    private SiteUser siteUser;
+    private Team team = new Team();
 }

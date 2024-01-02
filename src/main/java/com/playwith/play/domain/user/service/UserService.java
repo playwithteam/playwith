@@ -2,9 +2,11 @@ package com.playwith.play.domain.user.service;
 
 
 import com.playwith.play.domain.team.entity.Team;
+import com.playwith.play.domain.team.service.TeamService;
 import com.playwith.play.domain.user.controller.NewPasswordForm;
 import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.domain.user.repository.UserRepository;
+import com.playwith.play.global.util.DataNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
@@ -22,7 +24,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -35,11 +36,11 @@ public class UserService {
     private final Environment environment;
     @Value("${multipart.profile-images.location}")
     private String profileImageLocation;
+    private final TeamService teamService;
 
     @Transactional
     public SiteUser join(MultipartFile profileImage, String username, String name, String password,
                          String email, String area, String level, LocalDate birthdate, Team team) {
-
         String profileImgUrl = saveProfileImage(profileImage);
 
         SiteUser siteUser = SiteUser.builder()
@@ -52,9 +53,8 @@ public class UserService {
                 .area(area)
                 .level(level)
                 .birthDate(birthdate)
-                .team(team)
                 .build();
-
+        siteUser.setTeam(team);
         return this.userRepository.save(siteUser);
     }
 
@@ -105,18 +105,22 @@ public class UserService {
 
     //소셜 로그인
     @Transactional
-    public SiteUser whenSocialLogin(String providerTypeCode,String username, String nickname) {
-        Optional<SiteUser> os = this.userRepository.findByUsername(nickname);
+    public SiteUser whenSocialLogin(String providerTypeCode, String name, String username) {
+        Optional<SiteUser> os = this.userRepository.findByUsername(username);
         if (os.isPresent()) return os.get();
 
-        return join(null, username, nickname, "", "", "", "", null, null); // 최초 로그인 시 딱 한번 실행
+        return join(null, name, username, "", "", "", "", null, null); // 최초 로그인 시 딱 한번 실행
     }
 
     //유저아이디 찾기
-    public Optional<SiteUser> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public SiteUser findByUsername(String username) {
+        Optional<SiteUser> os = this.userRepository.findByUsername(username);
+        if (os.isPresent()) {
+            return os.get();
+        } else {
+            throw new DataNotFoundException("siteuser not found");
+        }
     }
-
 
     //이메일, 이름 찾기
     public Optional<SiteUser> getUserByEmailAndName(String email, String name) {
@@ -166,11 +170,5 @@ public class UserService {
     public String getFindProfileImgUrl(SiteUser user) {
         return user.getProfileImgUrl();
     }
-
-    public List<SiteUser> getTeamId(Long teamId) {
-        // 해당 팀에 속한 유저들을 가져오는 로직
-        return userRepository.findByTeamId(teamId);
-    }
-
 
 }

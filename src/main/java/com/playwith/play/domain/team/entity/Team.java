@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,5 +34,22 @@ public class Team extends BaseEntity {
     private List<TeamArticle> teamArticleList;
 
     @OneToMany(mappedBy = "team")
-    private List<SiteUser> siteUsers;
+    private List<SiteUser> siteUsers = new ArrayList<>();
+
+    public void addMember(SiteUser user) {
+        if (this.siteUsers == null) {
+            this.siteUsers = new ArrayList<>();
+        }
+        this.siteUsers.add(user);
+        user.setTeam(this);
+    }
+
+//    public void setSiteUsers(List<SiteUser> siteUsers) {
+//        if (siteUsers == null) {
+//            this.siteUsers = new ArrayList<>();
+//        } else {
+//            this.siteUsers = siteUsers;
+//        }
+//    }
+
 }

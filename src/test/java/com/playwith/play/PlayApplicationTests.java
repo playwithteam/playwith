@@ -1,6 +1,7 @@
 package com.playwith.play;
 
 import com.playwith.play.domain.stadium.service.StadiumService;
+import com.playwith.play.domain.team.service.TeamService;
 import com.playwith.play.domain.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,15 +17,17 @@ class PlayApplicationTests {
     private UserService userService;
     @Autowired
     StadiumService stadiumService;
+    @Autowired
+    TeamService teamService;
 
     @Test
     @DisplayName("테스트 아이디")
     void test01() {
         IntStream.rangeClosed(1, 1).forEach(i -> {
-            userService.join(null,"test","신짱구", "qwer1234!", "test@test.com", "대전", "상",
-                    null,null);
+            userService.join(null, "test", "신짱아", "qwer1234!", "test@test.com", "대전", "상", null, null);
         });
     }
+
 //    @Test
 //    @DisplayName("테스트 구장")
 //    void test02(StadiumService stadiumService) {
