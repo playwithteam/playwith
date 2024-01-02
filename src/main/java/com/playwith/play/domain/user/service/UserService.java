@@ -109,6 +109,7 @@ public class UserService {
 
     //소셜 로그인
     @Transactional
+
     public SiteUser whenSocialLogin(String providerTypeCode, String name, String username) {
         Optional<SiteUser> os = this.userRepository.findByUsername(username);
         if (os.isPresent()) return os.get();
