@@ -1,6 +1,7 @@
 package com.playwith.play.domain.user.controller;
 
 
+import com.playwith.play.domain.team.entity.Team;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -36,4 +37,5 @@ public class UserCreateForm {
     private String area;
     @NotBlank(message = "필수 입력 항목 입니다.")
     private String level;
+    private Team team;
 }

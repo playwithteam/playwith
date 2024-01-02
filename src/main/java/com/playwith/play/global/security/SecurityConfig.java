@@ -35,7 +35,7 @@ public class SecurityConfig {
                                 .defaultSuccessUrl("/"))
                 .logout((logout) -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/user/login")
                         .invalidateHttpSession(true))
                 .csrf((csrf) -> csrf
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/qna/*")))
