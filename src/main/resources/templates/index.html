@@ -128,10 +128,8 @@
                                             <span class="location-text f18" th:text="${matching.stadium.area} + ' ' + ${matching.stadium.name}"></span>
                                         </div>
                                     </div>
-                                    <span class="situation-box tac f16 tb lh140 type-1">용병 모집 중<br>0 / 14</span>
-                                    <span class="situation-box tac f16 tb lh140 type-2">용병 모집 완료<br>14 / 14</span>
-<!--                                    <span th:if="${#lists.size(matching.userList) > 0}" class="situation-box tac f16 tb lh140 type-1">용병 모집 중<br>0 / 14</span>-->
-<!--                                    <span th:if="${#lists.size(matching.userList) = 0}" class="situation-box tac f16 tb lh140 type-2">용병 모집 완료<br>14 / 14</span>-->
+                                    <span class="situation-box tac f16 tb lh140 type-1" th:if="${#lists.size(matching.userList) < 14}" th:utext="${'용병 모집 중' + '<br>' + #lists.size(matching.userList) + ' / 14'}"></span>
+                                    <span class="situation-box tac f16 tb lh140 type-2" th:if="${#lists.size(matching.userList) == 14}">용병 모집 완료<br>14 / 14</span>
                                 </a>
                             </li>
                         </ul>

@@ -12,16 +12,15 @@ import com.playwith.play.domain.user.service.UserService;
 import com.playwith.play.global.rq.Rq;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Controller
 @RequestMapping("/matching")
@@ -32,11 +31,13 @@ public class MatchingController {
     private final MatchingDateService matchingDateService;
     private final UserService userService;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
     public String create(MatchingForm matchingForm) {
         return "matching_form";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
     public String create(@Valid MatchingForm matchingForm, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
@@ -48,10 +49,24 @@ public class MatchingController {
         return "redirect:/";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Long id) {
+    public String detail(Model model, @PathVariable("id") Long id, Principal principal) {
         Matching matching = this.matchingService.getMatching(id);
+//        String currentUsername = principal.getName();
+//        List<SiteUser> userList = matching.getUserList();
+//        boolean isCurrentUserInList = userList.stream()
+//                .anyMatch(user -> user.getUsername().equals(currentUsername));
         model.addAttribute("matching", matching);
+//        model.addAttribute("isCurrentUserInList", isCurrentUserInList);
         return "matching_detail";
+    }
+
+    @PostMapping("/mercenary/{id}")
+    public String mercenary(@PathVariable("id") Long id, Principal principal) {
+        Matching matching = this.matchingService.getMatching(id);
+        SiteUser siteUser = this.userService.getUserByName(principal.getName());
+        this.matchingService.mercenary(matching, siteUser);
+        return String.format("redirect:/matching/detail/%s", id);
     }
 }

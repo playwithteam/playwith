@@ -5,8 +5,10 @@ import com.playwith.play.domain.matching.entity.Matching;
 import com.playwith.play.domain.matching.entity.MatchingType;
 import com.playwith.play.domain.matching.repository.MatchingRepository;
 import com.playwith.play.domain.matchingdate.entity.MatchingDate;
+import com.playwith.play.domain.qna.entity.Qna;
 import com.playwith.play.domain.stadium.entity.Stadium;
 import com.playwith.play.domain.stadium.repository.StadiumRepository;
+import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.global.util.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -51,4 +53,10 @@ public class MatchingService {
             throw new DataNotFoundException("matching not found");
         }
     }
+
+    public void mercenary(Matching matching, SiteUser siteUser) {
+        matching.getUserList().add(siteUser);
+        this.matchingRepository.save(matching);
+    }
+
 }
