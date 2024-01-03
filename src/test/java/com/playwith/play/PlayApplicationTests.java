@@ -28,7 +28,7 @@ class PlayApplicationTests {
     @DisplayName("기본 데이터 생성")
     void test01() {
         // 매니저 아아디 생성
-        userService.join(null,"test1","빵빵이", "1234", "test1@test.com", "", "", null, null, 2);
+        userService.join(null,"test1","빵빵이", "1234", "test1@test.com", "", "", null, null,2);
         userService.join(null,"test2","신짱아", "1234", "test2@test.com", "", "", null, null, 2);
         userService.join(null,"test3","뚱이", "1234", "test3@test.com", "", "", null, null, 2);
 
