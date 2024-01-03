@@ -11,4 +11,5 @@ public class WishListController {
     public String wishlist() {
         return "wishlist";
     }
+
 }
