@@ -1,10 +1,13 @@
 <html layout:decorate="~{/common/layout}">
 <div layout:fragment="content">
 
-    <form id="teamCreate" th:object="${teamCreateForm}" method="post" enctype="multipart/form-data">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <form id="teamModify" th:object="${teamCreateForm}" th:action="@{/team/team_modify/{teamId}(teamId=${team.id})}"
+          method="post" enctype="multipart/form-data">
+        <!--        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
         <div class="login-cnt-area w100per rel zi2">
             <div class="con w50per">
+                <h1 class="title-text lh120 tb tac wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">팀
+                    정보 수정</h1>
                 <div class="flex fdc wow fadeInUp" data-wow-delay="0.6s" data-wow-duration="0.6s">
                     <ul class="flex fdc g36">
                         <li>
@@ -27,7 +30,9 @@
                             <h3 class="c333 f18 tb mb16">팀명</h3>
                             <div class="input-btn-box flex g8">
                                 <div class="input-type-1">
-                                    <input name="teamName" type="text" th:field="*{teamName}" placeholder="팀명">
+                                    <input id="teamName" name='teamName' th:field="*{teamName}" type="text"
+                                           placeholder="팀명" th:value="${team.teamName}"
+                                    >
                                 </div>
                                 <button id="checkTeamNameBtn" type="button" class="btn-type-2">중복 확인</button>
                             </div>
@@ -42,21 +47,21 @@
                                 <li class="w50per">
                                     <h3 class="c333 f18 tb mb16">지역<span class="tb cCC0000 inblock">*</span></h3>
                                     <div class="select-type-2 rel">
-                                        <select name="area" id="area" th:field="*{area}">
+                                        <select id="area" th:field="*{area}" th:value="${team.area}">
                                             <option value="">지역</option>
-                                            <option value="강원도">강원도</option>
-                                            <option value="경기도">경기도</option>
-                                            <option value="충청도">충청도</option>
-                                            <option value="전라도">전라도</option>
-                                            <option value="경상도">경상도</option>
-                                            <option value="제주">제주</option>
-                                            <option value="서울">서울</option>
-                                            <option value="인천">인천</option>
-                                            <option value="대전">대전</option>
-                                            <option value="부산">부산</option>
-                                            <option value="대구">대구</option>
-                                            <option value="울산">울산</option>
-                                            <option value="광주">광주</option>
+                                            <option value="강원도" th:selected="${team.area == '강원도'}">강원도</option>
+                                            <option value="경기도" th:selected="${team.area == '경기도'}">경기도</option>
+                                            <option value="충청도" th:selected="${team.area == '충청도'}">충청도</option>
+                                            <option value="전라도" th:selected="${team.area == '전라도'}">전라도</option>
+                                            <option value="경상도" th:selected="${team.area == '경상도'}">경상도</option>
+                                            <option value="제주" th:selected="${team.area == '제주'}">제주</option>
+                                            <option value="서울" th:selected="${team.area == '서울'}">서울</option>
+                                            <option value="인천" th:selected="${team.area == '인천'}">인천</option>
+                                            <option value="대전" th:selected="${team.area == '대전'}">대전</option>
+                                            <option value="부산" th:selected="${team.area == '부산'}">부산</option>
+                                            <option value="대구" th:selected="${team.area == '대구'}">대구</option>
+                                            <option value="울산" th:selected="${team.area == '울산'}">울산</option>
+                                            <option value="광주" th:selected="${team.area == '광주'}">광주</option>
                                         </select>
                                         <span class="arrow img-box abs y-middle">
                                         <img th:src="@{/img/arrow_bottom_999999.svg}" alt="">
@@ -66,11 +71,11 @@
                                 <li class="w50per">
                                     <h3 class="c333 f18 tb mb16">레벨<span class="tb cCC0000 inblock">*</span></h3>
                                     <div class="select-type-2 rel">
-                                        <select name="level" th:field="*{level}" id="level">
+                                        <select id="level" th:field="*{level}" th:value="${team.level}" disabled>
                                             <option value="">레벨</option>
-                                            <option value="하">하</option>
-                                            <option value="중">중</option>
-                                            <option value="상">상</option>
+                                            <option value="하" th:selected="${team.level == '하'}">하</option>
+                                            <option value="중" th:selected="${team.level == '중'}">중</option>
+                                            <option value="상" th:selected="${team.level == '상'}">상</option>
                                         </select>
                                         <span class="arrow img-box abs y-middle">
                                         <img th:src="@{/img/arrow_bottom_999999.svg}" alt="">
@@ -80,11 +85,8 @@
                             </ul>
                         </li>
                     </ul>
-                    <a th:href="@{/team/team_create}">
-                        <button type="submit" class="w100per btn-type-1 mt80">
-                            팀 등록
-                        </button>
-                    </a>
+                    <button type="submit" id="modifyButton" class="btn-type-1 mt100">
+                        수정하기</a></button>
                 </div>
             </div>
         </div>
@@ -92,6 +94,7 @@
 </div>
 </html>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 <script>
     $(document).ready(function () {
 
@@ -187,51 +190,58 @@
             messageBox.text(message);
         }
 
-
+        // 팀 등록
         $(document).ready(function () {
 
-            // "팀 등록" 버튼에 대한 클릭 이벤트 핸들러 등록
-            $("#teamCreate").submit(function (event) {
+            $("#teamModify").submit(function (event) {
                 // 기본 동작 방지
                 event.preventDefault();
                 // 팀 등록 폼 서브밋 함수 호출
-                submitTeamRegistrationForm();
+                submitTeamModifyForm();
             });
 
-            // 팀 등록 폼 서브밋 함수
-            function submitTeamRegistrationForm() {
+            // 팀 수정 버튼
+            function submitTeamModifyForm() {
                 // 팀명 입력값 확인
                 var teamName = $("input[name='teamName']").val();
-                var level = $("#level").val();
-                var area = $("#area").val();
-                if (!teamName || !level || !area) {
+                if (!teamName) {
                     alert("다시 입력해 주세요.");
                     return; // 데이터 없으면 함수 중단
                 }
 
-                var formData = new FormData($("#teamCreate")[0]);
+                // // Thymeleaf를 사용하여 팀 ID 가져오기
+                // var teamId = /*[[${team.getId()}]]*/ '';
 
-                // 팀 ID 가져오기
-                var teamId = "${team.id}";
+                var formData = new FormData($("#teamModify")[0]);
 
+                // AJAX 호출
                 $.ajax({
                     type: "POST",
-                    url: "/team/team_detail/" + teamId,
+                    url: `/team/team_modify`,
                     data: formData,
                     contentType: false,
                     processData: false,
                     cache: false,
                     success: function (data) {
+                        window.location.href = "/team/team_modify/" + teamId;
                         alert("팀 등록이 완료되었습니다.");
-                        // 성공 응답에서 리다이렉트 URL을 받아서 페이지를 리다이렉트
-                        window.location.href = data;
                     },
                     error: function (xhr, status, error) {
+                        console.log(xhr.responseText);
                         console.log("팀 등록 실패");
                         alert("팀 등록에 실패했습니다.");
                     }
+                })
+                $("#modifyButton").click(function () {
+                    console.log("Modify button clicked");
+                    if (confirm("정말로 수정하시겠습니까?")) {
+                        $("#teamModify").submit(); // 사용자가 확인하면 폼 제출
+                    }
                 });
+
             }
         })
-    });
+    })
 </script>
+
+

@@ -6,6 +6,7 @@ import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.domain.user.repository.UserRepository;
 import com.playwith.play.domain.user.service.FileStorageException;
 import com.playwith.play.global.util.DataNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,8 +20,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -53,6 +56,7 @@ public class TeamService {
                 .orElseThrow(() -> new DataNotFoundException("팀이 존재하지 않습니다. teamId: " + teamId));
     }
 
+    // 팀 리스트 얻기
     public List<Team> getTeamList() {
         return this.teamRepository.findAll();
     }
@@ -96,5 +100,56 @@ public class TeamService {
             uniqueFileName = baseName + "_" + System.currentTimeMillis() + "." + extension;
         }
         return uniqueFileName;
+    }
+
+    // 팀 삭제 시 팀 외래 키 null로 설정
+    @Transactional
+    public void deleteTeamWithNullifyingUsers(Long teamId) {
+        Team team = teamRepository.findById(teamId).orElse(null);
+
+        if (team != null) {
+            List<SiteUser> usersCopy = new ArrayList<>(team.getSiteUsers());
+
+            for (SiteUser user : usersCopy) {
+                user.setTeam(null);
+            }
+
+            teamRepository.delete(team);
+        }
+    }
+
+    //팀 삭제
+    public void delete(Team team) {
+        this.teamRepository.delete(team);
+    }
+
+    //팀 정보 수정
+    public Team modifyTeam(Team team, MultipartFile profileImage, String teamName, String area, String level, SiteUser siteUser) {
+
+        Optional<Team> existingTeamOptional = this.teamRepository.findById(team.getId());
+
+        if (existingTeamOptional.isPresent()) {
+            Team existingTeam = existingTeamOptional.get();
+
+            // 프로필 이미지 업데이트
+            String profileImgUrl = saveProfileImage(profileImage);
+
+            // 기존 팀 정보를 업데이트
+            Team modifyTeam = Team
+                    .builder()
+                    .id(existingTeam.getId())
+                    .profileImgUrl(profileImgUrl)
+                    .teamName(teamName)
+                    .area(area != null ? area : existingTeam.getArea())
+                    .level(level != null ? level : existingTeam.getLevel())
+                    .siteUsers(existingTeam.getSiteUsers())
+                    .build();
+            modifyTeam.getSiteUsers().add(siteUser); // 사용자를 팀에 추가
+
+            // 업데이트된 사용자 정보를 저장
+            return this.teamRepository.save(modifyTeam);
+        } else {
+            return null;
+        }
     }
 }

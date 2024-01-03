@@ -4,9 +4,9 @@
     <div class="team-list-area sub-cnt-area w100per rel zi2">
         <div class="con w100per">
             <h1 class="title-text lh120 tb tac wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">팀 목록</h1>
-            <div class="no-team-box pt8 wow fadeInUp" data-wow-delay="0.6s" data-wow-duration="0.6s">
-                <p class="tac f20 c333 tb mb12">등록된 팀이 없습니다.</p>
-            </div>
+<!--            <div class="no-team-box pt8 wow fadeInUp" data-wow-delay="0.6s" data-wow-duration="0.6s">-->
+<!--                <p class="tac f20 c333 tb mb12">등록된 팀이 없습니다.</p>-->
+<!--            </div>-->
 
             <div class="flex fdc wow fadeInUp" data-wow-delay="0.6s" data-wow-duration="0.6s">
                 <div class="table-type-1 table-type">
@@ -18,7 +18,7 @@
                             <th>지역</th>
                             <th>레벨</th>
                             <th>생성일</th>
-                            <th>상태</th>
+                            <th>신청</th>
                             <th>모집 인원</th>
                         </tr>
                         </thead>
@@ -42,7 +42,7 @@
                                 <div class="btn-box inflex g8">
                                     <div th:if="${#lists.size(team.siteUsers) == 8}" class="btn-type-4" style="color: #fff; background-color: #CC0000;">모집완료</div>
                                     <div th:if="${#lists.size(team.siteUsers) >= 0 and #lists.size(team.siteUsers) < 8}"
-                                         class="btn-type-4" style="color: #fff; background-color: #0F46BC;">모집중
+                                         class="btn-type-4" style="color: #fff; background-color: #0F46BC;">신청하기
                                     </div>
                                 </div>
                             </td>

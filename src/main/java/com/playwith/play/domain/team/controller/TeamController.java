@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -51,7 +52,7 @@ public class TeamController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/team_detail/{id}")
-    public ResponseEntity<?> team_create(@Valid TeamCreateForm teamCreateForm, BindingResult bindingResult,Principal principal) {
+    public ResponseEntity<?> team_create(@Valid TeamCreateForm teamCreateForm, BindingResult bindingResult, Principal principal) {
 
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body("BindingResult error");
@@ -70,19 +71,95 @@ public class TeamController {
     @GetMapping("/team_detail/{id}")
     public String team_detail(Model model, @PathVariable("id") Long id) {
         Team team = this.teamService.getTeam(id);
+
         model.addAttribute("team", team);
         model.addAttribute("teamCreateForm", new TeamCreateForm());
         return "team_detail";
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/team_modify/{id}")
+    public String team_modify(Model model, TeamCreateForm teamCreateForm, @PathVariable("id") Long id, Principal principal) {
+        Team team = this.teamService.getTeam(id);
+        if (team != null) {
+            SiteUser siteUser = this.userService.findByUsername(principal.getName());
+            MultipartFile profileImage = teamCreateForm.getProfileImage();
+
+            teamCreateForm.setProfileImage(profileImage);
+            teamCreateForm.setTeamName(team.getTeamName());
+            teamCreateForm.setArea(team.getArea());
+            teamCreateForm.setLevel(team.getLevel());
+            teamCreateForm.setSiteUser(siteUser);
+
+            model.addAttribute("team", team);
+            model.addAttribute("teamCreateForm", teamCreateForm);
+        }
+        return "team_modify";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/team_modify/{id}")
+    public ResponseEntity<String> team_modify(@Valid TeamCreateForm teamCreateForm, BindingResult bindingResult,
+                                              Principal principal, @PathVariable("id") Long id) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body("입력된 값이 올바르지 않습니다.");
+        }
+
+        Team team = this.teamService.getTeam(id);
+        if (team == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        SiteUser siteUser = this.userService.findByUsername(principal.getName());
+
+        try {
+            // 수정된 팀 정보를 데이터베이스에 반영
+            this.teamService.modifyTeam(team, teamCreateForm.getProfileImage(), teamCreateForm.getTeamName(), teamCreateForm.getArea(), teamCreateForm.getLevel(), siteUser);
+            return ResponseEntity.ok("팀 수정이 완료되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("팀 수정 중 오류가 발생했습니다.");
+        }
+    }
+
+    // 팀 삭제
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/team_delete/{id}")
+    public String team_delete(Model model, @PathVariable("id") Long id) {
+        Team team = this.teamService.getTeam(id);
+
+        if (team == null || !team.getId().equals(id)) {
+            // 요청된 팀 ID와 DB에서 가져온 팀 ID가 일치하지 않을 경우 에러 처리
+            return "error";
+        }
+
+        // 팀 삭제 시 연결된 사용자의 팀 외래 키를 null로 설정
+        this.teamService.deleteTeamWithNullifyingUsers(id);
+
+        model.addAttribute("team", team);
+        this.teamService.delete(team);
+        return "redirect:/team/team_list";
+    }
+
+
     @GetMapping("/check_teamname")
     @ResponseBody
     public ResponseEntity<String> checkTeamName(@RequestParam("teamName") String teamName) {
         if (teamName == null || teamName.trim().isEmpty()) {
-            // teamName이 비어 있을 때의 처리
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("팀명을 다시 입력하세요.");
         }
-        // 팀명이 주어진 경우에 대한 추가적인 로직
+        if (teamService.isTeamNameUnique(teamName)) {
+            return ResponseEntity.ok("사용 가능한 팀명입니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 사용 중인 팀명입니다.");
+        }
+    }
+
+    @GetMapping("/check_modifyteamname")
+    @ResponseBody
+    public ResponseEntity<String> checkTeamModifyName(@RequestParam("teamName") String teamName) {
+        if (teamName == null || teamName.trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("팀명을 다시 입력하세요.");
+        }
         if (teamService.isTeamNameUnique(teamName)) {
             return ResponseEntity.ok("사용 가능한 팀명입니다.");
         } else {

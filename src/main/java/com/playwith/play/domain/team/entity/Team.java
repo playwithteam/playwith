@@ -3,6 +3,7 @@ package com.playwith.play.domain.team.entity;
 import com.playwith.play.domain.taemarticle.entity.TeamArticle;
 import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.global.jpa.BaseEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -33,7 +34,7 @@ public class Team extends BaseEntity {
     @OneToMany
     private List<TeamArticle> teamArticleList;
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany(mappedBy = "team", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private List<SiteUser> siteUsers = new ArrayList<>();
 
     public void addMember(SiteUser user) {
