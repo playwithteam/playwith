@@ -9,12 +9,14 @@ import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @SuperBuilder
 public class WishList extends BaseEntity {
 
@@ -22,7 +24,9 @@ public class WishList extends BaseEntity {
     @JoinColumn(name = "user_id")
     private SiteUser siteUser;
 
+
     @ManyToOne
     @JoinColumn(name = "matching_id")
     private Matching matching;
+
 }

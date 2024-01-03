@@ -1,6 +1,7 @@
 <html layout:decorate="~{/common/layout}">
 <div layout:fragment="content" class="main-page">
-
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <!-- 메인 비주얼 영역 -->
     <div class="main-visual-area w100per rel zi1">
         <div class="swiper-box wh100per rel zi1">
@@ -116,7 +117,7 @@
                                 <a th:href="@{|/matching/detail/${matching.id}|}" class="flex aic jcsb">
                                     <div class="left-box flex aic g40">
                                         <div class="flex aic g20">
-                                            <button class="favor-box img-box w24" id="favor_btn">
+                                            <button class="favor-box img-box w24" id="favor_btn" th:data-matching-id="${matching.id}" th:classappend="${!matching?.wishLists.?[siteUser?.username == @rq.member.username].isEmpty()} ? 'active' : ''">
                                                 <img th:src="@{/img/ico_heart.svg}" alt="">
                                             </button>
                                             <span class="time-text f18" th:text="${matching.gameTime}" style="width: 50px;"></span>

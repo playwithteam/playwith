@@ -7,10 +7,10 @@
             <div class="flex fdc wow fadeInUp" data-wow-delay="0.6s" data-wow-duration="0.6s">
                 <ul class="flex fdc g80">
                     <li>
-                        <h3 class="c333 f18 tb">용병 매칭</h3>
-                        <p class="tac c777 tb f16 mt40">위시리스트가 없습니다.</p>
-<!--                        하트 클릭된 애들만 불러오면 됌 !-->
-<!--                        <ul class="matching-list-box">-->
+                        <h3 class="c333 f18 tb">찜한 매치</h3>
+                        <ul class="matching-list-box" id="wishlist-container"></ul>
+                            <!-- 위시 리스트를 표시할 내용 추가 -->
+<!--                        <ul class="matching-list-box" th:if="${not #lists.isEmpty(wishList)}">-->
 <!--                            <li th:each="matching : ${matchingList}" th:if="${matching.matchingType.toString() == 'TYPE_1'}">-->
 <!--                                <a href="" class="flex aic jcsb">-->
 <!--                                    <div class="left-box flex aic g40">-->
@@ -32,6 +32,7 @@
 <!--                                </a>-->
 <!--                            </li>-->
 <!--                        </ul>-->
+                        <p id="no-wishlist-message" class="tac c777 tb f16 mt40" th:if="${#lists.isEmpty(wishList)}">위시리스트가 없습니다.</p>
                     </li>
                     <li>
                         <h3 class="c333 f18 tb">팀 매칭</h3>
@@ -42,5 +43,40 @@
         </div>
     </div>
 
-</div>1111
+</div>
 </html>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        $.ajax({
+            type: 'GET',
+            url: '/wishlists',
+            success: function (data) {
+                var wishlistContainer = $("#wishlist-container");
+                var noWishlistMessage = $("#no-wishlist-message");
+
+                // 데이터가 배열인지 확인
+                if (Array.isArray(data)) {
+                    if (data.length > 0) {
+                        wishlistContainer.empty();
+
+                        data.forEach(function (item) {
+                            var listItem = $('<li>');
+                            // 여기서 item의 속성을 이용하여 필요한 정보를 추가하세요.
+                            // 예: listItem.text(item.gameDate + ' ' + item.gameTime + ' ' + item.stadium.name);
+                            wishlistContainer.append(listItem);
+                        });
+                    } else {
+                        wishlistContainer.hide();
+                        noWishlistMessage.show();
+                    }
+                } else {
+                    console.error('Received data is not an array:', data);
+                }
+            },
+            error: function (error) {
+                console.error('Error fetching wish list', error);
+            }
+        });
+    });
+</script>

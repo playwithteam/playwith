@@ -61,7 +61,7 @@ public class SiteUser extends BaseEntity {
     }
 
 
-    @OneToMany
+    @OneToMany(mappedBy = "siteUser", cascade = CascadeType.ALL)
     private List<WishList> wishLists;
 
     @ManyToOne
