@@ -76,7 +76,7 @@
                 </div>
                 <div class="select-area flex aic g24 mt40">
                     <div class="select-type-1 rel">
-                        <select id="" name="">
+                        <select id="areaSelect1" name="area">
                             <option value="">모든 지역</option>
                             <option value="서울">서울</option>
                             <option value="대전">대전</option>
@@ -111,7 +111,7 @@
                 </div>
                 <ul class="tab-cnt-box-1 mt20">
                     <li th:each="matchingDate, loop : ${matchingDates}" th:id="@{|tab1-${loop.count}|}">
-                        <ul class="matching-list-box">
+                        <ul class="matching-list-box" id="matchingsList">
                             <li th:each="matching : ${filteredMatchings1}" th:if="${loop.count == matching.matchingDate.id}">
                                 <a th:href="@{|/matching/detail/${matching.id}|}" class="flex aic jcsb">
                                     <div class="left-box flex aic g40">

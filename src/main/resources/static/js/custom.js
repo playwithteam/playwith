@@ -223,4 +223,52 @@ $(document).ready(function(){
             }
         });
 
+
+        // select 박스가 변경될 때의 이벤트 처리
+                $('#areaSelect1').change(function () {
+                    // 선택된 지역 값 가져오기
+                    var selectedArea = $(this).val();
+
+                    // AJAX를 통해 서버에 선택된 지역을 전달하고, 해당 지역에 맞는 매칭 데이터를 받아와서 처리
+                    $.ajax({
+                        type: 'GET',
+                        url: '/filterByArea',
+                        data: { area: selectedArea },
+                        success: function (data) {
+                            // 받아온 데이터를 화면에 업데이트하는 함수 호출
+                            updateFilteredMatchings1(data);
+                        },
+                        error: function (error) {
+                            console.error('Error during AJAX request:', error);
+                        }
+                    });
+                });
+
+                // 받아온 데이터를 화면에 업데이트하는 함수
+                function updateFilteredMatchings1(data) {
+                    $('#matchingsList').empty();
+
+                        // 새로 받아온 매칭 데이터를 사용해 리스트를 새로 만듦
+                        $.each(data, function(i, matching) {
+                            // 매칭 데이터를 표현하는 <li> 태그 생성
+                                    var li = $('<li>');
+
+                                    // <li> 태그 내부의 HTML 요소를 동적으로 생성
+                                    var a = $('<a>').attr('href', '/matching/detail/' + matching.id).addClass('flex aic jcsb');
+                                    var div = $('<div>').addClass('left-box flex aic g40');
+                                    var div1 = $('<div>').addClass('flex aic g20');
+                                    var button = $('<button>').addClass('favor-box img-box w24').attr('id', 'favor_btn');
+                                    var img = $('<img>').attr('src', '/img/ico_heart.svg').attr('alt', '');
+                                    button.append(img);
+                                    var span = $('<span>').addClass('time-text f18').text(matching.gameTime).css('width', '50px');
+                                    div1.append(button, span);
+                                    div.append(div1);
+                                    a.append(div);
+
+                                    // <li> 태그를 리스트에 추가
+                                    li.append(a);
+                                    $('#matchingsList').append(li);
+                        });
+                }
+
 });
