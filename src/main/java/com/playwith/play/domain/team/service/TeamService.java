@@ -141,7 +141,6 @@ public class TeamService {
                     .profileImgUrl(profileImgUrl)
                     .teamName(teamName)
                     .area(area != null ? area : existingTeam.getArea())
-                    .level(level != null ? level : existingTeam.getLevel())
                     .siteUsers(existingTeam.getSiteUsers())
                     .build();
             modifyTeam.getSiteUsers().add(siteUser); // 사용자를 팀에 추가

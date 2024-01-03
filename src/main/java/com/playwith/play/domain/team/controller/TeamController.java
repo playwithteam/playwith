@@ -99,6 +99,7 @@ public class TeamController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/team_modify/{id}")
+    @ResponseBody
     public ResponseEntity<String> team_modify(@Valid TeamCreateForm teamCreateForm, BindingResult bindingResult,
                                               Principal principal, @PathVariable("id") Long id) {
         if (bindingResult.hasErrors()) {

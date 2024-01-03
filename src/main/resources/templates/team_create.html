@@ -214,6 +214,7 @@
                 // 팀 ID 가져오기
                 var teamId = "${team.id}";
 
+                console.log(teamId)
                 $.ajax({
                     type: "POST",
                     url: "/team/team_detail/" + teamId,
