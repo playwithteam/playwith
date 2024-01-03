@@ -42,6 +42,9 @@
                     <a th:href="@{/team/team_list}" class="c999 f16">팀 정보</a>
                 </li>
                 <li sec:authorize="isAuthenticated()">
+                    <a th:href="@{/matching/history}" class="c999 f16">매칭 내역</a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
                     <a th:href="@{/user/}" class="c999 f16">위시리스트</a>
                 </li>
                 <li sec:authorize="isAuthenticated()">

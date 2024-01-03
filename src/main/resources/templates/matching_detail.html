@@ -32,7 +32,7 @@
                                 <span class="img-box w24">
                                     <img th:src="@{/img/matching_ico_3.svg}" alt="">
                                 </span>
-                                <span class="f18 c555" th:text="${#temporals.format(matching.gameDate, 'M월 d일 E요일', new java.util.Locale('ko'))}"></span>
+                                <span class="f18 c555" th:text="${#temporals.format(matching.matchingDate.gameDate, 'M월 d일 E요일', new java.util.Locale('ko'))}"></span>
                                 <span class="f18 c555" th:text="${matching.gameTime}"></span>
                             </li>
                             <li class="flex aic g4" style="width: 255px">
@@ -56,30 +56,43 @@
                                     <img th:src="@{/img/ico_heart.svg}" alt="">
                                 </button>
                                 <div style="width: calc(100% - 60px);">
-                                    <form th:if="${#lists.size(matching.userList) < 14 and !isCurrentUserInList}" onclick="return confirm('정말 신청하시겠습니까?')" th:action="@{|/matching/mercenary/${matching.id}|}" method="post">
-                                        <button type="submit" class="btn-type-1" style="width: 100%;" th:text="${'용병 신청하기 ' + #lists.size(matching.userList) + ' / 14'}"></button>
+                                    <!--                                    원래 코드-->
+<!--                                    <form th:if="${#lists.size(matching.userList) < 14 and !isCurrentUserInList}" onclick="return confirm('정말 신청하시겠습니까?')" th:action="@{|/matching/mercenary/${matching.id}|}" method="post">-->
+<!--                                        <button type="submit" class="btn-type-1" style="width: 100%;" th:text="${'용병 신청하기 ' + #lists.size(matching.userList) + ' / 14'}"></button>-->
+<!--                                    </form>-->
+<!--                                    <a th:if="${isCurrentUserInList}" onclick="return confirm('정말 취소하시겠습니까?')" th:href="@{|/matching/mercenary/delete/${matching.id}|}" class="btn-type-1-3" style="width: 100%;" th:text="${'용병 취소하기 ' + #lists.size(matching.userList) + ' / 14'}"></a>-->
+<!--                                    <div class="btn-type-1-4" style="width: 100%;" th:if="${#lists.size(matching.userList) == 14 and !isCurrentUserInList}" th:text="${'용병 모집 완료 ' + #lists.size(matching.userList) + ' / 14'}"></div>-->
+
+                                    <!--발표할 때 시간관계상 코드 수정(14명 -> 4명)-->
+                                    <form th:if="${#lists.size(matching.userList) < 4 and !isCurrentUserInList}" onclick="return confirm('정말 신청하시겠습니까?')" th:action="@{|/matching/mercenary/${matching.id}|}" method="post">
+                                        <button type="submit" class="btn-type-1" style="width: 100%;" th:text="${'용병 신청하기 ' + #lists.size(matching.userList) + ' / 4'}"></button>
                                     </form>
-                                    <a th:if="${isCurrentUserInList}" onclick="return confirm('정말 취소하시겠습니까?')" th:href="@{|/matching/mercenary/delete/${matching.id}|}" class="btn-type-1-3" style="width: 100%;" th:text="${'용병 취소하기 ' + #lists.size(matching.userList) + ' / 14'}"></a>
-                                    <div class="btn-type-1-4" style="width: 100%;" th:if="${#lists.size(matching.userList) == 14 and !isCurrentUserInList}" th:text="${'용병 모집 완료 ' + #lists.size(matching.userList) + ' / 14'}"></div>
+                                    <a th:if="${isCurrentUserInList}" onclick="return confirm('정말 취소하시겠습니까?')" th:href="@{|/matching/mercenary/delete/${matching.id}|}" class="btn-type-1-3" style="width: 100%;" th:text="${'용병 취소하기 ' + #lists.size(matching.userList) + ' / 4'}"></a>
+                                    <div class="btn-type-1-4" style="width: 100%;" th:if="${#lists.size(matching.userList) == 4 and !isCurrentUserInList}" th:text="${'용병 모집 완료 ' + #lists.size(matching.userList) + ' / 4'}"></div>
                                 </div>
                             </div>
                             <div class="user-list-box" th:if="${@rq.member.rating == 2 and @rq.member.name == matching.managerName}">
-                                <h3 class="c333 f20 tb" th:text="${'신청 내역(' + #lists.size(matching.userList) + '/14)'}">)</h3>
+                                <!--                                    원래 코드-->
+<!--                                <h3 class="c333 f20 tb" th:text="${'신청 내역(' + #lists.size(matching.userList) + '/14)'}">)</h3>-->
+
+                                <!--발표할 때 시간관계상 코드 수정(14명 -> 4명)-->
+                                <h3 class="c333 f20 tb" th:text="${'신청 내역(' + #lists.size(matching.userList) + '/4)'}">)</h3>
                                 <div class="table-type-2 table-type mt12">
                                     <table>
                                         <tbody>
                                         <tr th:each="user : ${matching.userList}">
-                                            <td>
+                                            <td style="width: 30%">
                                                 <div class="user-name-box inflex aic g8">
-                                                    <span class="img-box w24">
-                                                        <img th:src="@{/img/user_img.svg}" alt="">
+                                                    <span class="img-box w24" style="border-radius: 50%; overflow: hidden;">
+                                                        <img th:if="${user.profileImgUrl == null}" th:src="@{/img/user_img.svg}" alt="Default Image">
+                                                        <img th:if="${user.profileImgUrl != null}" th:src="@{|/gen${user.profileImgUrl}|}" alt="User Image">
                                                     </span>
-                                                    <span class="c555 inblock">홍길동</span>
+                                                    <span class="c555 inblock" th:text="${user.name}"></span>
                                                 </div>
                                             </td>
-                                            <td th:text="${user.name}"></td>
-                                            <td th:text="${user.birthDate}"></td>
-                                            <td th:text="${user.level}"></td>
+                                            <td th:text="${user.username}" style="width: 30%"></td>
+                                            <td th:text="${user.birthDate}" style="width: 30%"></td>
+                                            <td th:text="${user.level}" style="width: 10%"></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -132,13 +145,12 @@
                     </div>
                 </div>
                 <div th:if="${@rq.member.rating == 2 and @rq.member.name == matching.managerName}"  class="flex g8 mgc mt80" style="width: 720px;">
-                    <a href="" class="btn-type-1 w100per">수정</a>
-                    <button class="btn-type-1-2 w100per">삭제</button>
+                    <a th:href="@{|/matching/modify/${matching.id}|}" class="btn-type-1 w100per" id="matching_modify_btn" th:data-userlist-size="${#lists.size(matching.userList)}">수정</a>
+                    <a th:href="@{|/matching/delete/${matching.id}|}" class="btn-type-1-2 w100per" id="matching_delete_btn" th:data-userlist-size="${#lists.size(matching.userList)}">삭제</a>
                 </div>
             </div>
         </div>
     </div>
 
 </div>
-1111
 </html>

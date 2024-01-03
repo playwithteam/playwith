@@ -202,4 +202,25 @@ $(document).ready(function(){
           textarea.remove();
         }
 
+        // 수정 버튼 클릭 이벤트
+        $('#matching_modify_btn').click(function(e) {
+            var userlistSize = $(this).data('userlist-size');
+            if (userlistSize > 0) {
+                alert('최소 1명의 유저 혹은 팀이 신청을 한 경우엔 수정 및 삭제가 불가능합니다.');
+                e.preventDefault(); // 링크의 기본 동작을 방지
+            }
+            // 그렇지 않으면 링크의 기본 동작을 계속 진행
+        });
+
+        // 삭제 버튼 클릭 이벤트
+        $('#matching_delete_btn').click(function(e) {
+            var userlistSize = $(this).data('userlist-size');
+            if (userlistSize > 0) {
+                alert('최소 1명의 유저 혹은 팀이 신청을 한 경우엔 수정 및 삭제가 불가능합니다.');
+                e.preventDefault(); // 링크의 기본 동작을 방지
+            } else if (!confirm('정말 삭제하시겠습니까?')) {
+                e.preventDefault(); // 사용자가 취소를 선택하면 링크의 기본 동작을 방지
+            }
+        });
+
 });

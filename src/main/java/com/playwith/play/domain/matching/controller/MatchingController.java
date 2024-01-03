@@ -1,6 +1,7 @@
 package com.playwith.play.domain.matching.controller;
 
 import com.playwith.play.domain.matching.entity.Matching;
+import com.playwith.play.domain.matching.entity.MatchingType;
 import com.playwith.play.domain.matching.service.MatchingService;
 import com.playwith.play.domain.matchingdate.entity.MatchingDate;
 import com.playwith.play.domain.matchingdate.service.MatchingDateService;
@@ -22,7 +23,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.Comparator;
 
 @Controller
 @RequestMapping("/matching")
@@ -47,7 +51,7 @@ public class MatchingController {
         }
         MatchingDate matchingDate = this.matchingDateService.getMatchingDate(matchingForm.getGameDate());
         SiteUser siteUser = this.userService.getUserByName(principal.getName());
-        this.matchingService.create(matchingForm.getMatchingType(), matchingDate, matchingForm.getGameTime(), matchingForm.getLevel(), matchingForm.getArea(), matchingForm.getStadium(), siteUser.getName());
+        this.matchingService.create(matchingForm.getMatchingType(), matchingForm.getGameDate(), matchingDate, matchingForm.getGameTime(), matchingForm.getLevel(), matchingForm.getArea(), matchingForm.getStadium(), siteUser.getName());
         return "redirect:/";
     }
 
@@ -64,6 +68,27 @@ public class MatchingController {
         return "matching_detail";
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modify/{id}")
+    public String modify(MatchingForm matchingForm ,@PathVariable("id") Long id, Principal principal) {
+        Matching matching = this.matchingService.getMatching(id);
+        SiteUser siteUser = this.userService.getUserByName(principal.getName());
+        matchingForm.setMatchingType(matching.getMatchingType());
+        matchingForm.setGameDate(matching.getGameDate());
+        matchingForm.setGameTime(matching.getGameTime());
+        matchingForm.setArea(matching.getArea());
+        matchingForm.setStadium(matching.getStadium());
+        matchingForm.setLevel(matching.getLevel());
+        return "matching_form";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable("id") Long id) {
+        Matching matching = this.matchingService.getMatching(id);
+        this.matchingService.delete(matching);
+        return "redirect:/";
+    }
+
     @PostMapping("/mercenary/{id}")
     public String mercenary(@PathVariable("id") Long id, Principal principal) {
         Matching matching = this.matchingService.getMatching(id);
@@ -78,5 +103,20 @@ public class MatchingController {
         SiteUser siteUser = this.userService.getUserByName(principal.getName());
         this.matchingService.mercenaryDelete(matching, siteUser);
         return String.format("redirect:/matching/detail/%s", id);
+    }
+
+    @GetMapping("/history")
+    public String history(Model model, Principal principal) {
+        String loggedInUsername = principal.getName();
+        List<Matching> allMatchings = this.matchingService.getList();
+        List<Matching> filteredMatchings = allMatchings.stream()
+                .filter(matching -> matching.getMatchingType() == MatchingType.TYPE_1 &&
+                        matching.getUserList().stream()
+                                .anyMatch(user -> user.getUsername().equals(loggedInUsername)))
+                .sorted(Comparator.comparing((Matching matching) -> matching.getMatchingDate().getGameDate())
+                        .thenComparing(Matching::getGameTime))
+                .collect(Collectors.toList());
+        model.addAttribute("filteredMatchings", filteredMatchings);
+        return "matching_history";
     }
 }

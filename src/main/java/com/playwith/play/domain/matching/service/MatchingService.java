@@ -25,10 +25,11 @@ import java.util.Optional;
 public class MatchingService {
     private final MatchingRepository matchingRepository;
 
-    public void create(MatchingType matchingType, MatchingDate matchingDate, LocalTime gameTime, String level, String area, Stadium stadium, String managerName) {
+    public void create(MatchingType matchingType, LocalDate gameDate, MatchingDate matchingDate, LocalTime gameTime, String level, String area, Stadium stadium, String managerName) {
         Matching matching = Matching
                 .builder()
                 .matchingType(matchingType)
+                .gameDate(gameDate)
                 .matchingDate(matchingDate)
                 .gameTime(gameTime)
                 .level(level)
@@ -64,4 +65,7 @@ public class MatchingService {
         this.matchingRepository.save(matching);
     }
 
+    public void delete(Matching matching) {
+        this.matchingRepository.delete(matching);
+    }
 }

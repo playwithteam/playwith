@@ -15,7 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.security.Principal;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,18 +31,15 @@ public class HomeController {
     @GetMapping("/")
     public String main(Model model) {
         List<Qna> qnaList = this.qnaService.getList();
-        List<Matching> matchingList = this.matchingService.getList();
-        List<MatchingDate> matchingDates = this.matchingDateService.getList();
-        long type1Count = matchingList.stream()
+        List<Matching> allMatchings = this.matchingService.getList();
+        List<Matching> filteredMatchings1 = allMatchings.stream()
                 .filter(matching -> matching.getMatchingType() == MatchingType.TYPE_1)
-                .count();
-        long type2Count = matchingList.stream()
-                .filter(matching -> matching.getMatchingType() == MatchingType.TYPE_2)
-                .count();
+                .sorted(Comparator.comparing((Matching matching) -> matching.getMatchingDate().getGameDate())
+                        .thenComparing(Matching::getGameTime))
+                .collect(Collectors.toList());
+        List<MatchingDate> matchingDates = this.matchingDateService.getList();
         model.addAttribute("qnaList", qnaList);
-        model.addAttribute("matchingList", matchingList);
-        model.addAttribute("type1Count", type1Count);
-        model.addAttribute("type2Count", type2Count);
+        model.addAttribute("filteredMatchings1", filteredMatchings1);
         model.addAttribute("matchingDates", matchingDates);
         return "index";
     }

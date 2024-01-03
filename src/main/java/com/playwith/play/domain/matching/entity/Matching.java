@@ -30,6 +30,7 @@ public class Matching extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "stadium_id")
     private Stadium stadium;
+    private String stadiumName;
     @ManyToOne
     @JoinColumn(name = "matching_date_id")
     private MatchingDate matchingDate;
