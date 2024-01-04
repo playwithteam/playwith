@@ -192,8 +192,13 @@ public class UserService {
         if (existingUserOptional.isPresent()) {
             SiteUser existingUser = existingUserOptional.get();
 
+            String profileImgUrl;
             // 프로필 이미지 업데이트
-            String profileImgUrl = saveProfileImage(profileImage);
+            if(!profileImage.isEmpty()) {
+                profileImgUrl = saveProfileImage(profileImage);
+            }else {
+                profileImgUrl = existingUser.getProfileImgUrl();
+            }
 
             // 기존 사용자 정보를 업데이트
             SiteUser updatedUser = SiteUser.builder()
