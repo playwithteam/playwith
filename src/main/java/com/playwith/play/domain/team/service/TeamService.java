@@ -126,11 +126,6 @@ public class TeamService {
     //팀 정보 수정
     public void modifyTeam(Team team, MultipartFile profileImage, String teamName, String area, String level ,SiteUser siteUser) {
 
-//        Optional<Team> existingTeamOptional = this.teamRepository.findById(team.getId());
-//
-//        if (existingTeamOptional.isPresent()) {
-//            Team existingTeam = existingTeamOptional.get();
-
         String profileImgUrl;
             // 프로필 이미지 업데이트
         if(!profileImage.isEmpty()) {
@@ -146,15 +141,11 @@ public class TeamService {
                     .teamName(teamName)
                     .area(area)
                     .level(team.getLevel())
-                    .rating(team.getRating())
                     .siteUsers(team.getSiteUsers())
                     .build();
             modifyTeam.getSiteUsers().add(siteUser); // 사용자를 팀에 추가
 
              this.teamRepository.save(modifyTeam);
-//        } else {
-//            return null;
-//        }
     }
 
     public void applyToTeam(Long teamId, SiteUser user) {
