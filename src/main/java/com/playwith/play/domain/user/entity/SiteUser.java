@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -45,9 +46,8 @@ public class SiteUser extends BaseEntity {
     private int rating;
 
 
-
-    @ManyToOne
-    @JoinColumn(name = "team_id")
+    @ManyToOne(optional = true, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "team_id", nullable = true)
     private Team team;
 
     public void setTeam(Team team) {
@@ -59,6 +59,9 @@ public class SiteUser extends BaseEntity {
             team.getSiteUsers().add(this);
         }
     }
+
+    
+
 
 
     @OneToMany(mappedBy = "siteUser", cascade = CascadeType.ALL)

@@ -20,6 +20,7 @@ profile_img_url = null,
 team_name = '대전FC',
 area = '대전',
 level ='상';
+
 SHOW DATABASES;
 SHOW TABLES;
 
