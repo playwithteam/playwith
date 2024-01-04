@@ -635,14 +635,14 @@ textarea:disabled {
 .matching-list-area .swiper-box .swiper-button-next::before {
     background: url(../img/arrow_next_point_030095.svg) no-repeat center center/cover;
 }
-.matching-list-area .matching-list-box > li  > a {
+.matching-list-area .matching-list-box > li a {
     box-sizing: border-box;
     padding: 16px 20px;
 }
-.matching-list-area .matching-list-box > li:not(:last-child)  > a {
+.matching-list-area .matching-list-box > li:not(:last-child) a {
     border-bottom: 1px solid #D9D9D9;
 }
-.matching-list-area .matching-list-box > li  > a .left-box .text-box .difficulty-text {
+.matching-list-area .matching-list-box > li a .left-box .text-box .difficulty-text {
     width: 26px;
     height: 26px;
     display: flex;
@@ -650,19 +650,19 @@ textarea:disabled {
     justify-content: center;
     border-radius: 4px;
 }
-.matching-list-area .matching-list-box > li  > a .left-box .text-box .difficulty-text.type-1 {
+.matching-list-area .matching-list-box > li a .left-box .text-box .difficulty-text.type-1 {
     border: 1px solid #FF7A00;
     color: #FF7A00;
 }
-.matching-list-area .matching-list-box > li  > a .left-box .text-box .difficulty-text.type-2 {
+.matching-list-area .matching-list-box > li a .left-box .text-box .difficulty-text.type-2 {
     border: 1px solid #32DD07;
     color: #32DD07;
 }
-.matching-list-area .matching-list-box > li  > a .left-box .text-box .difficulty-text.type-3 {
+.matching-list-area .matching-list-box > li a .left-box .text-box .difficulty-text.type-3 {
     border: 1px solid #FF0000;
     color: #FF0000;
 }
-.matching-list-area .matching-list-box > li  > a .situation-box {
+.matching-list-area .matching-list-box > li a .situation-box {
     width: 118px;
     height: 56px;
     box-sizing: border-box;
@@ -672,25 +672,30 @@ textarea:disabled {
     justify-content: center;
     color: #fff;
 }
-.matching-list-area .matching-list-box > li  > a .situation-box.type-1 {
+.matching-list-area .matching-list-box > li a .situation-box.type-1 {
     background: #CC0000;
 }
-.matching-list-area .matching-list-box > li  > a .situation-box.type-2 {
+.matching-list-area .matching-list-box > li a .situation-box.type-2 {
     background: #030095;
 }
 
+.matching-list-area .matching-list-box > li a .situation-box.type-3 {
+
+    background: #ccc;
+}
+
 /* 경기 완료시 */
-.matching-list-area .matching-list-box > li  > a.finish {
+.matching-list-area .matching-list-box > li a.finish {
     cursor: inherit;
 }
-.matching-list-area .matching-list-box > li  > a.finish {
+.matching-list-area .matching-list-box > li a.finish {
     color: #999999 !important;
 }
-.matching-list-area .matching-list-box > li  > a.finish .left-box .text-box .difficulty-text {
+.matching-list-area .matching-list-box > li a.finish .left-box .text-box .difficulty-text {
     border: 1px solid #999999 !important;
     color: #999999 !important;
 }
-.matching-list-area .matching-list-box > li  > a.finish .situation-box {
+.matching-list-area .matching-list-box > li a.finish .situation-box {
     background: #CCCCCC;
 }
 

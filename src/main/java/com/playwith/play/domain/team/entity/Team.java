@@ -30,7 +30,9 @@ public class Team extends BaseEntity {
     private String area;
     private String level;
 
+
     @OneToMany(mappedBy = "team", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+
     private List<SiteUser> siteUsers = new ArrayList<>();
 
     public void addMember(SiteUser user) {
