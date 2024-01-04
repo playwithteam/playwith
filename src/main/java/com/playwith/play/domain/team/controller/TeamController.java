@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -103,10 +102,10 @@ public class TeamController {
 
         if (team != null) {
             SiteUser siteUser = this.userService.findByUsername(principal.getName());
-//            siteUser.setRating(2);
-            MultipartFile profileImage = teamCreateForm.getProfileImage();
+            siteUser.setRating(2);
+//            MultipartFile profileImage = teamCreateForm.getProfileImage();
 
-            teamCreateForm.setProfileImage(profileImage);
+//            teamCreateForm.setProfileImage(profileImage);
             teamCreateForm.setTeamName(team.getTeamName());
             teamCreateForm.setArea(team.getArea());
             teamCreateForm.setLevel(team.getLevel());
@@ -163,11 +162,10 @@ public class TeamController {
         return "redirect:/team/team_list";
     }
 
-
     //팀 가입시, 팀명 중복체크
     @GetMapping("/check_teamname")
     @ResponseBody
-    public ResponseEntity<String> checkTeamName(@RequestParam("teamName") String teamName) {
+    public ResponseEntity<String> check_teamname(@RequestParam("teamName") String teamName) {
         if (teamName == null || teamName.trim().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("팀명을 다시 입력하세요.");
         }
@@ -180,8 +178,8 @@ public class TeamController {
 
     @GetMapping("/check_modifyteamname")
     @ResponseBody
-    public ResponseEntity<String> checkTeamModifyName(@RequestParam("teamName") String teamName) {
-        if (teamName == null || teamName.trim().isEmpty()) {
+    public ResponseEntity<String> check_modifyteamname(@RequestParam("teamName") String teamName) {
+        if ((teamName == null || teamName.trim().isEmpty())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("팀명을 다시 입력하세요.");
         }
         if (teamService.isTeamNameUnique(teamName)) {

@@ -103,6 +103,7 @@
 
                 reader.onload = function (e) {
                     // 이미지 미리보기 업데이트
+                    $("#ProfileImage").attr("src", e.target.result);
                     $("#previewImage").attr("src", e.target.result);
                 };
                 reader.readAsDataURL(file);
@@ -128,6 +129,7 @@
             var emblemImg = $("#emblem_img")[0];
             if (emblemImg && emblemImg.files && emblemImg.files.length === 0) {
                 $("#previewImage").attr("src", "/img/emblem_img.svg");
+                previewImage
             }
         });
 
@@ -143,6 +145,8 @@
         // 중복 확인 버튼 클릭 시 처리
         $("#checkTeamNameBtn").click(function () {
             var teamName = $("#teamName").val();
+
+            console.log(area);
 
             $.ajax({
                 type: "GET",
@@ -207,6 +211,7 @@
 
                 // Thymeleaf를 사용하여 팀 ID 가져오기
                 var teamId = [[${team.id}]];
+                var area = $("#area").val();
 
                 var formData = new FormData($("#teamModify")[0]);
 
@@ -219,10 +224,13 @@
                     processData: false,
                     cache: false,
                     success: function (data) {
-                        window.location.href = "/team/team_detail/" + teamId
-                        console.log("팀 수정 성공, 이동 전 레벨 값:", $("#area").val());
-                        alert("팀 수정이 완료되었습니다.");
-
+                        if(area != '') {
+                            window.location.href = "/team/team_detail/" + teamId
+                            console.log("팀 수정 성공, 이동 전 레벨 값:", $("#area").val());
+                            alert("팀 수정이 완료되었습니다.");
+                        }else {
+                            alert("지역을 입력해주세요.");
+                        }
                     },
                     error: function (xhr, status, error) {
                         console.log(xhr.responseText);

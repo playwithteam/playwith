@@ -24,7 +24,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -125,32 +124,37 @@ public class TeamService {
     }
 
     //팀 정보 수정
-    public Team modifyTeam(Team team, MultipartFile profileImage, String teamName, String area, String level ,SiteUser siteUser) {
+    public void modifyTeam(Team team, MultipartFile profileImage, String teamName, String area, String level ,SiteUser siteUser) {
 
-        Optional<Team> existingTeamOptional = this.teamRepository.findById(team.getId());
+//        Optional<Team> existingTeamOptional = this.teamRepository.findById(team.getId());
+//
+//        if (existingTeamOptional.isPresent()) {
+//            Team existingTeam = existingTeamOptional.get();
 
-        if (existingTeamOptional.isPresent()) {
-            Team existingTeam = existingTeamOptional.get();
-
+        String profileImgUrl;
             // 프로필 이미지 업데이트
-            String profileImgUrl = saveProfileImage(profileImage);
-
+        if(!profileImage.isEmpty()) {
+             profileImgUrl = saveProfileImage(profileImage);
+        }else {
+             profileImgUrl = team.getProfileImgUrl();
+        }
             // 기존 팀 정보를 업데이트
             Team modifyTeam = Team
                     .builder()
-                    .id(existingTeam.getId())
+                    .id(team.getId())
                     .profileImgUrl(profileImgUrl)
                     .teamName(teamName)
-                    .area(area != null ? area : existingTeam.getArea())
-                    .level(level != null ? level : existingTeam.getLevel())
-                    .siteUsers(existingTeam.getSiteUsers())
+                    .area(area)
+                    .level(team.getLevel())
+                    .rating(team.getRating())
+                    .siteUsers(team.getSiteUsers())
                     .build();
             modifyTeam.getSiteUsers().add(siteUser); // 사용자를 팀에 추가
 
-            return this.teamRepository.save(modifyTeam);
-        } else {
-            return null;
-        }
+             this.teamRepository.save(modifyTeam);
+//        } else {
+//            return null;
+//        }
     }
 
     public void applyToTeam(Long teamId, SiteUser user) {
