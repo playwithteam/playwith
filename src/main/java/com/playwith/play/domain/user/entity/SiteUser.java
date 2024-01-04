@@ -64,8 +64,8 @@ public class SiteUser extends BaseEntity {
     @OneToMany(mappedBy = "siteUser", cascade = CascadeType.ALL)
     private List<WishList> wishLists;
 
-    @ManyToOne
-    private Matching matching;
+    @ManyToMany
+    private List<Matching> matchingList;
 
 
 //    public boolean isSocialMember() {

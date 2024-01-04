@@ -1,6 +1,7 @@
 package com.playwith.play.domain.matching.repository;
 
 import com.playwith.play.domain.matching.entity.Matching;
+import com.playwith.play.domain.user.entity.SiteUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

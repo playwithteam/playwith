@@ -5,8 +5,10 @@ import com.playwith.play.domain.matching.entity.Matching;
 import com.playwith.play.domain.matching.entity.MatchingType;
 import com.playwith.play.domain.matching.repository.MatchingRepository;
 import com.playwith.play.domain.matchingdate.entity.MatchingDate;
+import com.playwith.play.domain.qna.entity.Qna;
 import com.playwith.play.domain.stadium.entity.Stadium;
 import com.playwith.play.domain.stadium.repository.StadiumRepository;
+import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.global.util.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,10 +25,11 @@ import java.util.Optional;
 public class MatchingService {
     private final MatchingRepository matchingRepository;
 
-    public void create(MatchingType matchingType, MatchingDate matchingDate, LocalTime gameTime, String level, String area, Stadium stadium, String managerName) {
+    public void create(MatchingType matchingType, LocalDate gameDate, MatchingDate matchingDate, LocalTime gameTime, String level, String area, Stadium stadium, String managerName) {
         Matching matching = Matching
                 .builder()
                 .matchingType(matchingType)
+                .gameDate(gameDate)
                 .matchingDate(matchingDate)
                 .gameTime(gameTime)
                 .level(level)
@@ -50,5 +53,19 @@ public class MatchingService {
         else {
             throw new DataNotFoundException("matching not found");
         }
+    }
+
+    public void mercenary(Matching matching, SiteUser siteUser) {
+        matching.getUserList().add(siteUser);
+        this.matchingRepository.save(matching);
+    }
+
+    public void mercenaryDelete(Matching matching, SiteUser siteUser) {
+        matching.getUserList().remove(siteUser);
+        this.matchingRepository.save(matching);
+    }
+
+    public void delete(Matching matching) {
+        this.matchingRepository.delete(matching);
     }
 }
