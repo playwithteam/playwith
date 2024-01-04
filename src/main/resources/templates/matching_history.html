@@ -8,10 +8,10 @@
                 <ul class="flex fdc g80">
                     <li>
                         <h3 class="c333 f18 tb">용병 매칭</h3>
-                        <p th:if="${filteredMatchings.size() == 0}" class="tac c777 tb f16 mt40">매칭 내역이 없습니다.</p>
-                        <div th:if="${filteredMatchings.size() > 0}" class="matching-list-area mt20">
+                        <p th:if="${historyMatchings.size() == 0}" class="tac c777 tb f16 mt40">매칭 내역이 없습니다.</p>
+                        <div th:if="${historyMatchings.size() > 0}" class="matching-list-area mt20">
                             <ul class="matching-list-box">
-                                <li th:each="matching : ${filteredMatchings}">
+                                <li th:each="matching : ${historyMatchings}">
                                     <a th:href="@{|/matching/detail/${matching.id}|}" class="flex aic jcsb">
                                         <div class="left-box flex aic g40">
                                             <div class="flex aic g20">

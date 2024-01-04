@@ -82,6 +82,7 @@ public class MatchingController {
         return "matching_form";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id) {
         Matching matching = this.matchingService.getMatching(id);
@@ -89,6 +90,7 @@ public class MatchingController {
         return "redirect:/";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/mercenary/{id}")
     public String mercenary(@PathVariable("id") Long id, Principal principal) {
         Matching matching = this.matchingService.getMatching(id);
@@ -97,6 +99,7 @@ public class MatchingController {
         return String.format("redirect:/matching/detail/%s", id);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/mercenary/delete/{id}")
     public String mercenaryDelete(@PathVariable("id") Long id, Principal principal) {
         Matching matching = this.matchingService.getMatching(id);
@@ -105,18 +108,33 @@ public class MatchingController {
         return String.format("redirect:/matching/detail/%s", id);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/history")
     public String history(Model model, Principal principal) {
         String loggedInUsername = principal.getName();
+        SiteUser siteUser = this.userService.getUserByName(principal.getName());
         List<Matching> allMatchings = this.matchingService.getList();
-        List<Matching> filteredMatchings = allMatchings.stream()
-                .filter(matching -> matching.getMatchingType() == MatchingType.TYPE_1 &&
-                        matching.getUserList().stream()
-                                .anyMatch(user -> user.getUsername().equals(loggedInUsername)))
-                .sorted(Comparator.comparing((Matching matching) -> matching.getMatchingDate().getGameDate())
-                        .thenComparing(Matching::getGameTime))
-                .collect(Collectors.toList());
-        model.addAttribute("filteredMatchings", filteredMatchings);
+        List<Matching> historyMatchings = new ArrayList<>();
+
+        if (siteUser.getRating() == 1) {
+            historyMatchings = allMatchings.stream()
+                    .filter(matching -> matching.getMatchingType() == MatchingType.TYPE_1 &&
+                            matching.getUserList().stream()
+                                    .anyMatch(user -> user.getUsername().equals(loggedInUsername)))
+                    .sorted(Comparator.comparing((Matching matching) -> matching.getMatchingDate().getGameDate())
+                            .thenComparing(Matching::getGameTime))
+                    .collect(Collectors.toList());
+        }
+        else if (siteUser.getRating() == 2) {
+            historyMatchings = allMatchings.stream()
+                    .filter(matching -> matching.getMatchingType() == MatchingType.TYPE_1 &&
+                            matching.getManagerName().equals(siteUser.getName()))
+                    .sorted(Comparator.comparing((Matching matching) -> matching.getMatchingDate().getGameDate())
+                            .thenComparing(Matching::getGameTime))
+                    .collect(Collectors.toList());
+        }
+
+        model.addAttribute("historyMatchings", historyMatchings);
         return "matching_history";
     }
 }

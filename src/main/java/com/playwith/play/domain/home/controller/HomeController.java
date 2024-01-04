@@ -16,6 +16,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,19 +46,46 @@ public class HomeController {
         return "index";
     }
 
-//    @RequestMapping(value = "/filterByArea", method = {RequestMethod.GET, RequestMethod.POST})
-    @GetMapping("/filterByArea")
-    @ResponseBody
-    public List<Matching> filterByArea(@RequestParam("area") String area, Model model) {
+    @GetMapping("/filterMatching")
+    public String filterByArea(@RequestParam("area") String area, @RequestParam("gameTime") String gameTime, @RequestParam("level") String level, Model model) {
         List<Matching> allMatchings = this.matchingService.getList();
-        // area에 해당하는 매칭 데이터를 필터링하여 반환
-        List<Matching> filteredMatchings1 = allMatchings.stream()
-                .filter(matching -> matching.getMatchingType() == MatchingType.TYPE_1 && matching.getArea().equals(area))
-                .sorted(Comparator.comparing((Matching matching) -> matching.getMatchingDate().getGameDate())
-                        .thenComparing(Matching::getGameTime))
-                .collect(Collectors.toList());
+        List<MatchingDate> matchingDates = this.matchingDateService.getList();
+        List<Matching> filteredMatchings1;
+
+        // 지역에 대한 필터링
+        if ("all".equals(area)) {
+            filteredMatchings1 = allMatchings.stream()
+                    .filter(matching -> matching.getMatchingType() == MatchingType.TYPE_1)
+                    .sorted(Comparator.comparing((Matching matching) -> matching.getMatchingDate().getGameDate())
+                            .thenComparing(Matching::getGameTime))
+                    .collect(Collectors.toList());
+        } else {
+            filteredMatchings1 = allMatchings.stream()
+                    .filter(matching -> matching.getMatchingType() == MatchingType.TYPE_1 && matching.getArea().equals(area))
+                    .sorted(Comparator.comparing((Matching matching) -> matching.getMatchingDate().getGameDate())
+                            .thenComparing(Matching::getGameTime))
+                    .collect(Collectors.toList());
+        }
+
+        // 시간에 대한 필터링
+        if (!"all".equals(gameTime)) {
+            int selectedGameTime = Integer.parseInt(gameTime);
+            LocalTime localTime = LocalTime.of(selectedGameTime, 0); // 분은 0으로 설정
+            filteredMatchings1 = filteredMatchings1.stream()
+                    .filter(matching -> matching.getGameTime().equals(localTime))
+                    .collect(Collectors.toList());
+        }
+
+        // 난이도에 대한 필터링
+        if (!"all".equals(level)) {
+            filteredMatchings1 = filteredMatchings1.stream()
+                    .filter(matching -> matching.getLevel().equals(level))
+                    .collect(Collectors.toList());
+        }
+
         model.addAttribute("filteredMatchings1", filteredMatchings1);
-        return filteredMatchings1;
+        model.addAttribute("matchingDates", matchingDates);
+        return "index::#matchingsArea";
     }
 
 }
