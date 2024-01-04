@@ -3,13 +3,16 @@ package com.playwith.play.domain.matching.entity;
 import com.playwith.play.domain.matchingdate.entity.MatchingDate;
 import com.playwith.play.domain.stadium.entity.Stadium;
 import com.playwith.play.domain.user.entity.SiteUser;
+import com.playwith.play.domain.wishlist.entity.WishList;
 import com.playwith.play.global.jpa.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -36,4 +39,6 @@ public class Matching extends BaseEntity {
     private MatchingDate matchingDate;
     @ManyToMany
     private List<SiteUser> userList;
+    @OneToMany(mappedBy = "matching", cascade = CascadeType.REMOVE)
+    private List<WishList> wishLists;
 }

@@ -185,8 +185,29 @@ $(document).ready(function(){
       });
 
       $('button#favor_btn').click(function(event) {
-          event.preventDefault();
-          $(this).toggleClass("active");
+         event.preventDefault();
+          var matchingId = Number($(this).data('matching-id'));
+
+         // CSRF 토큰 가져오기
+          var token = $("meta[name='_csrf']").attr("content");
+          var header = $("meta[name='_csrf_header']").attr("content");
+
+         $.ajax({
+             type: 'POST',
+             url: '/toggleFavorite/' + matchingId,
+             beforeSend: function (xhr) {
+                 // CSRF 토큰을 헤더에 포함
+                 xhr.setRequestHeader(header, token);
+             },
+             success: function(response) {
+                 console.log('success');
+             },
+             error: function(error) {
+                console.error('Error toggling favorite', error);
+             }
+         });
+
+         $(this).toggleClass("active");
       });
 
         //매칭 상세에서 주소 복사 버튼 클릭시

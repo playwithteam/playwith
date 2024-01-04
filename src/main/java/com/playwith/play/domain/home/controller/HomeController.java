@@ -7,8 +7,6 @@ import com.playwith.play.domain.matchingdate.entity.MatchingDate;
 import com.playwith.play.domain.matchingdate.service.MatchingDateService;
 import com.playwith.play.domain.qna.entity.Qna;
 import com.playwith.play.domain.qna.service.QnaService;
-import com.playwith.play.domain.user.entity.SiteUser;
-import com.playwith.play.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.stereotype.Controller;
@@ -49,6 +47,7 @@ public class HomeController {
         model.addAttribute("filteredMatchings1", filteredMatchings1);
         model.addAttribute("filteredMatchings2", filteredMatchings2);
         model.addAttribute("matchingDates", matchingDates);
+
         return "index";
     }
 
