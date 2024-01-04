@@ -22,4 +22,5 @@ public class UserProfileUpdateForm {
     private String area;
     private String level;
     private LocalDate birthDate;
+    private Integer rating;
 }

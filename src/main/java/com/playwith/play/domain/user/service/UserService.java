@@ -185,7 +185,7 @@ public class UserService {
     }
 
     public SiteUser modifyUser(MultipartFile profileImage, String username, String name, String password,
-                               String email, String area, String level, LocalDate birthdate) {
+                               String email, String area, String level, LocalDate birthdate, Team team, Integer rating) {
 
         Optional<SiteUser> existingUserOptional = this.userRepository.findByUsername(username);
 
@@ -205,6 +205,8 @@ public class UserService {
                     .area(area != null ? area : existingUser.getArea())
                     .level(level != null ? level : existingUser.getLevel())
                     .birthDate(birthdate != null ? birthdate : existingUser.getBirthDate())
+                    .team(team != null ? team : existingUser.getTeam())
+                    .rating(rating != null ? rating : existingUser.getRating())
                     .build();
 
             // 비밀번호가 입력된 경우에만 업데이트
