@@ -1,5 +1,6 @@
 package com.playwith.play.domain.user.controller;
 
+import com.playwith.play.domain.team.entity.Team;
 import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.domain.user.service.UserService;
 import com.playwith.play.global.rq.Rq;
@@ -154,11 +155,11 @@ public class UserController {
         MultipartFile profileImage = userProfileUpdateForm.getProfileImage();
         // 현재 로그인한 사용자 정보 가져오기
         SiteUser loggedInUser = rq.getMember();
-
+        Team team = loggedInUser.getTeam();
         // 사용자 정보 수정
         userService.modifyUser(profileImage, loggedInUser.getUsername(), userProfileUpdateForm.getName(),
                 userProfileUpdateForm.getPassword1(), userProfileUpdateForm.getEmail(),
-                userProfileUpdateForm.getArea(), userProfileUpdateForm.getLevel(), userProfileUpdateForm.getBirthDate());
+                userProfileUpdateForm.getArea(), userProfileUpdateForm.getLevel(), userProfileUpdateForm.getBirthDate(), team, userProfileUpdateForm.getRating());
 
         model.addAttribute("userProfileUpdateForm", userProfileUpdateForm);
 

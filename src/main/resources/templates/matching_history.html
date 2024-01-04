@@ -15,7 +15,7 @@
                                     <a th:href="@{|/matching/detail/${matching.id}|}" class="flex aic jcsb">
                                         <div class="left-box flex aic g40">
                                             <div class="flex aic g20">
-                                                <button class="favor-box img-box w24" id="favor_btn">
+                                                <button class="favor-box img-box w24" id="favor_btn" th:classappend="${!matching?.wishLists.?[siteUser?.username == @rq.member.username].isEmpty()} ? 'active' : ''">
                                                     <img th:src="@{/img/ico_heart.svg}" alt="">
                                                 </button>
                                                 <div class="flex aic fcc fdc tac g4" style="width: 70px;">
