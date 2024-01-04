@@ -44,6 +44,8 @@ public class Team extends BaseEntity {
         this.siteUsers.add(user);
         user.setTeam(this);
     }
+    @Column(name = "rating")
+    private int rating;
 
 //    public void setSiteUsers(List<SiteUser> siteUsers) {
 //        if (siteUsers == null) {

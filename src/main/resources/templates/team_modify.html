@@ -13,24 +13,16 @@
                             <h3 class="c333 f18 tb mb16">[엠블럼 이미지]</h3>
                             <div class="file-type-1 rel flex aie g20">
                                 <div class="user-img-box">
-                                    <img id="ProfileImage" th:if="${team.profileImgUrl != null}"
-                                         th:src="@{|/gen${team.profileImgUrl}|}" alt="Profile Image"
-                                         style="width: 100px; height: 100px; border-radius: 50%;">
-                                    <img id="previewImage" th:unless="${team.profileImgUrl != null}"
-                                         th:src="@{/img/user_img.svg}" alt="Default Image"
-                                         style="width: 100px; height: 100px; border-radius: 50%;">
+                                    <img id="ProfileImage" th:if="${team.profileImgUrl != null}" th:src="@{|/gen${team.profileImgUrl}|}" alt="" style="width: 100px; height: 100px; border-radius: 50%;">
+                                    <img id="previewImage" th:unless="${team.profileImgUrl != null}" th:src="@{/img/emblem_img.svg}" alt="" style="width: 100px; height: 100px; border-radius: 50%;">
                                 </div>
                                 <div class="file-btn w16 abs xy-bl">
-                                    <img id="editIcon" th:src="@{/img/ico_edit_999999.svg}" alt=""
-                                         style="cursor: pointer;">
-                                    <input type="file" id="emblem_img" th:field="*{profileImage}" name="profileImage"
-                                           style="display: none"
-                                           accept="image/*" onchange="previewFile()">
+                                    <img id="editIcon" th:src="@{/img/ico_edit_999999.svg}" alt="" style="cursor: pointer;">
+                                    <input type="file" id="emblem_img" name="profileImage" style="display: none" accept="image/*" onchange="previewFile()">
                                 </div>
-                                <button type="button" class="btn-type-3" id="resetImageBtn">기본 엠블럼</button>
+                                <button type="button" class="btn-type-3" id="resetImageBtn">기본 이미지</button>
                             </div>
                         </li>
-                        <li>
                         <li>
                             <h3 class="c333 f18 tb mb16">팀명</h3>
                             <div class="input-btn-box flex g8">
@@ -51,7 +43,7 @@
                                 <li class="w50per">
                                     <h3 class="c333 f18 tb mb16">지역<span class="tb cCC0000 inblock">*</span></h3>
                                     <div class="select-type-2 rel">
-                                        <select id="area" th:value="${team.area}">
+                                        <select id="area" name="area" th:value="${team.area}">
                                             <option value="">지역</option>
                                             <option value="강원도" th:selected="${team.area == '강원도'}">강원도</option>
                                             <option value="경기도" th:selected="${team.area == '경기도'}">경기도</option>
@@ -90,7 +82,7 @@
                         </li>
                     </ul>
                     <button type="submit" id="modifyButton" class="btn-type-1 mt100">
-                        수정하기</a></button>
+                        수정하기</button>
                 </div>
             </div>
         </div>
@@ -126,7 +118,7 @@
             previewFile();
             if ($("#emblem_img")[0].files.length === 0) {
                 $("#previewImage").removeAttr("src");
-                // 이미지가 선택되지 않았을 때 profileImgUrl을 null로 설정
+                // // 이미지가 선택되지 않았을 때 profileImgUrl을 null로 설정
                 $("input[name='profileImage']").val(""); // 추가된 부분
             }
         });
@@ -139,14 +131,13 @@
             }
         });
 
-        // 기본 이미지로 변경 버튼 클릭 시 처리
         $("#resetImageBtn").click(function () {
             // 파일 선택 input 초기화
             $("#emblem_img").val("");
+
             // 미리보기 이미지를 기본 이미지로 변경
+            $("#ProfileImage").attr("src", "/img/emblem_img.svg");
             $("#previewImage").attr("src", "/img/emblem_img.svg");
-            // 서버에 null 값을 전송
-            $("input[name='profileImage']").val("");
         });
 
         // 중복 확인 버튼 클릭 시 처리
@@ -207,7 +198,9 @@
             function submitTeamModifyForm() {
                 // 팀명 입력값 확인
                 var teamName = $("input[name='teamName']").val();
-                if (!teamName) {
+                var area = $("select[name='area']").val();
+
+                if (!teamName && !area) {
                     alert("다시 입력해 주세요.");
                     return; // 데이터 없으면 함수 중단
                 }
@@ -226,13 +219,15 @@
                     processData: false,
                     cache: false,
                     success: function (data) {
-                        window.location.href = "/team/team_modify/" + teamId;
-                        alert("팀 등록이 완료되었습니다.");
+                        window.location.href = "/team/team_detail/" + teamId
+                        console.log("팀 수정 성공, 이동 전 레벨 값:", $("#area").val());
+                        alert("팀 수정이 완료되었습니다.");
+
                     },
                     error: function (xhr, status, error) {
                         console.log(xhr.responseText);
                         console.log("팀 등록 실패");
-                        alert("팀 등록에 실패했습니다.");
+                        alert("팀 수정에 실패했습니다.");
                     }
                 })
                 $("#modifyButton").click(function () {

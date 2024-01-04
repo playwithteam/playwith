@@ -28,7 +28,7 @@ public class TeamController {
     private final UserService userService;
 
 
-    //팀정보
+    //팀 목록
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/team_list")
     public String team_list(Model model, Principal principal) {
@@ -44,12 +44,29 @@ public class TeamController {
         }
     }
 
+    //팀 신청
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/team_list/{teamId}")
+    @ResponseBody
+    public ResponseEntity<?> applyToTeam(@PathVariable(name = "teamId") Long teamId, Principal principal) {
+        Team team = this.teamService.getTeam(teamId);
+        SiteUser siteUser = this.userService.findByUsername(principal.getName());
+
+        if (siteUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 후 이용");
+        }
+        teamService.applyToTeam(team.getId(), siteUser);
+        return ResponseEntity.ok("팀 가입 성공");
+    }
+
+    //팀 생성
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/team_create")
     public String team_create(TeamCreateForm teamCreateForm) {
         return "team_create";
     }
 
+    //팀 조회
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/team_detail/{id}")
     public ResponseEntity<?> team_create(@Valid TeamCreateForm teamCreateForm, BindingResult bindingResult, Principal principal) {
@@ -58,6 +75,7 @@ public class TeamController {
             return ResponseEntity.badRequest().body("BindingResult error");
         }
         SiteUser siteUser = this.userService.findByUsername(principal.getName());
+        siteUser.setRating(2);
         Team createdTeam = this.teamService.createTeam(teamCreateForm.getProfileImage(), teamCreateForm.getTeamName(), teamCreateForm.getArea(), teamCreateForm.getLevel(), siteUser);
 
         if (createdTeam != null) {
@@ -77,12 +95,15 @@ public class TeamController {
         return "team_detail";
     }
 
+    //팀 수정
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/team_modify/{id}")
     public String team_modify(Model model, TeamCreateForm teamCreateForm, @PathVariable("id") Long id, Principal principal) {
         Team team = this.teamService.getTeam(id);
+
         if (team != null) {
             SiteUser siteUser = this.userService.findByUsername(principal.getName());
+//            siteUser.setRating(2);
             MultipartFile profileImage = teamCreateForm.getProfileImage();
 
             teamCreateForm.setProfileImage(profileImage);
@@ -112,10 +133,11 @@ public class TeamController {
         }
 
         SiteUser siteUser = this.userService.findByUsername(principal.getName());
+        siteUser.setRating(2);
 
         try {
             // 수정된 팀 정보를 데이터베이스에 반영
-            this.teamService.modifyTeam(team, teamCreateForm.getProfileImage(), teamCreateForm.getTeamName(), teamCreateForm.getArea(), teamCreateForm.getLevel(), siteUser);
+            this.teamService.modifyTeam(team, teamCreateForm.getProfileImage(), teamCreateForm.getTeamName(), teamCreateForm.getArea(), teamCreateForm.getLevel(),siteUser);
             return ResponseEntity.ok("팀 수정이 완료되었습니다.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("팀 수정 중 오류가 발생했습니다.");
@@ -142,6 +164,7 @@ public class TeamController {
     }
 
 
+    //팀 가입시, 팀명 중복체크
     @GetMapping("/check_teamname")
     @ResponseBody
     public ResponseEntity<String> checkTeamName(@RequestParam("teamName") String teamName) {

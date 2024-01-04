@@ -30,12 +30,9 @@ public class UserController {
     //로그인
     @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
-    public String login(Principal principal) {
-        if(!(principal == null)){
-            return "redirect:/user/logout";
-        }else {
-            return "login";
-        }
+    public String login() {
+        return "login";
+
     }
 
     //회원가입
@@ -55,7 +52,7 @@ public class UserController {
                 userCreateForm.getPassword1(), userCreateForm.getEmail(),
                 userCreateForm.getArea(), userCreateForm.getLevel(), userCreateForm.getBirthDate(), null, 1);
 
-        redirectAttributes.addFlashAttribute("msg","회원가입이 완료되었습니다. 로그인페이지로 이동합니다.");
+        redirectAttributes.addFlashAttribute("msg", "회원가입이 완료되었습니다. 로그인페이지로 이동합니다.");
         return "redirect:/user/login";
     }
 
@@ -100,7 +97,7 @@ public class UserController {
         if (this.findUserName != null) {
             SiteUser findUser = this.userService.findByUsername(findUserName);
             model.addAttribute("findUsername", findUser);
-            findUserName =null;
+            findUserName = null;
         }
         return "id_search_result";
     }
@@ -126,7 +123,7 @@ public class UserController {
     @PreAuthorize("isAnonymous()")
     @GetMapping("/password_search_modify")
     public String password_search_modify(Model model) {
-        model.addAttribute("newPasswordForm",new NewPasswordForm());
+        model.addAttribute("newPasswordForm", new NewPasswordForm());
         return "password_search_modify";
     }
 
@@ -144,7 +141,7 @@ public class UserController {
     @GetMapping("/mypage")
     public String mypage(Model model) {
         // 현재 로그인한 사용자의 정보를 가져오기
-        SiteUser  user = rq.getMember();
+        SiteUser user = rq.getMember();
 
         // 가져온 정보를 모델에 추가
         model.addAttribute("user", user);

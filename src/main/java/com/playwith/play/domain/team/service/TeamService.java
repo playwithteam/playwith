@@ -6,6 +6,7 @@ import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.domain.user.repository.UserRepository;
 import com.playwith.play.domain.user.service.FileStorageException;
 import com.playwith.play.global.util.DataNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
@@ -124,7 +125,7 @@ public class TeamService {
     }
 
     //팀 정보 수정
-    public Team modifyTeam(Team team, MultipartFile profileImage, String teamName, String area, String level, SiteUser siteUser) {
+    public Team modifyTeam(Team team, MultipartFile profileImage, String teamName, String area, String level ,SiteUser siteUser) {
 
         Optional<Team> existingTeamOptional = this.teamRepository.findById(team.getId());
 
@@ -141,14 +142,26 @@ public class TeamService {
                     .profileImgUrl(profileImgUrl)
                     .teamName(teamName)
                     .area(area != null ? area : existingTeam.getArea())
+                    .level(level != null ? level : existingTeam.getLevel())
                     .siteUsers(existingTeam.getSiteUsers())
                     .build();
             modifyTeam.getSiteUsers().add(siteUser); // 사용자를 팀에 추가
 
-            // 업데이트된 사용자 정보를 저장
             return this.teamRepository.save(modifyTeam);
         } else {
             return null;
         }
+    }
+
+    public void applyToTeam(Long teamId, SiteUser user) {
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new EntityNotFoundException("팀이 존재하지 않습니다."));
+
+        // 팀에 사용자를 추가하고, 사용자의 팀을 설정
+        team.addMember(user);
+        // 사용자 정보 저장
+        userRepository.save(user);
+        // 팀 정보 저장
+        teamRepository.save(team);
     }
 }
