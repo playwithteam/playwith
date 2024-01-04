@@ -55,6 +55,7 @@ public class TeamController {
         if (siteUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 후 이용");
         }
+
         teamService.applyToTeam(team.getId(), siteUser);
         return ResponseEntity.ok("팀 가입 성공");
     }
