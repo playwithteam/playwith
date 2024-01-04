@@ -5,6 +5,7 @@ import com.playwith.play.domain.wishlist.service.WishListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,10 @@ public class WishListController {
     private final WishListService wishListService;
 
     @GetMapping("/wishlist")
-    public String wishlist() {
+    public String wishlist(Model model, Principal principal) {
+        String username = principal.getName();
+        List<WishList> wishList = wishListService.getWishListByUsername(username);
+        model.addAttribute("wishList", wishList);
         return "wishlist";
     }
 
@@ -32,11 +36,9 @@ public class WishListController {
         return ResponseEntity.ok("Toggle successful");
     }
 
-    @ResponseBody
-    @GetMapping("/wishlists")
-    public ResponseEntity<List<WishList>> getWishList(Principal principal) {
-        String username = principal.getName();
-        List<WishList> wishList = wishListService.getWishListByUsername(username);
-        return ResponseEntity.ok(wishList);
+    @PostMapping("/deleteWishList/{wishListId}")
+    public String deleteWishItem(@PathVariable(name = "wishListId") Long wishListId) {
+        wishListService.deleteWishItem(wishListId);
+        return "redirect:/wishlist";
     }
 }

@@ -49,4 +49,15 @@ public class WishListService {
         }
     }
 
+    @Transactional
+    public void deleteWishItem(Long wishListId) {
+        // 삭제 전용 로직을 구현
+        WishList wishList = wishListRepository.findById(wishListId)
+                .orElseThrow(() -> new RuntimeException("WishList not found with id: " + wishListId));
+
+        Matching matching = wishList.getMatching();
+        matching.getWishLists().remove(wishList);
+        wishListRepository.delete(wishList);
+    }
+
 }
