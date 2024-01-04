@@ -124,28 +124,28 @@ public class TeamService {
     }
 
     //팀 정보 수정
-    public void modifyTeam(Team team, MultipartFile profileImage, String teamName, String area, String level ,SiteUser siteUser) {
+    public void modifyTeam(Team team, MultipartFile profileImage, String teamName, String area, String level, SiteUser TeamLeader) {
 
         String profileImgUrl;
-            // 프로필 이미지 업데이트
+        // 프로필 이미지 업데이트
         if(!profileImage.isEmpty()) {
-             profileImgUrl = saveProfileImage(profileImage);
+            profileImgUrl = saveProfileImage(profileImage);
         }else {
-             profileImgUrl = team.getProfileImgUrl();
+            profileImgUrl = team.getProfileImgUrl();
         }
-            // 기존 팀 정보를 업데이트
-            Team modifyTeam = Team
-                    .builder()
-                    .id(team.getId())
-                    .profileImgUrl(profileImgUrl)
-                    .teamName(teamName)
-                    .area(area)
-                    .level(team.getLevel())
-                    .siteUsers(team.getSiteUsers())
-                    .build();
-            modifyTeam.getSiteUsers().add(siteUser); // 사용자를 팀에 추가
+        // 기존 팀 정보를 업데이트
+        Team modifyTeam = Team
+                .builder()
+                .id(team.getId())
+                .profileImgUrl(profileImgUrl)
+                .teamName(teamName)
+                .area(area)
+                .level(team.getLevel())
+                .siteUsers(team.getSiteUsers())
+                .build();
+        modifyTeam.getSiteUsers().add(TeamLeader); // 사용자를 팀에 추가
 
-             this.teamRepository.save(modifyTeam);
+        this.teamRepository.save(modifyTeam);
     }
 
     public void applyToTeam(Long teamId, SiteUser user) {
@@ -154,6 +154,7 @@ public class TeamService {
 
         // 팀에 사용자를 추가하고, 사용자의 팀을 설정
         team.addMember(user);
+        user.setRating(4); //팀원은 4번
         // 사용자 정보 저장
         userRepository.save(user);
         // 팀 정보 저장

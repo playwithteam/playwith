@@ -35,6 +35,7 @@ public class TeamController {
         model.addAttribute("teamList", teamList);
 
         SiteUser siteUser = userService.findByUsername(principal.getName());
+        siteUser.setRating(4);
 
         if (siteUser.getTeam() != null) {
             return String.format("redirect:/team/team_detail/%s", siteUser.getTeam().getId());
@@ -50,7 +51,7 @@ public class TeamController {
     public ResponseEntity<?> applyToTeam(@PathVariable(name = "teamId") Long teamId, Principal principal) {
         Team team = this.teamService.getTeam(teamId);
         SiteUser siteUser = this.userService.findByUsername(principal.getName());
-
+        siteUser.setRating(4);
         if (siteUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 후 이용");
         }
@@ -74,7 +75,7 @@ public class TeamController {
             return ResponseEntity.badRequest().body("BindingResult error");
         }
         SiteUser siteUser = this.userService.findByUsername(principal.getName());
-        siteUser.setRating(2);
+        siteUser.setRating(3);
         Team createdTeam = this.teamService.createTeam(teamCreateForm.getProfileImage(), teamCreateForm.getTeamName(), teamCreateForm.getArea(), teamCreateForm.getLevel(), siteUser);
 
         if (createdTeam != null) {
@@ -102,9 +103,9 @@ public class TeamController {
 
         if (team != null) {
             SiteUser siteUser = this.userService.findByUsername(principal.getName());
-            siteUser.setRating(2);
+            siteUser.setRating(3);
 //            MultipartFile profileImage = teamCreateForm.getProfileImage();
-
+//
 //            teamCreateForm.setProfileImage(profileImage);
             teamCreateForm.setTeamName(team.getTeamName());
             teamCreateForm.setArea(team.getArea());
@@ -132,7 +133,7 @@ public class TeamController {
         }
 
         SiteUser siteUser = this.userService.findByUsername(principal.getName());
-        siteUser.setRating(2);
+        siteUser.setRating(3);
 
         try {
             // 수정된 팀 정보를 데이터베이스에 반영

@@ -18,7 +18,7 @@
                                          th:src="@{|/gen${team.profileImgUrl}|}" alt="Profile Image"
                                          style="width: 100px; height: 100px; border-radius: 50%;">
                                     <img id="previewImage" th:unless="${team.profileImgUrl != null}"
-                                         th:src="@{/img/emblem_img.svg}" alt="Default Image"
+                                         th:src="@{/img/emblem_img.svg.svg}" alt="Default Image"
                                          style="width: 100px; height: 100px; border-radius: 50%;">
                                 </div>
                                 <div class="file-btn w16 abs xy-bl">
@@ -90,18 +90,18 @@
                         </li>
                     </ul>
                     <div class="flex g8 mt80">
+                            <a sec:authorize="isAuthenticated()" th:if="${@rq.member.rating == 3}"
+                               th:href="@{|/team/team_modify/${team.getId()}|}" class="w100per btn-type-1"
+                               onclick="confirmAndRedirect()">수정</a>
+                            <a sec:authorize="isAuthenticated()" th:if="${@rq.member.rating == 4}"
+                               th:href="@{|/team/team_modify/${team.getId()}|}" class="w100per btn-type-1"
+                               style="display: none;">수정</a>
 
-                        <a sec:authorize="isAuthenticated()" and th:if="${@rq.member.rating == 2}"
-                           th:href="@{|/team/team_modify/${team.getId()}|}" class="w100per btn-type-1"
-                           onclick="confirmAndRedirect()">수정</a>
-                        <a sec:authorize="isAuthenticated()" th:if="${@rq.member.rating == 1}"
-                           th:href="@{|/team/team_modify/${team.getId()}|}" class="w100per btn-type-1"
-                           style="display: none;">수정</a>
 
-                        <a sec:authorize="isAuthenticated()" and th:if="${@rq.member.rating == 2}"
+                        <a sec:authorize="isAuthenticated()" th:if="${@rq.member.rating == 3}"
                            onclick="return confirm('정말 삭제하시겠습니까?')" th:href="@{|/team/team_delete/${team.getId()}|}"
-                           class="delete w100per btn-type-1-2" >팀 삭제</a>
-                        <a sec:authorize="isAuthenticated()" th:if="${@rq.member.rating == 1}"
+                           class="delete w100per btn-type-1-2">팀 삭제</a>
+                        <a sec:authorize="isAuthenticated()" th:if="${@rq.member.rating == 4}" }
                            onclick="return confirm('정말 삭제하시겠습니까?')" th:href="@{|/team/team_delete/${team.getId()}|}"
                            class="delete w100per btn-type-1-2" style="display: none;">팀 삭제</a>
 

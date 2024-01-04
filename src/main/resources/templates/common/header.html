@@ -35,18 +35,17 @@
                 <li sec:authorize="isAnonymous()">
                     <a th:href="@{/user/signup}" class="c999 f16">회원가입</a>
                 </li>
-                <li sec:authorize="isAuthenticated()" th:if="${@rq.member.rating == 1}">
+                <li sec:authorize="isAuthenticated()" th:if="${@rq.member.rating == 1 or @rq.member.rating == 3 or @rq.member.rating == 4}">
                     <a th:href="@{/user/mypage}" class="c999 f16">내 정보</a>
                 </li>
-                <li sec:authorize="isAuthenticated()" th:if="${@rq.member.rating == 1}">
+                <li sec:authorize="isAuthenticated()" th:if="${@rq.member.rating == 1 or @rq.member.rating == 3 or @rq.member.rating == 4}">
                     <a th:href="@{/team/team_list}" class="c999 f16">팀 정보</a>
                 </li>
                 <li sec:authorize="isAuthenticated()">
                     <a th:href="@{/matching/history}" class="c999 f16">매칭 내역</a>
                 </li>
-                <li sec:authorize="isAuthenticated()" th:if="${@rq.member.rating == 1}">
+                <li sec:authorize="isAuthenticated()" th:if="${@rq.member.rating == 1 or @rq.member.rating == 3 or @rq.member.rating == 4}">
                     <a th:href="@{/wishlist}" class="c999 f16">위시리스트</a>
-
                 </li>
                 <li sec:authorize="isAuthenticated()">
                     <a th:href="@{/user/logout}" class="c999 f16">로그아웃</a>
