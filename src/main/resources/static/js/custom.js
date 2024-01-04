@@ -130,14 +130,16 @@ $(document).ready(function(){
     });
 
     $("#customTimeInput").on("change", function() {
-        // 분을 00분으로 고정하고 시간과 분을 합치기
-        var fixedMinutes = "00";
-        var selectedTime = $(this).val() || "00:00";
-        var modifiedTime = selectedTime.split(":")[0] + ":" + fixedMinutes;
+      var fixedMinutes = "00";
+      var selectedTime = $(this).val() || "00:00";
+      var selectedHour = parseInt(selectedTime.split(":")[0]);
 
-        // 수정된 값을 다시 input 요소에 설정
-        $(this).val(modifiedTime);
-      });
+      // 시간이 18시부터 24시 사이에 속하지 않으면 알림창 표시하고 초기화
+      if (selectedHour < 18 || selectedHour > 24) {
+        alert("오후 18시 ~ 24시만 선택 가능합니다.");
+        $(this).val("");
+      }
+    });
 
       $("#areaSelect").change(function () {
           var selectedArea = $(this).val();
@@ -221,6 +223,72 @@ $(document).ready(function(){
               .select();
           document.execCommand("copy");
           textarea.remove();
+        }
+
+        // 수정 버튼 클릭 이벤트
+        $('#matching_modify_btn').click(function(e) {
+            var userlistSize = $(this).data('userlist-size');
+            if (userlistSize > 0) {
+                alert('최소 1명의 유저 혹은 팀이 신청을 한 경우엔 수정 및 삭제가 불가능합니다.');
+                e.preventDefault(); // 링크의 기본 동작을 방지
+            }
+            // 그렇지 않으면 링크의 기본 동작을 계속 진행
+        });
+
+        // 삭제 버튼 클릭 이벤트
+        $('#matching_delete_btn').click(function(e) {
+            var userlistSize = $(this).data('userlist-size');
+            if (userlistSize > 0) {
+                alert('최소 1명의 유저 혹은 팀이 신청을 한 경우엔 수정 및 삭제가 불가능합니다.');
+                e.preventDefault(); // 링크의 기본 동작을 방지
+            } else if (!confirm('정말 삭제하시겠습니까?')) {
+                e.preventDefault(); // 사용자가 취소를 선택하면 링크의 기본 동작을 방지
+            }
+        });
+
+        // select 박스가 변경될 때의 이벤트 처리
+        $('.option-select').change(function () {
+            // 선택된 지역 값 가져오기
+            var selectedArea = $('#optionAreaSelect').val();
+            var selectedTime = $('#optionTimeSelect').val();
+            var selectedLevel = $('#optionLevelSelect').val();
+
+            // AJAX를 통해 서버에 선택된 지역을 전달하고, 해당 지역에 맞는 매칭 데이터를 받아와서 처리
+            $.ajax({
+                type: 'GET',
+                url: '/filterMatching',
+                data: { area: selectedArea, gameTime: selectedTime, level: selectedLevel },
+                success: function (data) {
+                   $("#matchingsArea").replaceWith(data);
+                   initializeMatchingAreaScript();
+                },
+                error: function (error) {
+                    console.error('Error during AJAX request:', error);
+                }
+            });
+        });
+
+        //ajax 실행 후 기존에 적용되던 script가 풀려서 초기화
+        function initializeMatchingAreaScript() {
+            function tabMenu(no) {
+                $(".tab-cnt-box-" + no + " > li:not("+$(".tab-menu-box-" + no + " > li > a.active").attr("href")+")").hide();
+                $(".tab-menu-box-" + no + " > li > a").click(function(){
+                    $(".tab-menu-box-" + no + " > li > a").removeClass("active");
+                    $(this).addClass("active");
+                    $(".tab-cnt-box-" + no + " > li").hide();
+                    $($(this).attr("href")).show();
+                    return false;
+                });
+            }
+
+            for (let tabMenuNum = 1; tabMenuNum <= 20; tabMenuNum++) {
+                tabMenu(tabMenuNum);
+            }
+
+            $('button#favor_btn').click(function(event) {
+              event.preventDefault();
+              $(this).toggleClass("active");
+          });
         }
 
 });
