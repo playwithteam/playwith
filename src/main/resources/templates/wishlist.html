@@ -12,25 +12,28 @@
                         <p class="tac c777 tb f16 mt40" th:if="${#lists.isEmpty(wishList)}">위시리스트가 없습니다.</p>
                         <div class="matching-list-area wow fadeInUp" data-wow-delay="0.9s" data-wow-duration="0.6s">
                             <ul class="matching-list-box" th:if="${not #lists.isEmpty(wishList)}">
-                                <li th:each="wishItem : ${wishList}">
-                                    <a href="" class="flex aic jcsb">
-                                        <div class="left-box flex aic g40">
-                                            <div class="flex aic g20">
-                                                <button class="favor-box img-box w24 active" id="favor_btn" >
-                                                    <img th:src="@{/img/ico_heart.svg}" alt="">
-                                                </button>
-                                                <span class="time-text f18" th:text="${wishItem.matching.gameTime}"></span>
+                                <li th:each="wishList : ${wishList}">
+                                    <form id="deleteWishItemForm" th:action="@{'/deleteWishList/' + ${wishList.id}}" method="post">
+                                        <input type="hidden" th:each="wishItem : ${wishList}" th:id="'wishListIdInput-' + ${wishList.id}" th:name="wishListId" th:value="${wishList.id}" />
+                                        <a href="" class="flex aic jcsb">
+                                            <div class="left-box flex aic g40">
+                                                <div class="flex aic g20">
+                                                    <button class="favor-box img-box w24 active" id="favor_btn">
+                                                        <img th:src="@{/img/ico_heart.svg}" alt="">
+                                                    </button>
+                                                    <span class="time-text f18" th:text="${wishList.matching.gameTime}"></span>
+                                                </div>
+                                                <div class="text-box flex aic g8">
+                                                    <span th:if="${wishList.matching.level} == '하'" class="difficulty-text f16 type-1" th:text="${wishList.matching.level}"></span>
+                                                    <span th:if="${wishList.matching.level} == '중'" class="difficulty-text f16 type-2" th:text="${wishList.matching.level}"></span>
+                                                    <span th:if="${wishList.matching.level} == '상'" class="difficulty-text f16 type-3" th:text="${wishList.matching.level}"></span>
+                                                    <span class="location-text f18" th:text="${wishList.matching.stadium.area} + ' ' + ${wishList.matching.stadium.name}"></span>
+                                                </div>
                                             </div>
-                                            <div class="text-box flex aic g8">
-                                                <span th:if="${wishItem.matching.level} == '하'" class="difficulty-text f16 type-1" th:text="${wishItem.matching.level}"></span>
-                                                <span th:if="${wishItem.matching.level} == '중'" class="difficulty-text f16 type-2" th:text="${wishItem.matching.level}"></span>
-                                                <span th:if="${wishItem.matching.level} == '상'" class="difficulty-text f16 type-3" th:text="${wishItem.matching.level}"></span>
-                                                <span class="location-text f18" th:text="${wishItem.matching.stadium.area} + ' ' + ${wishItem.matching.stadium.name}"></span>
-                                            </div>
-                                        </div>
-                                        <span class="situation-box tac f16 tb lh140 type-1">용병 모집 중<br>0 / 14</span>
-                                        <span class="situation-box tac f16 tb lh140 type-2">용병 모집 완료<br>14 / 14</span>
-                                    </a>
+                                            <span class="situation-box tac f16 tb lh140 type-1">용병 모집 중<br>0 / 14</span>
+                                            <span class="situation-box tac f16 tb lh140 type-2">용병 모집 완료<br>14 / 14</span>
+                                        </a>
+                                    </form>
                                 </li>
                             </ul>
                         </div>
