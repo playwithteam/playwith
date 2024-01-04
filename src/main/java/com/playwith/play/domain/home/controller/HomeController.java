@@ -39,9 +39,15 @@ public class HomeController {
                 .sorted(Comparator.comparing((Matching matching) -> matching.getMatchingDate().getGameDate())
                         .thenComparing(Matching::getGameTime))
                 .collect(Collectors.toList());
+        List<Matching> filteredMatchings2 = allMatchings.stream()
+                .filter(matching -> matching.getMatchingType() == MatchingType.TYPE_2)
+                .sorted(Comparator.comparing((Matching matching) -> matching.getMatchingDate().getGameDate())
+                        .thenComparing(Matching::getGameTime))
+                .collect(Collectors.toList());
         List<MatchingDate> matchingDates = this.matchingDateService.getList();
         model.addAttribute("qnaList", qnaList);
         model.addAttribute("filteredMatchings1", filteredMatchings1);
+        model.addAttribute("filteredMatchings2", filteredMatchings2);
         model.addAttribute("matchingDates", matchingDates);
         return "index";
     }

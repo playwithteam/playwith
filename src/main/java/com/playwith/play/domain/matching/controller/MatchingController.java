@@ -114,11 +114,19 @@ public class MatchingController {
         String loggedInUsername = principal.getName();
         SiteUser siteUser = this.userService.getUserByName(principal.getName());
         List<Matching> allMatchings = this.matchingService.getList();
-        List<Matching> historyMatchings = new ArrayList<>();
+        List<Matching> historyMatchings1 = new ArrayList<>();
+        List<Matching> historyMatchings2 = new ArrayList<>();
 
         if (siteUser.getRating() == 1) {
-            historyMatchings = allMatchings.stream()
+            historyMatchings1 = allMatchings.stream()
                     .filter(matching -> matching.getMatchingType() == MatchingType.TYPE_1 &&
+                            matching.getUserList().stream()
+                                    .anyMatch(user -> user.getUsername().equals(loggedInUsername)))
+                    .sorted(Comparator.comparing((Matching matching) -> matching.getMatchingDate().getGameDate())
+                            .thenComparing(Matching::getGameTime))
+                    .collect(Collectors.toList());
+            historyMatchings2 = allMatchings.stream()
+                    .filter(matching -> matching.getMatchingType() == MatchingType.TYPE_2 &&
                             matching.getUserList().stream()
                                     .anyMatch(user -> user.getUsername().equals(loggedInUsername)))
                     .sorted(Comparator.comparing((Matching matching) -> matching.getMatchingDate().getGameDate())
@@ -126,15 +134,22 @@ public class MatchingController {
                     .collect(Collectors.toList());
         }
         else if (siteUser.getRating() == 2) {
-            historyMatchings = allMatchings.stream()
+            historyMatchings1 = allMatchings.stream()
                     .filter(matching -> matching.getMatchingType() == MatchingType.TYPE_1 &&
+                            matching.getManagerName().equals(siteUser.getName()))
+                    .sorted(Comparator.comparing((Matching matching) -> matching.getMatchingDate().getGameDate())
+                            .thenComparing(Matching::getGameTime))
+                    .collect(Collectors.toList());
+            historyMatchings2 = allMatchings.stream()
+                    .filter(matching -> matching.getMatchingType() == MatchingType.TYPE_2 &&
                             matching.getManagerName().equals(siteUser.getName()))
                     .sorted(Comparator.comparing((Matching matching) -> matching.getMatchingDate().getGameDate())
                             .thenComparing(Matching::getGameTime))
                     .collect(Collectors.toList());
         }
 
-        model.addAttribute("historyMatchings", historyMatchings);
+        model.addAttribute("historyMatchings1", historyMatchings1);
+        model.addAttribute("historyMatchings2", historyMatchings2);
         return "matching_history";
     }
 }

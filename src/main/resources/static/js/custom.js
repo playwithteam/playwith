@@ -130,14 +130,16 @@ $(document).ready(function(){
     });
 
     $("#customTimeInput").on("change", function() {
-        // 분을 00분으로 고정하고 시간과 분을 합치기
-        var fixedMinutes = "00";
-        var selectedTime = $(this).val() || "00:00";
-        var modifiedTime = selectedTime.split(":")[0] + ":" + fixedMinutes;
+      var fixedMinutes = "00";
+      var selectedTime = $(this).val() || "00:00";
+      var selectedHour = parseInt(selectedTime.split(":")[0]);
 
-        // 수정된 값을 다시 input 요소에 설정
-        $(this).val(modifiedTime);
-      });
+      // 시간이 18시부터 24시 사이에 속하지 않으면 알림창 표시하고 초기화
+      if (selectedHour < 18 || selectedHour > 24) {
+        alert("오후 18시 ~ 24시만 선택 가능합니다.");
+        $(this).val("");
+      }
+    });
 
       $("#areaSelect").change(function () {
           var selectedArea = $(this).val();

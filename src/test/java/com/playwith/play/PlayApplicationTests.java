@@ -1,11 +1,14 @@
 package com.playwith.play;
 
+import com.playwith.play.domain.matching.entity.Matching;
 import com.playwith.play.domain.matching.entity.MatchingType;
 import com.playwith.play.domain.matching.service.MatchingService;
 import com.playwith.play.domain.matchingdate.entity.MatchingDate;
 import com.playwith.play.domain.matchingdate.service.MatchingDateService;
 import com.playwith.play.domain.qna.service.QnaService;
+import com.playwith.play.domain.stadium.entity.Stadium;
 import com.playwith.play.domain.stadium.service.StadiumService;
+import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.domain.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.stream.IntStream;
 
 @SpringBootTest
@@ -23,11 +28,11 @@ class PlayApplicationTests {
     @Autowired
     private MatchingService matchingService;
     @Autowired
-    StadiumService stadiumService;
+    private StadiumService stadiumService;
     @Autowired
-    QnaService qnaService;
+    private QnaService qnaService;
     @Autowired
-    MatchingDateService matchingDateService;
+    private MatchingDateService matchingDateService;
 
     @Test
     @DisplayName("기본 데이터 생성")
@@ -82,5 +87,42 @@ class PlayApplicationTests {
         qnaService.create("고정 골키퍼를 할 수 있나요?", "매치 진행 동안 인원 및 현장 상황에 따라 필드, 골키퍼를 번갈아 가면서 할 수 있도록 매니저가 로테이션을 조절하고 있어요.<br>다만 골키퍼로만 매치에 참여하고 싶다면, 매치 시작 전 현장에서 매니저, 같은 팀 참가자와 소통해주세요.<br>같은 팀 참가자의 동의를 얻는다면 골키퍼로만 참여가 가능합니다.");
         qnaService.create("참여 가능한 나이 제한이 있나요?", "안전 상의 이유로 고등학생(만 16세)이상만 참여가 가능합니다.<br>보호자 동반 유무와 관계없이 현장에서 만 16세 미만의 참가자로 확인되는 경우 참가가 제한돼요.");
         qnaService.create("매니저가 현장에 늦게 도착했어요", "매니저의 지각으로 인해 매치가 정상 진행되지 못했다면,<br>지각자, 무단 불참자를 제외하고 지연된 시간만큼 다음 날 오전 중으로 부분 환불 처리를 도와드리고 있어요.");
+
+        MatchingType matchingType1 = MatchingType.TYPE_1;
+        MatchingType matchingType2 = MatchingType.TYPE_2;
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy-MM-dd");
+
+        LocalDate localDate1 = LocalDate.now().plusDays(1);
+        LocalDate localDate2 = LocalDate.now().plusDays(2);
+
+        MatchingDate matchingDate1 = this.matchingDateService.getMatchingDate(localDate1);
+        MatchingDate matchingDate2 = this.matchingDateService.getMatchingDate(localDate2);
+
+        LocalTime localTime1 = LocalTime.of(18, 0);
+        LocalTime localTime2 = LocalTime.of(19, 0);
+        LocalTime localTime3 = LocalTime.of(20, 0);
+        LocalTime localTime4 = LocalTime.of(21, 0);
+        LocalTime localTime5 = LocalTime.of(22, 0);
+
+        Stadium testStadium1 = this.stadiumService.getStadiumsByName("로꼬풋살장");
+        Stadium testStadium2 = this.stadiumService.getStadiumsByName("금강풋살장");
+        Stadium testStadium3 = this.stadiumService.getStadiumsByName("첼시풋살장");
+
+        //매칭 데이터 생성
+        //당일
+        matchingService.create(matchingType1, localDate1, matchingDate1, localTime1, "상", "대전", testStadium2, "빵빵이");
+        matchingService.create(matchingType1, localDate1, matchingDate1, localTime1, "중", "서울", testStadium1, "빵빵이");
+        matchingService.create(matchingType1, localDate1, matchingDate1, localTime2, "상", "부산", testStadium3, "빵빵이");
+        matchingService.create(matchingType1, localDate1, matchingDate1, localTime3, "상", "서울", testStadium1, "신짱아");
+        matchingService.create(matchingType1, localDate1, matchingDate1, localTime4, "하", "대전", testStadium2, "뚱이");
+        matchingService.create(matchingType1, localDate1, matchingDate1, localTime5, "상", "서울", testStadium1, "빵빵이");
+
+        //당일+1
+        matchingService.create(matchingType1, localDate2, matchingDate2, localTime1, "중", "서울", testStadium1, "뚱이");
+        matchingService.create(matchingType1, localDate2, matchingDate2, localTime2, "중", "부산", testStadium3, "빵빵이");
+        matchingService.create(matchingType1, localDate2, matchingDate2, localTime2, "상", "대전", testStadium2, "뚱이");
+        matchingService.create(matchingType1, localDate2, matchingDate2, localTime3, "하", "대전", testStadium2, "신짱아");
     }
+
 }
