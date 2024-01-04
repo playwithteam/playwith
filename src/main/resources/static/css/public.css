@@ -678,7 +678,9 @@ textarea:disabled {
 .matching-list-area .matching-list-box > li a .situation-box.type-2 {
     background: #030095;
 }
+
 .matching-list-area .matching-list-box > li a .situation-box.type-3 {
+
     background: #ccc;
 }
 
