@@ -1,6 +1,7 @@
 package com.playwith.play.domain.user.controller;
 
 import com.playwith.play.domain.team.entity.Team;
+import com.playwith.play.domain.team.service.TeamService;
 import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.domain.user.service.UserService;
 import com.playwith.play.global.rq.Rq;
@@ -27,6 +28,7 @@ public class UserController {
     private final UserService userService;
     private final Rq rq;
     private String findUserName; //아이디 값 담을 변수 선언
+    private final TeamService teamService;
 
     //로그인
     @PreAuthorize("isAnonymous()")

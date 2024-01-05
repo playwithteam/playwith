@@ -164,6 +164,7 @@ public class UserService {
                 .profileImgUrl(findUser.getProfileImgUrl())
                 .level(findUser.getLevel())
                 .area(findUser.getArea())
+                .rating(findUser.getRating())
                 .build();
         return this.userRepository.save(siteUserPassword);
     }

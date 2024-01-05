@@ -16,7 +16,7 @@
                             <th>지역</th>
                             <th>레벨</th>
                             <th>생성일</th>
-                            <th>신청</th>
+                            <th>가입</th>
                             <th>모집 인원</th>
                         </tr>
                         </thead>
@@ -43,11 +43,11 @@
                                         <button type="button" class="btn-type-4"
                                                 style="color: #fff; background-color: #0F46BC;"
                                                 th:if="${#lists.size(team.siteUsers) < 8}" th:id="'applyButton' + ${team.id}"
-                                                th:onclick="'applyBtn(\'' + ${team.id} + '\')'">신청하기
+                                                th:onclick="'applyBtn(\'' + ${team.id} + '\')'">가입하기
 <!--                                            th:onclick="'applyBtn(\''${vote.Id} + ')'"-->
                                         </button>
                                         <div th:if="${#lists.size(team.siteUsers) == 8}" class="btn-type-4"
-                                             style="color: #fff; background-color: #CC0000;" disabled>모집마감
+                                             style="color: #fff; background-color: #CCC; cursor: inherit;" disabled>모집마감
                                         </div>
                                     </div>
 <!--                                </form>-->

@@ -26,7 +26,14 @@
                     <img th:if="${@rq.profileImgUrl != null}" th:src="@{|/gen${@rq.profileImgUrl}|}" alt="Profile Image">
                     <img th:unless="${@rq.profileImgUrl != null}" th:src="@{/img/user_img.svg}" alt="Default Image">
                 </span>
-                <span class="c333 tb inblock" th:text="${@rq.member.name}"></span>님
+                <div th:if="${@rq.member.rating == 1 or @rq.member.rating == 3 or @rq.member.rating == 4}" class="flex aic g4">
+                    <span class="c333 tb" th:text="${@rq.member.name}"></span>
+                    <span class="c999">님</span>
+                </div>
+                <div th:if="${@rq.member.rating == 2}" class="flex aic g4">
+                    <span class="c333 tb" th:text="${@rq.member.name}"></span>
+                    <span class="c999">매니저</span>
+                </div>
             </div>
             <ul class="sub-menu-box flex aic g12">
                 <li sec:authorize="isAnonymous()">
