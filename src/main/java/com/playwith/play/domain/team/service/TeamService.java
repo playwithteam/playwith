@@ -140,6 +140,7 @@ public class TeamService {
                 .profileImgUrl(profileImgUrl)
                 .teamName(teamName)
                 .area(area)
+                .createdDate(team.getCreatedDate())
                 .level(team.getLevel())
                 .siteUsers(team.getSiteUsers())
                 .build();

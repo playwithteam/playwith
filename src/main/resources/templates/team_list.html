@@ -28,7 +28,7 @@
                 <span class="img-box w28 mr20">
                     <img th:if="${team.profileImgUrl != null}" th:src="@{|/gen${team.profileImgUrl}|}"
                          alt="Profile Image" style="width: 30px; height: 30px; border-radius: 50%;">
-                    <img th:unless="${team.profileImgUrl != null}" th:src="@{/img/user_img.svg}"
+                    <img th:unless="${team.profileImgUrl != null}" th:src="@{/img/emblem_img.svg}"
                          alt="Default Image"></span>
                                     <span th:text="${team.teamName}"></span>
                                 </div>

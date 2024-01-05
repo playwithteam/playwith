@@ -7,6 +7,7 @@ import com.playwith.play.domain.matchingdate.service.MatchingDateService;
 import com.playwith.play.domain.qna.service.QnaService;
 import com.playwith.play.domain.stadium.entity.Stadium;
 import com.playwith.play.domain.stadium.service.StadiumService;
+import com.playwith.play.domain.team.service.TeamService;
 import com.playwith.play.domain.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,8 @@ import java.time.format.DateTimeFormatter;
 @SpringBootTest
 class PlayApplicationTests {
 
+    @Autowired
+    TeamService teamService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -56,7 +59,10 @@ class PlayApplicationTests {
         userService.join(null,"user14","이청용", "1234", "user14@test.com", "대구", "상", LocalDate.of(1988, 4, 24), null, 1);
         userService.join(null,"user15","이운재", "1234", "user15@test.com", "창원", "상", LocalDate.of(1975, 9, 4), null, 1);
         userService.join(null,"user16","김신욱", "1234", "user16@test.com", "서울", "중", LocalDate.of(1988, 7, 2), null, 1);
-
+        userService.join(null,"user17","김병지", "1234", "user17@test.com", "서울", "중", LocalDate.of(1988, 8, 2), null, 1);
+        userService.join(null,"user18","최용수", "1234", "user18@test.com", "서울", "중", LocalDate.of(1988, 9, 2), null, 1);
+        userService.join(null,"user19","박지성", "1234", "user19@test.com", "서울", "중", LocalDate.of(1988, 10, 2), null, 1);
+        userService.join(null,"user20","차범근", "1234", "user20@test.com", "서울", "중", LocalDate.of(1988, 11, 2), null, 1);
         // 기본 구장 생성
         stadiumService.create("서울", "로꼬풋살장", "KR 서울특별시 송파구 잠실동 40-1 롯데마트 제타플렉스점 R층", "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d202412.1888398174!2d126.8427373825985!3d37.56235622779598!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357ca5c150f26537%3A0x6946a93f4d550d0!2z66Gc6rys7ZKL7IK07Iqk7YOA65SU7JuAIOyeoOyLpOygnO2DgO2UjOugieyKpOygkA!5e0!3m2!1sko!2skr!4v1703209534380!5m2!1sko!2skr");
         stadiumService.create("서울", "루다풋살장", "서울특별시 도봉구 방학동 271-2", "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d202412.1888398174!2d126.8427373825985!3d37.56235622779598!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357cbfc2be51bdb7%3A0xf7fd2c558d26beff!2z66Oo64ukIO2Si-yCtOyepQ!5e0!3m2!1sko!2skr!4v1703209664306!5m2!1sko!2skr");
@@ -123,7 +129,6 @@ class PlayApplicationTests {
         matchingService.create(matchingType1, localDate2, matchingDate2, localTime2, "중", "부산", testStadium3, "빵빵이");
         matchingService.create(matchingType1, localDate2, matchingDate2, localTime2, "상", "대전", testStadium2, "뚱이");
         matchingService.create(matchingType1, localDate2, matchingDate2, localTime3, "하", "대전", testStadium2, "신짱아");
-
     }
 
 }
