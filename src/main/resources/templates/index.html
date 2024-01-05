@@ -1,6 +1,7 @@
-<html layout:decorate="~{layout}">
-<div layout:fragment="content">
-
+<html layout:decorate="~{/common/layout}">
+<div layout:fragment="content" class="main-page">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <!-- 메인 비주얼 영역 -->
     <div class="main-visual-area w100per rel zi1">
         <div class="swiper-box wh100per rel zi1">
@@ -62,56 +63,12 @@
                 <div class="swiper-box wh100per rel zi1">
                     <div class="swiper-2 swiper">
                         <ul class="swiper-wrapper tab-menu-box-1">
-                            <li class="swiper-slide">
-                                <a href="#tab1-1" class="active c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab1-2" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab1-3" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab1-4" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab1-5" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab1-6" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab1-7" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab1-8" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab1-9" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab1-10" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab1-11" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab1-12" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab1-13" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab1-14" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab1-15" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab1-16" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab1-17" class="c999 lh140 tac">12월 11일<br>월요일</a>
+                            <li class="swiper-slide" th:each="matchingDate, loop : ${matchingDates}">
+                                <a th:href="@{|#tab1-${loop.count}|}"
+                                   th:class="${loop.first} ? 'active c999 tac' : 'c999 tac'">
+                                    <span class="lh140" th:text="${matchingDate.gameDate != null ? #temporals.format(matchingDate.gameDate, 'MM월 dd일') : ''}"></span>
+                                    <span class="lh140" th:text="${matchingDate.gameDate != null ? #temporals.format(matchingDate.gameDate, 'EEEE') : ''}"></span>
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -120,30 +77,34 @@
                 </div>
                 <div class="select-area flex aic g24 mt40">
                     <div class="select-type-1 rel">
-                        <select id="" name="">
-                            <option value="모든 지역">모든 지역</option>
-                            <option value="대전">대전</option>
-                            <option value="대구">대구</option>
+                        <select id="optionAreaSelect" name="area" class="option-select">
+                            <option value="all">모든 지역</option>
                             <option value="서울">서울</option>
+                            <option value="대전">대전</option>
+                            <option value="부산">부산</option>
                         </select>
                         <span class="arrow img-box abs y-middle">
                             <img th:src="@{/img/arrow_bottom_777.svg}" alt="아래 화살표">
                         </span>
                     </div>
                     <div class="select-type-1 rel">
-                        <select id="" name="">
-                            <option value="모든 시간">모든 시간</option>
-                            <option value="10시">10시</option>
-                            <option value="11시">11시</option>
-                            <option value="12시">12시</option>
+                        <select id="optionTimeSelect" name="gameTime" class="option-select">
+                            <option value="all">모든 시간</option>
+                            <option value="18">18시</option>
+                            <option value="19">19시</option>
+                            <option value="20">20시</option>
+                            <option value="21">21시</option>
+                            <option value="22">22시</option>
+                            <option value="23">23시</option>
+                            <option value="24">24시</option>
                         </select>
                         <span class="arrow img-box abs y-middle">
                             <img th:src="@{/img/arrow_bottom_777.svg}" alt="아래 화살표">
                         </span>
                     </div>
                     <div class="select-type-1 rel">
-                        <select id="" name="">
-                            <option value="모든 시간">모든 난이도</option>
+                        <select id="optionLevelSelect" name="level" class="option-select">
+                            <option value="all">모든 난이도</option>
                             <option value="하">하</option>
                             <option value="중">중</option>
                             <option value="상">상</option>
@@ -153,60 +114,40 @@
                         </span>
                     </div>
                 </div>
-                <ul class="tab-cnt-box-1 mt20">
-                    <li id="tab1-1">
+                <ul class="tab-cnt-box-1 mt20" id="matchingsArea">
+                    <li th:each="matchingDate, loop : ${matchingDates}" th:id="@{|tab1-${loop.count}|}">
                         <ul class="matching-list-box">
-                            <li>
-                                <a href="" class="flex aic jcsb">
+                            <li th:each="matching : ${filteredMatchings1}" th:if="${loop.count == matching.matchingDate.id}">
+                                <a th:href="@{|/matching/detail/${matching.id}|}" class="flex aic jcsb">
                                     <div class="left-box flex aic g40">
-                                        <span class="time-text f18">10:00</span>
+                                        <div class="flex aic g20">
+                                            <button class="favor-box img-box w24" id="favor_btn" th:data-matching-id="${matching.id}" th:classappend="${!matching?.wishLists.?[siteUser?.username == @rq.member.username].isEmpty()} ? 'active' : ''">
+                                                <img th:src="@{/img/ico_heart.svg}" alt="">
+                                            </button>
+                                            <span class="time-text f18" th:text="${matching.gameTime}" style="width: 50px;"></span>
+                                        </div>
                                         <div class="text-box flex aic g8">
-                                            <span class="difficulty-text f16 type-1">하</span>
-                                            <span class="location-text f18">대전갈마풋살장</span>
+                                            <span th:if="${matching.level} == '하'" class="difficulty-text f16 type-1" th:text="${matching.level}"></span>
+                                            <span th:if="${matching.level} == '중'" class="difficulty-text f16 type-2" th:text="${matching.level}"></span>
+                                            <span th:if="${matching.level} == '상'" class="difficulty-text f16 type-3" th:text="${matching.level}"></span>
+                                            <span class="location-text f18" th:text="${matching.stadium.area} + ' ' + ${matching.stadium.name}"></span>
                                         </div>
                                     </div>
-                                    <span class="situation-box tac f16 tb lh140 type-1">용병 모집 중<br>0 / 14</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="" class="flex aic jcsb">
-                                    <div class="left-box flex aic g40">
-                                        <span class="time-text f18">10:00</span>
-                                        <div class="text-box flex aic g8">
-                                            <span class="difficulty-text f16 type-2">중</span>
-                                            <span class="location-text f18">대전갈마풋살장</span>
-                                        </div>
-                                    </div>
-                                    <span class="situation-box tac f16 tb lh140 type-2">용병 모집 완료<br>14 / 14</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="" class="flex aic jcsb">
-                                    <div class="left-box flex aic g40">
-                                        <span class="time-text f18">10:00</span>
-                                        <div class="text-box flex aic g8">
-                                            <span class="difficulty-text f16 type-3">상</span>
-                                            <span class="location-text f18">대전갈마풋살장</span>
-                                        </div>
-                                    </div>
-                                    <span class="situation-box tac f16 tb lh140 type-2">용병 모집 완료<br>14 / 14</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="" class="flex aic jcsb finish">
-                                    <div class="left-box flex aic g40">
-                                        <span class="time-text f18">10:00</span>
-                                        <div class="text-box flex aic g8">
-                                            <span class="difficulty-text f16 type-3">상</span>
-                                            <span class="location-text f18">대전갈마풋살장</span>
-                                        </div>
-                                    </div>
-                                    <span class="situation-box tac f16 tb lh140">경기 완료</span>
+<!--                                    원래 코드-->
+<!--                                    <span class="situation-box tac f16 tb lh140 type-1" th:if="${#lists.size(matching.userList) < 14}" th:utext="${'용병 모집 중' + '<br>' + #lists.size(matching.userList) + ' / 14'}"></span>-->
+<!--                                    <span class="situation-box tac f16 tb lh140 type-2" th:if="${#lists.size(matching.userList) == 14}">용병 모집 완료<br>14 / 14</span>-->
+
+                                    <!--발표할 때 시간관계상 코드 수정(14명 -> 4명)-->
+                                    <span class="situation-box tac f16 tb lh140 type-1" th:if="${#lists.size(matching.userList) < 4}" th:utext="${'용병 모집 중' + '<br>' + #lists.size(matching.userList) + ' / 4'}"></span>
+                                    <span class="situation-box tac f16 tb lh140 type-2" th:if="${#lists.size(matching.userList) == 4}">용병 모집 완료<br>4 / 4</span>
                                 </a>
                             </li>
                         </ul>
                     </li>
                 </ul>
+            </div>
+            <div sec:authorize="isAuthenticated()" th:if="${@rq.member.rating == 2}" class="btn-box-type-1 flex jcc wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">
+                <a th:href="@{/matching/create}" class="btn-type-1">매칭 등록</a>
             </div>
         </div>
     </div>
@@ -225,56 +166,12 @@
                 <div class="swiper-box wh100per rel zi1">
                     <div class="swiper-3 swiper">
                         <ul class="swiper-wrapper tab-menu-box-2">
-                            <li class="swiper-slide">
-                                <a href="#tab2-1" class="active c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab2-2" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab2-3" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab2-4" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab2-5" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab2-6" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab2-7" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab2-8" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab2-9" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab2-10" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab2-11" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab2-12" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab2-13" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab2-14" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab2-15" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab2-16" class="c999 lh140 tac">12월 11일<br>월요일</a>
-                            </li>
-                            <li class="swiper-slide">
-                                <a href="#tab2-17" class="c999 lh140 tac">12월 11일<br>월요일</a>
+                            <li class="swiper-slide" th:each="matchingDate, loop : ${matchingDates}">
+                                <a th:href="@{|#tab2-${loop.count}|}"
+                                   th:class="${loop.first} ? 'active c999 tac' : 'c999 tac'">
+                                    <span class="lh140" th:text="${matchingDate.gameDate != null ? #temporals.format(matchingDate.gameDate, 'MM월 dd일') : ''}"></span>
+                                    <span class="lh140" th:text="${matchingDate.gameDate != null ? #temporals.format(matchingDate.gameDate, 'EEEE') : ''}"></span>
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -283,30 +180,34 @@
                 </div>
                 <div class="select-area flex aic g24 mt40">
                     <div class="select-type-1 rel">
-                        <select id="" name="">
-                            <option value="모든 지역">모든 지역</option>
-                            <option value="대전">대전</option>
-                            <option value="대구">대구</option>
+                        <select id="optionAreaSelect2" name="area" class="option-select2">
+                            <option value="all">모든 지역</option>
                             <option value="서울">서울</option>
+                            <option value="대전">대전</option>
+                            <option value="부산">부산</option>
                         </select>
                         <span class="arrow img-box abs y-middle">
                             <img th:src="@{/img/arrow_bottom_777.svg}" alt="아래 화살표">
                         </span>
                     </div>
                     <div class="select-type-1 rel">
-                        <select id="" name="">
-                            <option value="모든 시간">모든 시간</option>
-                            <option value="10시">10시</option>
-                            <option value="11시">11시</option>
-                            <option value="12시">12시</option>
+                        <select id="optionTimeSelect2" name="gameTime" class="option-select2">
+                            <option value="all">모든 시간</option>
+                            <option value="18">18시</option>
+                            <option value="19">19시</option>
+                            <option value="20">20시</option>
+                            <option value="21">21시</option>
+                            <option value="22">22시</option>
+                            <option value="23">23시</option>
+                            <option value="24">24시</option>
                         </select>
                         <span class="arrow img-box abs y-middle">
                             <img th:src="@{/img/arrow_bottom_777.svg}" alt="아래 화살표">
                         </span>
                     </div>
                     <div class="select-type-1 rel">
-                        <select id="" name="">
-                            <option value="모든 시간">모든 난이도</option>
+                        <select id="optionLevelSelect2" name="level" class="option-select2">
+                            <option value="all">모든 난이도</option>
                             <option value="하">하</option>
                             <option value="중">중</option>
                             <option value="상">상</option>
@@ -317,59 +218,39 @@
                     </div>
                 </div>
                 <ul class="tab-cnt-box-2 mt20">
-                    <li id="tab2-1">
+                    <li th:each="matchingDate, loop : ${matchingDates}" th:id="@{|tab2-${loop.count}|}">
                         <ul class="matching-list-box">
-                            <li>
-                                <a href="" class="flex aic jcsb">
+                            <li th:each="matching : ${filteredMatchings2}" th:if="${loop.count == matching.matchingDate.id}">
+                                <a th:href="@{|/matching/detail/${matching.id}|}" class="flex aic jcsb">
                                     <div class="left-box flex aic g40">
-                                        <span class="time-text f18">10:00</span>
+                                        <div class="flex aic g20">
+                                            <button class="favor-box img-box w24" id="favor_btn">
+                                                <img th:src="@{/img/ico_heart.svg}" alt="">
+                                            </button>
+                                            <span class="time-text f18" th:text="${matching.gameTime}" style="width: 50px;"></span>
+                                        </div>
                                         <div class="text-box flex aic g8">
-                                            <span class="difficulty-text f16 type-1">하</span>
-                                            <span class="location-text f18">대전갈마풋살장</span>
+                                            <span th:if="${matching.level} == '하'" class="difficulty-text f16 type-1" th:text="${matching.level}"></span>
+                                            <span th:if="${matching.level} == '중'" class="difficulty-text f16 type-2" th:text="${matching.level}"></span>
+                                            <span th:if="${matching.level} == '상'" class="difficulty-text f16 type-3" th:text="${matching.level}"></span>
+                                            <span class="location-text f18" th:text="${matching.stadium.area} + ' ' + ${matching.stadium.name}"></span>
                                         </div>
                                     </div>
-                                    <span class="situation-box tac f16 tb lh140 type-1">팀 모집 중<br>0 / 2</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="" class="flex aic jcsb">
-                                    <div class="left-box flex aic g40">
-                                        <span class="time-text f18">10:00</span>
-                                        <div class="text-box flex aic g8">
-                                            <span class="difficulty-text f16 type-2">중</span>
-                                            <span class="location-text f18">대전갈마풋살장</span>
-                                        </div>
-                                    </div>
-                                    <span class="situation-box tac f16 tb lh140 type-2">팀 모집 완료<br>2 / 2</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="" class="flex aic jcsb">
-                                    <div class="left-box flex aic g40">
-                                        <span class="time-text f18">10:00</span>
-                                        <div class="text-box flex aic g8">
-                                            <span class="difficulty-text f16 type-3">상</span>
-                                            <span class="location-text f18">대전갈마풋살장</span>
-                                        </div>
-                                    </div>
-                                    <span class="situation-box tac f16 tb lh140 type-2">팀 모집 완료<br>2 / 2</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="" class="flex aic jcsb finish">
-                                    <div class="left-box flex aic g40">
-                                        <span class="time-text f18">10:00</span>
-                                        <div class="text-box flex aic g8">
-                                            <span class="difficulty-text f16 type-3">상</span>
-                                            <span class="location-text f18">대전갈마풋살장</span>
-                                        </div>
-                                    </div>
-                                    <span class="situation-box tac f16 tb lh140">경기 완료</span>
+                                    <!--                                    원래 코드-->
+                                    <!--                                    <span class="situation-box tac f16 tb lh140 type-1" th:if="${#lists.size(matching.userList) < 14}" th:utext="${'용병 모집 중' + '<br>' + #lists.size(matching.userList) + ' / 14'}"></span>-->
+                                    <!--                                    <span class="situation-box tac f16 tb lh140 type-2" th:if="${#lists.size(matching.userList) == 14}">용병 모집 완료<br>14 / 14</span>-->
+
+                                    <!--발표할 때 시간관계상 코드 수정(14명 -> 4명)-->
+                                    <span class="situation-box tac f16 tb lh140 type-1" th:if="${#lists.size(matching.userList) < 2}" th:utext="${'팀 모집 중' + '<br>' + #lists.size(matching.userList) + ' / 2'}"></span>
+                                    <span class="situation-box tac f16 tb lh140 type-2" th:if="${#lists.size(matching.userList) == 2}">팀 모집 완료<br>2 / 2</span>
                                 </a>
                             </li>
                         </ul>
                     </li>
                 </ul>
+            </div>
+            <div sec:authorize="isAuthenticated()" th:if="${@rq.member.rating == 2}" class="btn-box-type-1 flex jcc wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">
+                <a th:href="@{/matching/create}" class="btn-type-1">매칭 등록</a>
             </div>
         </div>
     </div>
@@ -382,88 +263,32 @@
             <p class="title-sub-text mt24 lh140 c777 wow fadeInUp" data-wow-delay="0.6s" data-wow-duration="0.6s">
                 자주 묻는 질문 목록입니다.<br>
                 찾으시는 질문이 없으시다면<br>
-                새로운 질문을 해보세요!
+                고객센터로 문의주세요!
             </p>
-            <ul class="question-list-box inner wow fadeInUp" data-wow-delay="0.9s" data-wow-duration="0.6s">
-                <li>
+            <ul class="question-list-box inner wow fadeInUp" data-wow-delay="0.9s" data-wow-duration="0.6s" th:if="${qnaList.size() != 0}">
+                <li th:each="qna : ${qnaList}">
                     <div class="area-1 flex aic jcsb">
                         <div class="left-box flex aic">
-                            <h3 class="tb">Q. 질문질문질문질문질문질문질문</h3>
+                            <h3 class="tb" th:text="'Q. ' + ${qna.title}"></h3>
                         </div>
                         <span class="arrow-ico img-box">
                             <img th:src="@{/img/arrow_bottom_231916.svg}" alt="">
                         </span>
                     </div>
                     <div class="area-2">
-                        <p>
-                            답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div class="area-1 flex aic jcsb">
-                        <div class="left-box flex aic">
-                            <h3 class="tb">Q. 질문질문질문질문질문질문질문</h3>
-                        </div>
-                        <span class="arrow-ico img-box">
-                            <img th:src="@{/img/arrow_bottom_231916.svg}" alt="">
-                        </span>
-                    </div>
-                    <div class="area-2">
-                        <p>
-                            답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div class="area-1 flex aic jcsb">
-                        <div class="left-box flex aic">
-                            <h3 class="tb">Q. 질문질문질문질문질문질문질문</h3>
-                        </div>
-                        <span class="arrow-ico img-box">
-                            <img th:src="@{/img/arrow_bottom_231916.svg}" alt="">
-                        </span>
-                    </div>
-                    <div class="area-2">
-                        <p>
-                            답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div class="area-1 flex aic jcsb">
-                        <div class="left-box flex aic">
-                            <h3 class="tb">Q. 질문질문질문질문질문질문질문</h3>
-                        </div>
-                        <span class="arrow-ico img-box">
-                            <img th:src="@{/img/arrow_bottom_231916.svg}" alt="">
-                        </span>
-                    </div>
-                    <div class="area-2">
-                        <p>
-                            답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div class="area-1 flex aic jcsb">
-                        <div class="left-box flex aic">
-                            <h3 class="tb">Q. 질문질문질문질문질문질문질문</h3>
-                        </div>
-                        <span class="arrow-ico img-box">
-                            <img th:src="@{/img/arrow_bottom_231916.svg}" alt="">
-                        </span>
-                    </div>
-                    <div class="area-2">
-                        <p>
-                            답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변답변
+                        <p th:utext="${qna.content}">
                         </p>
                     </div>
                 </li>
             </ul>
+            <div class="matching-none-area wow fadeInUp" data-wow-delay="0.9s" data-wow-duration="0.6s" th:if="${qnaList.size() == 0}">
+                <p class="tac tb c333">등록된 자주 묻는 질문이 없습니다.</p>
+            </div>
+            <div sec:authorize="isAuthenticated()" th:if="${@rq.member.rating == 2}" class="btn-box-type-1 flex jcc wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">
+                <a th:href="@{/qna/list}" class="btn-type-1">질문 관리</a>
+            </div>
         </div>
     </div>
-    <!-- //질문 영역 -->
 
 </div>
 </html>

@@ -1,0 +1,66 @@
+<html layout:decorate="~{/common/layout}">
+<div layout:fragment="content">
+
+    <div class="qna-list-area sub-cnt-area w100per rel zi2">
+        <div class="con w100per">
+            <h1 class="title-text lh120 tb tac wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">자주 묻는 질문</h1>
+            <div class="flex fdc wow fadeInUp" data-wow-delay="0.6s" data-wow-duration="0.6s">
+                <div class="table-type-1 table-type">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="check-type-1 inblock">
+                                        <input type="checkbox" id="cbx_chkAll">
+                                        <label for="cbx_chkAll"></label>
+                                    </div>
+                                </th>
+                                <th>번호</th>
+                                <th>제목</th>
+                                <th>내용</th>
+                                <th>생성일</th>
+                                <th>수정일</th>
+                                <th>관리</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="qna, loop : ${qnaList}">
+                                <td>
+                                    <div class="check-type-1 inblock">
+                                        <input type="checkbox" th:id="${qna.id}" th:value="${qna.id}" name="chk">
+                                        <label th:for="${qna.id}"></label>
+                                    </div>
+                                </td>
+                                <td th:text="${loop.count}"></td>
+                                <td class="tal lh140" th:text="${qna.title}"></td>
+                                <td class="wsw tal lh140" th:utext="${qna.content}"></td>
+                                <td th:text="${#temporals.format(qna.createdDate, 'yy-MM-dd HH:mm')}"></td>
+                                <td>
+                                    <span th:if="${qna.modifiedDate != null}" th:text="${#temporals.format(qna.modifiedDate, 'yy-MM-dd HH:mm')}"></span>
+                                </td>
+                                <td>
+                                    <div class="btn-box inflex g8">
+                                        <a th:href="@{|/qna/modify/${qna.id}|}" class="btn-type-4">수정</a>
+                                        <a onclick="return confirm('정말 삭제하시겠습니까?')" th:href="@{|/qna/delete/${qna.id}|}" class="btn-type-4">삭제</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="flex jce mt20 g8">
+                    <button type="button" class="btn-type-5" id="selectDelBtn">선택 삭제</button>
+                    <button type="button" class="btn-type-5" th:if="${qnaList.size() == 0}" onclick="alert('게시글이 존재하지 않습니다.')">전체 삭제</button>
+                    <form th:if="${qnaList.size() != 0}" onsubmit="return confirm('정말로 전체 삭제하시겠습니까?')" th:action="@{/qna/deleteAll}" method="get">
+                        <button type="submit" class="btn-type-5">전체 삭제</button>
+                    </form>
+                </div>
+                <div class="btn-box-type-1 flex jcc">
+                    <a th:href="@{/qna/create}" class="btn-type-1">질문 작성</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</html>

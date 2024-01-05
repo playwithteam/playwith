@@ -1,0 +1,116 @@
+<html layout:decorate="~{/common/layout}">
+<div layout:fragment="content">
+
+    <div class="matching-form-area login-cnt-area w100per rel zi2">
+        <div class="con w100per">
+            <h1 class="title-text lh120 tb tac wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">매칭 등록</h1>
+            <div class="signup-box flex fdc wow fadeInUp" data-wow-delay="0.6s" data-wow-duration="0.6s">
+                <form th:object="${matchingForm}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <ul class="flex fdc g36">
+                        <li>
+                            <h3 class="c333 f18 tb mb16">매칭 유형<span class="tb cCC0000 inblock">*</span></h3>
+                            <div class="flex aic g32">
+                                <div class="check-text-type-3 flex aic">
+                                    <input type="radio" th:field="*{matchingType}" id="matching_type_1" value="TYPE_1" />
+                                    <label for="matching_type_1">
+                                        <span class="text">용병 매칭</span>
+                                    </label>
+                                </div>
+                                <div class="check-text-type-3 flex aic">
+                                    <input type="radio" th:field="*{matchingType}" id="matching_type_2" value="TYPE_2" />
+                                    <label for="matching_type_2">
+                                        <span class="text">팀 매칭</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="error-text-box wsn flex g8 mt8" role="alert" th:if="${#fields.hasErrors('matchingType')}">
+                                <div class="error-text f14 cCC0000" th:each="err : ${#fields.errors('matchingType')}" th:text="${err}" />
+                            </div>
+                        </li>
+                        <li>
+                            <h3 class="c333 f18 tb mb16">날짜<span class="tb cCC0000 inblock">*</span></h3>
+                            <div class="date-type-1">
+                                <input type="date" id="gameDate" th:field="*{gameDate}">
+                            </div>
+                            <div class="error-text-box wsn flex g8 mt8" role="alert" th:if="${#fields.hasErrors('gameDate')}">
+                                <div class="error-text f14 cCC0000" th:each="err : ${#fields.errors('gameDate')}" th:text="${err}" />
+                            </div>
+                        </li>
+                        <li>
+                            <ul class="flex g8">
+                                <li class="w50per">
+                                    <h3 class="c333 f18 tb mb16">시간<span class="tb cCC0000 inblock">*</span></h3>
+                                    <div class="date-type-1">
+                                        <input th:field="*{gameTime}" type="time" id="customTimeInput">
+                                    </div>
+                                    <div class="error-text-box wsn flex g8 mt8" role="alert" th:if="${#fields.hasErrors('gameTime')}">
+                                        <div class="error-text f14 cCC0000" th:each="err : ${#fields.errors('gameTime')}" th:text="${err}" />
+                                    </div>
+                                </li>
+                                <li class="w50per">
+                                    <h3 class="c333 f18 tb mb16">레벨<span class="tb cCC0000 inblock">*</span></h3>
+                                    <div class="select-type-2 rel">
+                                        <select th:field="*{level}">
+                                            <option value="">레벨</option>
+                                            <option value="하">하</option>
+                                            <option value="중">중</option>
+                                            <option value="상">상</option>
+                                        </select>
+                                        <span class="arrow img-box abs y-middle">
+                                            <img th:src="@{/img/arrow_bottom_999999.svg}" alt="">
+                                        </span>
+                                    </div>
+                                    <div class="error-text-box wsn flex g8 mt8" role="alert" th:if="${#fields.hasErrors('level')}">
+                                        <div class="error-text f14 cCC0000" th:each="err : ${#fields.errors('level')}" th:text="${err}" />
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <ul class="flex g8">
+                                <li class="w50per">
+                                    <h3 class="c333 f18 tb mb16">지역<span class="tb cCC0000 inblock">*</span></h3>
+                                    <div class="select-type-2 rel">
+                                        <select th:field="*{area}" id="areaSelect">
+                                            <option value="">지역</option>
+                                            <option value="서울">서울</option>
+                                            <option value="대전">대전</option>
+                                            <option value="부산">부산</option>
+                                        </select>
+                                        <span class="arrow img-box abs y-middle">
+                                            <img th:src="@{/img/arrow_bottom_999999.svg}" alt="">
+                                        </span>
+                                    </div>
+                                    <div class="error-text-box wsn flex g8 mt8" role="alert" th:if="${#fields.hasErrors('area')}">
+                                        <div class="error-text f14 cCC0000" th:each="err : ${#fields.errors('area')}" th:text="${err}" />
+                                    </div>
+                                </li>
+                                <li class="w50per">
+                                    <h3 class="c333 f18 tb mb16">구장<span class="tb cCC0000 inblock">*</span></h3>
+                                    <div class="select-type-2 rel">
+                                        <select th:field="*{stadium}" id="stadiumSelect">
+                                            <option value="">구장</option>
+                                        </select>
+                                        <span class="arrow img-box abs y-middle">
+                                            <img th:src="@{/img/arrow_bottom_999999.svg}" alt="">
+                                        </span>
+                                    </div>
+                                    <div class="error-text-box wsn flex g8 mt8" role="alert" th:if="${#fields.hasErrors('stadium')}">
+                                        <div class="error-text f14 cCC0000" th:each="err : ${#fields.errors('stadium')}" th:text="${err}" />
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="flex g8 mt80">
+                        <input type="submit" value="저장" class="btn-type-1 w100per">
+                        <a th:href="@{/}" class="btn-type-1-2 w100per">취소</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    </div>
+</html>

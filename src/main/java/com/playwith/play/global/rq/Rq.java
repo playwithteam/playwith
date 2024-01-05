@@ -1,13 +1,14 @@
 package com.playwith.play.global.rq;
 
-import com.playwith.play.global.data.RsData;
 import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.domain.user.service.UserService;
+import com.playwith.play.global.data.RsData;
 import com.playwith.play.global.util.Ut;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.ToString;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -16,6 +17,7 @@ import org.springframework.web.context.annotation.RequestScope;
 
 @Component
 @RequestScope
+@ToString
 public class Rq {
     private final UserService userService;
     private final HttpServletRequest req;
@@ -51,6 +53,7 @@ public class Rq {
     }
 
     public boolean isLogout() {
+
         return !isLogin();
     }
 
@@ -58,11 +61,9 @@ public class Rq {
         if (isLogout()) {
             return null;
         }
-
         if (siteUser == null) {
-            siteUser = userService.findByUsername(getLoginedMemberUsername()).get();
+            siteUser = userService.findByUsername(user.getUsername());
         }
-
         return siteUser;
     }
 
@@ -165,8 +166,11 @@ public class Rq {
     }
 
     public String historyBack(String msg) {
+        // http요청에서 referer 가져오기
         String referer = req.getHeader("referer");
+        //referer기반 키 생성
         String key = "historyBackFailMsg___" + referer;
+        //요청 객체 속성 설정
         req.setAttribute("localStorageKeyAboutHistoryBackFailMsg", key);
         req.setAttribute("historyBackFailMsg", Ut.url.withTtl(msg));
         // 200 이 아니라 400 으로 응답코드가 지정되도록
@@ -185,7 +189,10 @@ public class Rq {
 
     public String redirectOrBack(String url, RsData rs) {
         if (rs.isFail()) return historyBack(rs);
-
         return redirect(url, rs);
+    }
+
+    public String getProfileImgUrl() {
+        return this.userService.getFindProfileImgUrl(getMember());
     }
 }

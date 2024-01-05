@@ -1,56 +1,130 @@
-<html layout:decorate="~{layout}">
+<html layout:decorate="~{/common/layout}">
 <div layout:fragment="content">
 
-    <div class="login-area login-cnt-area w100per rel zi1">
-        <div class="con w100per">
-            <h1 class="title-text lh120 tb tac wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">로그인</h1>
-            <div class="login-box flex fdc wow fadeInUp" data-wow-delay="0.6s" data-wow-duration="0.6s">
-                <div class="input-type-1">
-                    <input type="text" placeholder="아이디">
-                </div>
-                <div class="input-type-1 mt12">
-                    <input type="password" placeholder="비밀번호">
-                </div>
-                <div class="error-text-box wsn flex g8 mt8">
-                    <span class="error-text f14 cCC0000">아이디 또는 비밀번호가 올바르지 않습니다.</span>
-                </div>
-                <button type="button" class="btn-type-1 mt16">로그인</button>
-                <div class="check-text-type-1 mt16">
-                    <input type="checkbox" id="id_save">
-                    <label for="id_save">
-                        <span class="text c555 f14">아이디 저장</span>
-                    </label>
-                </div>
-                <div class="add-menu-box flex jcc aic g12 mt40">
-                    <a th:href="@{/user/id_search}" class="c777 f14">아이디 찾기</a>
-                    <span class="line"></span>
-                    <a th:href="@{/user/password_search}" class="c777 f14"> 비밀번호 찾기</a>
-                    <span class="line"></span>
-                    <a th:href="@{/user/signup}" class="c777 f14">회원가입</a>
-                </div>
-                <div class="sns-login-box mt70">
-                    <h3 class="tm c333 f16 tac rel">SNS 계정으로 로그인</h3>
-                    <ul class="sns-box flex aic jcc mt40 g50">
-                        <li class="w36">
-                            <a href="" class="img-box">
-                                <img th:src="@{/img/ico_google.svg}" alt="">
-                            </a>
-                        </li>
-                        <li class="w36">
-                            <a href="" class="img-box">
-                                <img th:src="@{/img/ico_naver.svg}" alt="">
-                            </a>
-                        </li>
-                        <li class="w36">
-                            <a href="/oauth2/authorization/kakao" class="img-box">
-                                <img th:src="@{/img/ico_kakao.svg}" alt="">
-                            </a>
-                        </li>
-                    </ul>
+    <form th:action="@{/user/login}" method="post" onsubmit="return box_check();">
+        <div class="login-area login-cnt-area w100per rel zi1">
+            <div class="con w100per">
+                <h1 class="title-text lh120 tb tac wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">로그인</h1>
+                <div class="login-box flex fdc wow fadeInUp" data-wow-delay="0.6s" data-wow-duration="0.6s">
+                    <div class="input-type-1">
+                        <input type="text" name="username" id="username" placeholder="아이디">
+                    </div>
+                    <div class="input-type-1 mt12">
+                        <input type="password" name="password" id="password" placeholder="비밀번호">
+                    </div>
+                    <div th:if="${param.error}" class="error-text-box wsn flex g8 mt8">
+                        <span class="error-text f14 cCC0000">아이디 또는 비밀번호가 올바르지 않습니다.</span>
+                    </div>
+                    <button type="submit" class="btn-type-1 mt16">로그인</button>
+
+                    <div class="check-text-type-1 mt16">
+                        <input type="checkbox" class="save_id" id="saveId" name="saveId">
+                        <label for="saveId">
+                            <span class="text c555 f14">아이디 저장</span>
+                        </label>
+                    </div>
+                    <div class="add-menu-box flex jcc aic g12 mt40">
+                        <a th:href="@{/user/id_search}" class="c777 f14">아이디 찾기</a>
+                        <span class="line"></span>
+                        <a th:href="@{/user/password_search}" class="c777 f14"> 비밀번호 찾기</a>
+                        <span class="line"></span>
+                        <a th:href="@{/user/signup}" class="c777 f14">회원가입</a>
+                    </div>
+                    <div class="sns-login-box mt70">
+                        <h3 class="tm c333 f16 tac rel">SNS 계정으로 로그인</h3>
+                        <ul class="sns-box flex aic jcc mt40 g50">
+                            <li class="w36">
+                                <a href="" class="img-box">
+                                    <img th:src="@{/img/ico_google.svg}" alt="">
+                                </a>
+                            </li>
+                            <li class="w36">
+                                <a href="" class="img-box">
+                                    <img th:src="@{/img/ico_naver.svg}" alt="">
+                                </a>
+                            </li>
+                            <li class="w36">
+                                <a href="/oauth2/authorization/kakao" class="img-box">
+                                    <img th:src="@{/img/ico_kakao.svg}" alt="">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 
+    <!-- 아이디 저장 -->
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            fnInit();
+        });
+
+        function box_check() {
+            saveid();
+        }
+
+        function fnInit() {
+            var cookieid = getCookie("saveid");
+            console.log(cookieid);
+            if (cookieid != "") {
+                $("input:checkbox[id='saveId']").prop("checked", true);
+                $('#username').val(cookieid);
+            }
+        }
+
+        function setCookie(name, value, expiredays) {
+            var todayDate = new Date();
+            todayDate.setTime(todayDate.getTime() + 0);
+            if (todayDate > expiredays) {
+                document.cookie = name + "=" + escape(value) + "; path=/; expires=" + expiredays + ";";
+            } else if (todayDate < expiredays) {
+                todayDate.setDate(todayDate.getDate() + expiredays);
+                document.cookie = name + "=" + escape(value) + "; path=/; expires=" + todayDate.toGMTString() + ";";
+            }
+            console.log(document.cookie);
+        }
+
+        function getCookie(Name) {
+            var search = Name + "=";
+            console.log("search : " + search);
+
+            if (document.cookie.length > 0) { // 쿠키가 설정되어 있다면
+                offset = document.cookie.indexOf(search);
+                console.log("offset : " + offset);
+                if (offset != -1) { // 쿠키가 존재하면
+                    offset += search.length;
+                    // set index of beginning of value
+                    end = document.cookie.indexOf(";", offset);
+                    console.log("end : " + end);
+                    // 쿠키 값의 마지막 위치 인덱스 번호 설정
+                    if (end == -1)
+                        end = document.cookie.length;
+                    console.log("end위치  : " + end);
+
+                    return unescape(document.cookie.substring(offset, end));
+                }
+            }
+            return "";
+        }
+
+        function saveid() {
+            var expdate = new Date();
+            if ($("#saveId").is(":checked")) {
+                expdate.setTime(expdate.getTime() + 1000 * 3600 * 24 * 30);
+                setCookie("saveid", $("#username").val(), expdate);
+            } else {
+                expdate.setTime(expdate.getTime() - 1000 * 3600 * 24 * 30);
+                setCookie("saveid", $("#username").val(), expdate);
+            }
+        }
+        let message = "[[${msg}]]";
+        if(message != ""){
+            alert(message);
+        }
+    </script>
 </div>
 </html>

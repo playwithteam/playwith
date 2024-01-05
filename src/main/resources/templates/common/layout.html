@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!--스와이퍼-->
+    <link rel="stylesheet" th:href="@{https://unpkg.com/swiper@8/swiper-bundle.min.css}">
+
+    <!-- css -->
+    <link rel="stylesheet" th:href="@{/css/basic.css}">
+    <link rel="stylesheet" th:href="@{/css/public.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <!-- wow 애니메이션 -->
+    <link rel="stylesheet" th:href="@{/css/animate.css}">
+
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}">
+
+    <title>PLAY WITH</title>
+</head>
+<body id="area_0">
+
+<!-- 탑 버튼 -->
+<button class="top-btn-box img-box fixed zi5">
+    <img th:src="@{/img/ico_up_arrow_point_777.svg}" alt="">
+</button>
+<!-- //탑 버튼 -->
+
+<!--헤더-->
+<header th:replace="~{/common/header :: headerFragment}"></header>
+<!--//헤더-->
+
+<th:block layout:fragment="content"></th:block>
+
+<!--푸터-->
+<footer th:replace="~{/common/footer :: footerFragment}"></footer>
+<!--//푸터-->
+
+<!-- 제이쿼리 -->
+<script th:src="@{/js/jquery-3.6.4.min.js}"></script>
+
+<!-- js -->
+<script th:src="@{/js/custom.js}"></script>
+
+<!-- 스와이퍼 -->
+<script th:src="@{https://unpkg.com/swiper@8/swiper-bundle.min.js}"></script>
+<script th:src="@{/js/swiper.js}"></script>
+
+<!--wow 애니메이션-->
+<script type="text/javascript" th:src="@{/js/wow.min.js}"></script>
+<script> new WOW().init(); </script>
+</body>
+</html>

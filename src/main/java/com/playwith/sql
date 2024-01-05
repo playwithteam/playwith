@@ -3,3 +3,33 @@ CREATE DATABASE play_dev;
 USE play_dev;
 
 SELECT * FROM site_user;
+
+# 팀 생성
+INSERT INTO team
+SET modified_date = now(),
+created_date = now(),
+profile_img_url = null,
+team_name = '서울FC',
+area = '서울',
+level ='하';
+
+INSERT INTO team
+SET modified_date = now(),
+created_date = now(),
+profile_img_url = null,
+team_name = '대전FC',
+area = '대전',
+level ='상';
+
+SHOW DATABASES;
+SHOW TABLES;
+
+SELECT * FROM SITE_USER;
+SELECT * FROM MATCHING;
+SELECT * FROM STADIUM;
+
+INSERT INTO STADIUM
+SET area = "서울",
+name = "로꼬풋살장",
+address = "서울특별시 송파구 잠실동 40-1 롯데마트 제타플렉스점 R층",
+map_url = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d202412.1888398174!2d126.8427373825985!3d37.56235622779598!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357ca5c150f26537%3A0x6946a93f4d550d0!2z66Gc6rys7ZKL7IK07Iqk7YOA65SU7JuAIOyeoOyLpOygnO2DgO2UjOugieyKpOygkA!5e0!3m2!1sko!2skr!4v1703209534380!5m2!1sko!2skr";
