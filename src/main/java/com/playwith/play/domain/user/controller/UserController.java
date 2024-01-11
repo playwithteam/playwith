@@ -1,6 +1,7 @@
 package com.playwith.play.domain.user.controller;
 
 import com.playwith.play.domain.team.entity.Team;
+import com.playwith.play.domain.team.service.TeamService;
 import com.playwith.play.domain.user.entity.SiteUser;
 import com.playwith.play.domain.user.service.UserService;
 import com.playwith.play.global.rq.Rq;
@@ -26,13 +27,15 @@ public class UserController {
 
     private final UserService userService;
     private final Rq rq;
-    private SiteUser findUser;
+    private String findUserName; //아이디 값 담을 변수 선언
+    private final TeamService teamService;
 
     //로그인
     @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
     public String login() {
         return "login";
+
     }
 
     //회원가입
@@ -52,7 +55,7 @@ public class UserController {
                 userCreateForm.getPassword1(), userCreateForm.getEmail(),
                 userCreateForm.getArea(), userCreateForm.getLevel(), userCreateForm.getBirthDate(), null, 1);
 
-        redirectAttributes.addFlashAttribute("msg","회원가입이 완료되었습니다. 로그인페이지로 이동합니다.");
+        redirectAttributes.addFlashAttribute("msg", "회원가입이 완료되었습니다. 로그인페이지로 이동합니다.");
         return "redirect:/user/login";
     }
 
@@ -81,7 +84,7 @@ public class UserController {
         Optional<SiteUser> foundUser = this.userService.getUserByEmailAndName(inputEmail, inputName);
 
         if (foundUser.isPresent()) {
-            findUser = foundUser.get();
+            findUserName = foundUser.get().getUsername();
 
             return ResponseEntity.ok("id_search_result");
         } else {
@@ -94,8 +97,10 @@ public class UserController {
     @GetMapping("/id_search_result")
     public String id_search_result(Model model) {
         // findUser가 null이 아닌 경우에만 모델에 추가
-        if (this.findUser != null) {
-            model.addAttribute("findUsername", this.findUser.getUsername());
+        if (this.findUserName != null) {
+            SiteUser findUser = this.userService.findByUsername(findUserName);
+            model.addAttribute("findUsername", findUser);
+            findUserName = null;
         }
         return "id_search_result";
     }
@@ -108,12 +113,12 @@ public class UserController {
     }
 
     @PreAuthorize("isAnonymous()")
-    @PostMapping("/password_search_modify")
+    @PostMapping("/password_search_confirm")
     public ResponseEntity<String> password_search(@RequestParam("username") String inputUsername,
                                                   @RequestParam("email") String inputEmail, @RequestParam("name") String inputName) {
         // 사용자의 아이디, 메일, 이름 얻기
-        Optional<SiteUser> founUser = this.userService.getUserUsernameAndMailAndName(inputUsername, inputEmail, inputName);
-        findUser = founUser.get();
+        Optional<SiteUser> findUser = this.userService.getUserUsernameAndMailAndName(inputUsername, inputEmail, inputName);
+        findUserName = findUser.get().getUsername();
 
         return ResponseEntity.ok("password_search_modify");
     }
@@ -121,7 +126,7 @@ public class UserController {
     @PreAuthorize("isAnonymous()")
     @GetMapping("/password_search_modify")
     public String password_search_modify(Model model) {
-        model.addAttribute("newPasswordForm", this.findUser);
+        model.addAttribute("newPasswordForm", new NewPasswordForm());
         return "password_search_modify";
     }
 
@@ -129,7 +134,9 @@ public class UserController {
     @PreAuthorize("isAnonymous()")
     @PostMapping("/password_search_result")
     public ResponseEntity<String> modifyPassword(@ModelAttribute("newPasswordForm") NewPasswordForm newPasswordForm) {
+        SiteUser findUser = this.userService.findByUsername(findUserName);
         this.userService.modifyPassword(newPasswordForm, findUser);
+        findUserName = null;
         return ResponseEntity.ok("login");
     }
 
@@ -137,7 +144,7 @@ public class UserController {
     @GetMapping("/mypage")
     public String mypage(Model model) {
         // 현재 로그인한 사용자의 정보를 가져오기
-        SiteUser  user = rq.getMember();
+        SiteUser user = rq.getMember();
 
         // 가져온 정보를 모델에 추가
         model.addAttribute("user", user);

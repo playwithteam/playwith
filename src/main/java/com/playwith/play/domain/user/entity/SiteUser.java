@@ -5,16 +5,14 @@ import com.playwith.play.domain.team.entity.Team;
 import com.playwith.play.domain.wishlist.entity.WishList;
 import com.playwith.play.global.jpa.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
+
 
 
 @NoArgsConstructor
@@ -45,9 +43,8 @@ public class SiteUser extends BaseEntity {
     private int rating;
 
 
-
-    @ManyToOne
-    @JoinColumn(name = "team_id")
+    @ManyToOne(optional = true, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "team_id", nullable = true)
     private Team team;
 
     public void setTeam(Team team) {
@@ -59,6 +56,9 @@ public class SiteUser extends BaseEntity {
             team.getSiteUsers().add(this);
         }
     }
+
+
+
 
 
     @OneToMany(mappedBy = "siteUser", cascade = CascadeType.ALL)
