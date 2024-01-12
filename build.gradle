@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.0'
 	id 'io.spring.dependency-management' version '1.1.4'
+
 }
 
 group = 'com.playwith'
@@ -40,8 +41,15 @@ dependencies {
 	implementation 'org.apache.tika:tika-core:2.9.0'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'commons-io:commons-io:2.11.0'
+	runtimeOnly 'org.postgresql:postgresql'
+	runtimeOnly 'org.postgresql:postgresql'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+jar {
+	enabled = false
+}
+
