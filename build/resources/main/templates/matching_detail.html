@@ -1,4 +1,4 @@
-<html layout:decorate="~{/common/layout}">
+<html layout:decorate="~{common/layout}">
 <div layout:fragment="content">
 
     <div class="matching-detail-area w100per rel zi2">
@@ -49,10 +49,10 @@
                             </li>
                         </ul>
                     </div>
-                    <div th:if="${@rq.member.rating == 1 or @rq.member.rating == 2 and @rq.member.name == matching.managerName}" class="application-list-box w50per bsb" style="padding-left: 28px; border-left: 1px solid #E0E0E0; height: auto; height: auto;">
+                    <div th:if="${@rq.member.rating == 1 or @rq.member.rating == 3 or @rq.member.rating == 4 or @rq.member.rating == 2 and @rq.member.name == matching.managerName}" class="application-list-box w50per bsb" style="padding-left: 28px; border-left: 1px solid #E0E0E0; height: auto; height: auto;">
                         <div th:if="${matching.matchingType.toString() == 'TYPE_1'}" class="h100per">
-                            <div class="user-btn-box h100per flex aic jcsb g20" th:if="${@rq.member.rating == 1}">
-                                <button class="favor-box img-box w40" id="favor_btn">
+                            <div class="user-btn-box h100per flex aic jcsb g20" th:if="${@rq.member.rating == 1 or @rq.member.rating == 3 or @rq.member.rating == 4}">
+                                <button class="favor-box img-box w40" id="favor_btn" th:classappend="${!matching?.wishLists.?[siteUser?.username == @rq.member.username].isEmpty()} ? 'active' : ''">
                                     <img th:src="@{/img/ico_heart.svg}" alt="">
                                 </button>
                                 <div style="width: calc(100% - 60px);">

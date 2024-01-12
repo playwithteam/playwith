@@ -1,4 +1,4 @@
-<html layout:decorate="~{/common/layout}">
+<html layout:decorate="~{common/layout}">
 <div layout:fragment="content">
 
     <form id="teamCreate" th:object="${teamCreateForm}" method="post" enctype="multipart/form-data">
@@ -80,11 +80,11 @@
                             </ul>
                         </li>
                     </ul>
-                    <a th:href="@{/user/team_create}">
+
                         <button type="submit" class="w100per btn-type-1 mt80">
                             팀 등록
                         </button>
-                    </a>
+
                 </div>
             </div>
         </div>
@@ -121,7 +121,7 @@
             if ($("#emblem_img")[0].files.length === 0) {
                 $("#previewImage").removeAttr("src");
                 // 이미지가 선택되지 않았을 때 profileImgUrl을 null로 설정
-                $("input[name='profileImage']").val(""); // 추가된 부분
+                // $("input[name='profileImage']").val(""); // 추가된 부분
             }
         });
 
@@ -146,8 +146,6 @@
         // 중복 확인 버튼 클릭 시 처리
         $("#checkTeamNameBtn").click(function () {
             var teamName = $("#teamName").val();
-            // 폼 에러 메시지 초기화
-            $("#checkTeamName .error-text").text("");
 
             $.ajax({
                 type: "GET",
@@ -216,6 +214,7 @@
                 // 팀 ID 가져오기
                 var teamId = "${team.id}";
 
+                console.log(teamId)
                 $.ajax({
                     type: "POST",
                     url: "/team/team_detail/" + teamId,

@@ -40,8 +40,14 @@ dependencies {
 	implementation 'org.apache.tika:tika-core:2.9.0'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'commons-io:commons-io:2.11.0'
+	//pg
+	runtimeOnly 'org.postgresql:postgresql'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+jar {
+	enabled = false
 }
